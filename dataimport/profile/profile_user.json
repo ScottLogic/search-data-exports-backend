@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "0.1",
+    "fields": [                
+        { "name" : "LastName" } ,        
+        { "name" : "FirstName" } ,        
+        { "name" : "EmailAddress" } 
+        ],
+    "rules": [                 
+        {
+            "rule": "User Name",
+            "constraints": [
+                {
+                    "field":"LastName",
+                    "is":"ofType",
+                    "value":"lastname"
+                },
+                {
+                    "not": { "field":"LastName", "is":"null" }
+                }
+            ]
+        },  
+        {
+            "rule": "User Name",
+            "constraints": [
+                {
+                    "field":"FirstName",
+                    "is":"ofType",
+                    "value":"firstname"
+                },
+                {
+                    "not": { "field":"FirstName", "is":"null" }
+                }
+            ]
+        },  
+        {
+            "rule": "Email Address",
+            "constraints": [
+                {
+                    "field":"EmailAddress",
+                    "is":"ofType",
+                    "value":"string"
+                },
+                {
+                    "not": { "field":"EmailAddress", "is":"null" }
+                },
+                {   "field":"EmailAddress",
+                    "is":"matchingRegex",
+                    "value":"\\w+\\@[a-zA-Z]+\\.[a-zA-Z]{1,3}(\\.[a-zA-Z]{1,3})?"
+                }
+            ]
+        }
+    ]
+}

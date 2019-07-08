@@ -1,0 +1,121 @@
+{
+    "schemaVersion": "0.1",
+    "fields": [        
+        { "name" : "UserID" },
+        { "name" : "DateCreated" } ,
+        { "name" : "tag1" },
+        { "name" : "tag2" },
+        { "name" : "tag3" },
+        { "name" : "tag4" },
+        { "name" : "tag5" },
+        { "name" : "Content" } 
+        ],
+    "rules": [
+        {
+            "rule":" User Rules",
+            "constraints": [
+                {
+                    "field":"UserID",
+                    "is":"ofType",
+                    "value":"integer"
+                },                
+                {
+                    "not": { "field":"UserID", "is":"null" }
+                },
+                {
+                    "field":"UserID",
+                    "is":"greaterThanOrEqualTo",
+                    "value": 1
+                },
+                {
+                    "field":"UserID",
+                    "is":"lessThanOrEqualTo",
+                    "value": 100
+                }
+            ]
+
+        },   
+        {
+            "rule": "Date Creation Rules",
+            "constraints": [
+                {
+                    "field":"DateCreated",
+                    "is":"ofType",
+                    "value":"datetime"
+                },
+                {
+                    "field":"DateCreated",
+                    "is":"after",
+                    "value": { "date":"2017-01-01T00:00:00.00Z"}
+                },
+                {
+                    "field":"DateCreated",
+                    "is":"before",
+                    "value": { "date":"2020-01-01T00:00:00.00Z"}
+                },
+                {
+                    "not": { "field":"DateCreated", "is":"null" }
+                }
+            ]
+        },
+        {
+            "rule": "Tag #1 Rules",
+            "constraints": [
+                { "field":"tag1", "is":"ofType", "value":"string" },
+                { "field":"tag1", "is":"setFromFile", "value":"./sets/tags.csv" }
+            ]
+        },
+        {
+            "rule": "Tag #2 Rules",
+            "constraints": [
+                { "field":"tag2", "is":"ofType", "value":"string" },
+                { "field":"tag2", "is":"setFromFile", "value":"./sets/tags.csv" }
+            ]
+        },
+        {
+            "rule": "Tag #3 Rules",
+            "constraints": [
+                { "field":"tag3", "is":"ofType", "value":"string" },
+                { "field":"tag3", "is":"setFromFile", "value":"./sets/tags.csv" }
+            ]
+        },
+        {
+            "rule": "Tag #4 Rules",
+            "constraints": [
+                { "field":"tag4", "is":"ofType", "value":"string" },
+                { "field":"tag4", "is":"setFromFile", "value":"./sets/tags.csv" }
+            ]
+        },
+        {
+            "rule": "Tag #5 Rules",
+            "constraints": [
+                { "field":"tag5", "is":"ofType", "value":"string" },
+                { "field":"tag5", "is":"setFromFile", "value":"./sets/tags.csv" }
+            ]
+        },
+        
+        {
+            "rule" : "Content Rules",
+            "constraints" : [                     
+                {
+                    "field":"Content",
+                    "is":"ofType",
+                    "value":"string"
+                },
+                {
+                    "field":"Content",
+                    "is":"setFromFile",
+                    "value":"./sets/content.csv"
+                },                                
+                {
+                    "field":"Content",
+                    "is":"longerThan",
+                    "value": 10
+                },
+                {
+                    "not": { "field":"Content", "is":"null" }
+                }
+            ]
+        }
+    ]
+}
