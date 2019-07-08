@@ -41,3 +41,24 @@ To change options for the elastic search import, modify the following file `./ap
 + `esTypeUsers` - Document name for an individual user. (Default: `user`) 
 + `importFilePosts` - File path and name of posts import file.  (Default: `./data/posts.csv`)
 + `importFileUsers` - File patch and name for users import file.  (Default: `./data/users.csv`)
+
+# Elastic Search Data Format
+The following JSON format has been created for use within elastic search. 
++ Users under `/users/user/`
+```json
+{
+    "UserID": "integer",
+    "LastName": "string",
+    "FirstName": "string",
+    "EmailAddress": "string"
+}
+```
++ Posts under `/posts/post`
+```json
+{
+    "UserID": "integer",
+    "DateCreated": "dateTime",
+    "Content": "string",
+    "Tags": [ "string", ...]
+}
+```
