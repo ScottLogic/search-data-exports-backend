@@ -60,8 +60,8 @@ const convertJson = (jsonObject) => {
     // use of filter gets rid of empty values in the array. as some may be blank from the generator. 
     return {
         "UserID":jsonObject.UserID,
-        "DateCreated":jsonObject.dateCreated,
-        "Content": jsonObject.content,
+        "DateCreated":jsonObject.DateCreated,
+        "Content": jsonObject.Content,
         "Tags" : tagList.filter(x => x)
     };
 }
