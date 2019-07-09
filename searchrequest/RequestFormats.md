@@ -1,9 +1,17 @@
 
-API call specification
-```json {
+# API call specification
+
+## API endpoints
++ `/api/search/` - Used to search all indexes
++ `/api/search/post/` - End point to search all posts - Accecpts *GET* and *POST*
++ `/api/search/user/` - End point to search all users - Accecpts *GET* and *POST*
+
+Generic information on how json requests are to be passed into the node API.
+```json 
+{
     "type" : "user|post", // defaults to blank, which should search both indexes. 
-    "results" : int Default:10, 
-    "page" : int Default:0,
+    "results" : int, //Default:10
+    "page" : int, //Default:0
     "search" : [
         {"all" : "value" }, // Search on every field
         {"field" : "value" } ... // seach on a specific fields.
@@ -13,7 +21,8 @@ API call specification
 ```
 
 Call Example, this would return all posts where there exists a tag called #Value.
-```json {
+```json 
+{
     "type" : "post",
     "results" : 25, 
     "page" : 1,
@@ -26,7 +35,8 @@ Call Example, this would return all posts where there exists a tag called #Value
 ## Example response
 Going to use the default elastic search response in feedback, as this contains all the information you could require. 
 
-```json {
+```json 
+{
     "took": 37,
     "timed_out": false,
     "_shards": {
@@ -37,7 +47,7 @@ Going to use the default elastic search response in feedback, as this contains a
     },
     "hits": {
         "total": {
-            "value": int,
+            "value": int, // number of total results.
             "relation": "eq"
         },
         "max_score": 1.0,
@@ -48,7 +58,8 @@ Going to use the default elastic search response in feedback, as this contains a
 
 Example data from within the hits list is as 
 Users - 
-```json {
+```json 
+{
     "_index": "users",
     "_type": "user",
     "_id": "kiEH0msBcSVQ8Ni1lRo7",
@@ -63,7 +74,8 @@ Users -
 ```
 
 Posts - 
-```json {
+```json 
+{
     "_index": "posts",
     "_type": "post",
     "_id": "9iEH0msBcSVQ8Ni1lRpT",
