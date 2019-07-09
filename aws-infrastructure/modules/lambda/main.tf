@@ -20,3 +20,14 @@ resource "aws_lambda_function" "search_lambda" {
   runtime           = "nodejs8.10"
   description       = "SDE search lambda"
 }
+
+resource "aws_lambda_permission" "lambda_permission" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.search_lambda.arn
+  principal     = "apigateway.amazonaws.com"
+
+  # The /*/*/* part allows invocation from any stage, method and resource path
+  # within API Gateway REST API.
+  source_arn = "${var.api_gateway_execution_arn}/*/*/*"
+}

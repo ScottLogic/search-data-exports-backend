@@ -3,9 +3,10 @@ provider "aws" {
 }
 
 module "lambda" {
-  source              = "./modules/lambda"
-  project             = var.project
-  environment         = var.environment
+  source                    = "./modules/lambda"
+  project                   = var.project
+  environment               = var.environment
+  api_gateway_execution_arn = module.api-gateway.api_gateway_execution_arn
 }
 
 module "api-gateway" {
