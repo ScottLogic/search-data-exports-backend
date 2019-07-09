@@ -30,6 +30,12 @@ resource "aws_lambda_function" "search_lambda" {
   handler           = "index.handler"
   runtime           = "nodejs8.10"
   description       = "SDE search lambda"
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-search"
+    Environment = var.environment
+    Project     = var.project
+  }
 }
 
 resource "aws_lambda_permission" "lambda_permission" {
