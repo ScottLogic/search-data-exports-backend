@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node": "^12.6.0"
+  }
+}
