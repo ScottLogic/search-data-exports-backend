@@ -1,0 +1,34 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "${account_id}"
+        ]
+      },
+      "Action": [
+        "es:*"
+      ],
+      "Resource": "${elastic_search_arn}/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "es:*"
+      ],
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "${allowed_public_ip}"
+          ]
+        }
+      },
+      "Resource": "${elastic_search_arn}/*"
+    }
+  ]
+}

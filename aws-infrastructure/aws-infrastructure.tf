@@ -16,3 +16,10 @@ module "api-gateway" {
   environment               = var.environment
   search_lambda_invoke_arn  = module.lambda.search_lambda_invoke_arn
 }
+
+module "elasticserch" {
+  source                    = "./modules/elasticsearch"
+  project                   = var.project
+  environment               = var.environment
+  allowed_public_ip         = var.allowed_public_ip
+}
