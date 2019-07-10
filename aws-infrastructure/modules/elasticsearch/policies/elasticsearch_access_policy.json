@@ -4,18 +4,6 @@
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": [
-          "${account_id}"
-        ]
-      },
-      "Action": [
-        "es:*"
-      ],
-      "Resource": "${elastic_search_arn}/*"
-    },
-    {
-      "Effect": "Allow",
-      "Principal": {
         "AWS": "*"
       },
       "Action": [

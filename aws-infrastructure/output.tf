@@ -3,9 +3,9 @@ output "api_gateway_invoke_url" {
 }
 
 output "elasticsearch_endpoint" {
-  value = module.elasticserch.endpoint
+  value = module.elasticsearch.endpoint
 }
 
 output "elasticsearch_kibana_endpoint" {
-  value = module.elasticserch.kibana_endpoint
+  value = module.elasticsearch.kibana_endpoint
 }

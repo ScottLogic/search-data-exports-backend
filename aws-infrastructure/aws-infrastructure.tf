@@ -7,6 +7,7 @@ module "lambda" {
   project                   = var.project
   environment               = var.environment
   api_gateway_execution_arn = module.api-gateway.api_gateway_execution_arn
+  elasticsearch_arn         = module.elasticsearch.elasticsearch_arn
 }
 
 module "api-gateway" {
@@ -17,7 +18,7 @@ module "api-gateway" {
   search_lambda_invoke_arn  = module.lambda.search_lambda_invoke_arn
 }
 
-module "elasticserch" {
+module "elasticsearch" {
   source                    = "./modules/elasticsearch"
   project                   = var.project
   environment               = var.environment

@@ -15,7 +15,7 @@ resource "aws_elasticsearch_domain" "test-domain" {
     volume_size = 10
   }
 
-  //access_policies = data.template_file.access_policy.rendered
+  access_policies = data.template_file.access_policy.rendered
 
   tags = {
     Name        = "${var.project}-${var.environment}-es-test-domain"
