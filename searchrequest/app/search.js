@@ -11,6 +11,32 @@ class ESSearch {
     constructor() {    
     }
 
+    async doSearch(searchJSON) {
+        return await client.search(searchJSON);        
+    }
+
+    async seachPosts2(searchJSON) {
+        const x = await client.search({body:searchJSON,index: "posts"});
+        return x;
+    }
+
+    searchPosts(searchJSON) {
+        let returnJSON;      
+        console.log(`Define the promise thing`);
+        const searchResults = async() => {
+            console.log("Search function")
+            returnJSON = await this.doSearch({body:searchJSON,index: "posts"});
+            console.log(`return JSON`,(returnJSON)? true: false);
+            return returnJSON;
+        }
+        console.log(`Run the process`,(returnJSON)? true: false);
+        searchResults();
+        console.log(`Ran the Process`,(returnJSON)? true: false);
+        //return returnJSON;
+        // console.log(`HHHHH`,returnJSON);
+        // console.log("returning - Main flow");
+    }
+
     async performESSearch(searchJSON) {
         console.log(`Start ES Search`);
         const actualJSON = { body:searchJSON, index: "posts" };
@@ -30,13 +56,13 @@ class ESSearch {
         });        
     }
 
-    doSearch(request) {                
-        client.search(request).then( (result) => {
-            console.log(`resulting`,result);
-            return result;
-        });                        
-        //return result;
-    }
+    // doSearch(request) {                
+    //     client.search(request).then( (result) => {
+    //         console.log(`resulting`,result);
+    //         return result;
+    //     });                        
+    //     //return result;
+    // }
 
     seachPost2 (searchJSON) {
         console.log(`Starting`);

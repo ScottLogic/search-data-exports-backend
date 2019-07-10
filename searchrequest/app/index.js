@@ -24,13 +24,20 @@ app.all(`/search/post/`, (req,res) => {
     //let returnJSON = search.performESSearch(searchJson);
     let returnJSON;
     //let returnJSON =  search.performESSearch(searchJson);
-    const requestJSON = async() => {
-        console.log(`THIS`);
-        returnJSON = await search.performESSearch(searchJson);
-        res.status(200).send(returnJSON);
-    };
-    requestJSON();
+    // const requestJSON = async() => {
+    //     console.log(`THIS`);
+    //     returnJSON = await search.performESSearch(searchJson);
+    //     res.status(200).send(returnJSON);
+    // };
+    // requestJSON();
 
+    search.seachPosts2(searchJson).then( (result) => {        
+        res.status(200).send(result);
+    }).catch( (err) => {
+        console.log(`Error`);
+        res.status(500).send(`Error with search ${err}`);
+    });
+    console.log(`This should be last?`);
     //console.log(`api return`,returnJSON);
     
     
