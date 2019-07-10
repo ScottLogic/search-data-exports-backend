@@ -1,62 +1,40 @@
 const express = require(`express`);
 const app = express();
-const QueryGenerator = require(`./querry.js`);
 const ESSearch = require(`./search.js`);
-
 let server = require('http').Server(app);
-let queryGen = new QueryGenerator();
+
 let search = new ESSearch();
 const port = 3000;
+
+// Because the input can come from a few places, (url params, body content etc) we use ES6 notation to combine them all up. 
+const combineRequest = (request) => {
+    return {...request.params ,...request.query, ...request.body}
+}
 
 app.use(express.json());
 
 app.all(`/search/`, (req,res) => {        
-    const rstring = { ...req.params ,...req.query, ...req.body }
-    res.status(200).send(rstring);
+    search.search(combineRequest(req)).then( (result) => {  // Throw to the runner, and await response       
+        res.status(200).send(result.body); // shoot back result
+    }).catch( (err) => {        
+        res.status(500).send(`Error with search ${err}`); // Return an error. 
+    });   
 });
 
-app.all(`/search/post/`, (req,res) => {
-    const rstring = { ...req.params ,...req.query, ...req.body }
-    // throw this into another class, that will deal with making it be "correct" in terms of a ES request.
-    // throw the result of that into the thing that actually DOES the search. 
-    // and that is the result that gets kicked back.
-    const searchJson =  queryGen.buildQueryJson(rstring,"all");
-    //let returnJSON = search.performESSearch(searchJson);
-    let returnJSON;
-    //let returnJSON =  search.performESSearch(searchJson);
-    // const requestJSON = async() => {
-    //     console.log(`THIS`);
-    //     returnJSON = await search.performESSearch(searchJson);
-    //     res.status(200).send(returnJSON);
-    // };
-    // requestJSON();
-
-    search.seachPosts2(searchJson).then( (result) => {        
-        res.status(200).send(result);
-    }).catch( (err) => {
-        console.log(`Error`);
-        res.status(500).send(`Error with search ${err}`);
-    });
-    console.log(`This should be last?`);
-    //console.log(`api return`,returnJSON);
-    
-    
-    // returnJSON.then( () => {
-    //     console.log(`Finished`);
-    //     console.log(returnJSON);
-    //     res.status(200).send(returnJSON.body)
-    // },() => {
-    //     console.log(`Errored`);
-    //     res.status(200).send("THIS IS AN ERROR");
-    // })
-    
+app.all(`/search/post/`, (req,res) => {  
+    search.searchPosts(combineRequest(req)).then( (result) => {  // Throw to the runner, and await response       
+        res.status(200).send(result.body); // shoot back result
+    }).catch( (err) => {        
+        res.status(500).send(`Error with search ${err}`); // Return an error. 
+    });    
 });
 
 app.all(`/search/user/`, (req,res) => {
-    const rstring = { ...req.params ,...req.query, ...req.body }
-    res.status(200).send(rstring);
+    search.searchUsers(combineRequest(req)).then( (result) => {  // Throw to the runner, and await response       
+        res.status(200).send(result.body); // shoot back result
+    }).catch( (err) => {        
+        res.status(500).send(`Error with search ${err}`); // Return an error. 
+    }); 
 });
-
-// app.use(express.static(`public`));
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`));

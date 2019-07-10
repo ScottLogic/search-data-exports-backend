@@ -1,3 +1,4 @@
 dataimport/data/
 dataimport/node_modules/
 searchrequest/node_modules/
+searchrequest/app/brokenexamples.js
