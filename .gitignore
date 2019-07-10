@@ -1,2 +1,12 @@
 dataimport/data/
 dataimport/node_modules/
+
+### Terraform ###
+# Compiled files
+*.tfstate
+*.tfstate.backup
+.terraform.tfstate.lock.info
+# Module directory
+aws-infrastructure/.terraform/
+aws-infrastructure/.idea
+aws-infrastructure/modules/lambda/*.zip

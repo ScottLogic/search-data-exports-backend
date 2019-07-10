@@ -1,0 +1,61 @@
+# Search Data Export
+
+## AWS Infrastructure diagram
+![](../aws-diagram-export-data.svg)
+
+## First time initialisation
+```
+terraform init
+```
+
+##Environment Variables
+### Credentials
+Set the AWS credentials as we don't want these hard coded:
+```
+set AWS_ACCESS_KEY_ID=XYZ
+set AWS_SECRET_ACCESS_KEY=abcdefghijklmnopqrstuvwxyz
+```
+
+Alternatively, other options are available:
+* [Terraform AWS Authentication](https://www.terraform.io/docs/providers/aws/index.html)
+
+## Terraform Commands
+### Create / update infrastructure
+```
+terraform apply
+```
+
+Where an alternative config is supplied:
+```
+terraform apply -var-file="uat.tfvars"
+```
+This applies to destroy and output commands.
+
+### Destroy infrastructure
+```
+terraform destroy
+```
+
+### Output current settings
+```
+terraform output
+```
+
+## Configuration
+The file [terraform.tfvars](tarraform.tfvars) contains the variables used by the configuration which builds the infrastructure in AWS. This file is loaded by default unless an alternative is supplied.  
+
+An example is:
+```hcl-terraform
+project                = "sde"
+environment            = "dev"
+region                 = "eu-west-1"
+```
+
+### Configuration items
+The items are:
+* project
+    * The name of the project, e.g. sde
+* environment
+    * The name of the environment we're creating, i.e prod, uat, dev etc.
+* region
+    * The AWS region name
