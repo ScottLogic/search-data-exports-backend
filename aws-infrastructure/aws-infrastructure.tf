@@ -13,6 +13,7 @@ module "lambda" {
   environment               = var.environment
   api_gateway_execution_arn = module.api-gateway.api_gateway_execution_arn
   elasticsearch_arn         = module.elasticsearch.elasticsearch_arn
+  elasticsearch_endpoint    = module.elasticsearch.endpoint
 }
 
 module "api-gateway" {

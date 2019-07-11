@@ -45,6 +45,12 @@ resource "aws_lambda_function" "search_lambda" {
   runtime           = "nodejs8.10"
   description       = "SDE search lambda"
 
+  environment {
+    variables = {
+      ES_SEARCH_API = var.elasticsearch_endpoint
+    }
+  }
+
   tags = {
     Name        = "${var.name_prefix}-search"
     Environment = var.environment
