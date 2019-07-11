@@ -2,7 +2,7 @@
 The API Gateway
 ======*/
 resource "aws_api_gateway_rest_api" "api_gateway" {
-  name        = "${var.project}-${var.environment}-api-gateway"
+  name        = "${var.name_prefix}-api-gateway"
   description = "${var.project} API Gateway"
 
   endpoint_configuration {

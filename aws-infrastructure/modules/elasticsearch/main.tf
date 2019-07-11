@@ -1,5 +1,5 @@
 resource "aws_elasticsearch_domain" "test-domain" {
-  domain_name = "${var.project}-${var.environment}-es-test-domain"
+  domain_name = "${var.name_prefix}-es-test-domain"
 
   cluster_config {
     instance_type = "t2.micro.elasticsearch"
@@ -18,7 +18,7 @@ resource "aws_elasticsearch_domain" "test-domain" {
   access_policies = data.template_file.access_policy.rendered
 
   tags = {
-    Name        = "${var.project}-${var.environment}-es-test-domain"
+    Name        = "${var.name_prefix}-es-test-domain"
     Environment = var.environment
     Project     = var.project
   }
