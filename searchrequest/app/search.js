@@ -1,7 +1,7 @@
 /*
 This code is responsible to making ES queries from the JSON inputted, as we want to hide some of the nitty gritty from the users. 
 */
-const QueryGenerator = require(`./querry.js`);
+const QueryGenerator = require(`./query.js`);
 
 const esUrl = `http://localhost:9200`;  // URL to elastic search
 

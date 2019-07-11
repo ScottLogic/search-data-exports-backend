@@ -30,9 +30,9 @@ const esUrl = `http://localhost:9200`;  // URL to elastic search
 
 ## API Requests
 The API can accecpt requests on the following end points. All current endpoints take the same accecpted JSON formats. *Api requests can be tested/mocked via PostMan.*
-+ `/api/search/` - Default search, will search on all indexs/types unless given parametrs not to. 
-+ `/api/search/post/` - Searches posts only, this will ignore the `type` from any inputted JSON.  
-+ `/api/search/user/` - Searches users only, this will ignore the `type` from any inputted JSON.
++ `/search/` - Default search, will search on all indexs/types unless given parametrs not to. 
++ `/search/post/` - Searches posts only, this will ignore the `type` from any inputted JSON.  
++ `/search/user/` - Searches users only, this will ignore the `type` from any inputted JSON.
 
 
 
@@ -44,7 +44,8 @@ The inputted JSON can be in the format below, and must be properly formatted JSO
     "results" : 0, /* How many results to return in a set. default:10 */
     "page": 0, /* Which page of results is required. default:0 */
     "search": [
-        {"field": "fieldName|all","value":"value"},
+        {"field": "fieldName|all",
+         "value": "value"},
         ...
         {"dateRange": [ "Start Date", "End Date"]} // Optionial for Post search.
     ]
