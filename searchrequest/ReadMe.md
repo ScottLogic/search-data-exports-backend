@@ -23,10 +23,15 @@ The NodeJS api can be configured to run on different ports etc, by modifying the
 const port = 3000;
 ```
 ### Elastic Search Connection
-To define the connection string to the ElasticSearch which is in use, modify `./app/search.js` to supply the correct URL. 
-```javascript
-const esUrl = `http://localhost:9200`;  // URL to elastic search
+Elastic search defaults its connection to `http://localhost:9200` but this can be overridden by enviroment variables.
+
+For local development, create `.env` file within the base directory, and its contents should match the `.env.example` file provided. **DO NOT submit this file into git**
+
+For remote deployment, ensure that the following environment variables are setup, in the relevant systems. 
 ```
+ES_SEARCH_API=url_to_elastic_search_api
+```
+
 
 ## API Requests
 The API can accecpt requests on the following end points. All current endpoints take the same accecpted JSON formats. *Api requests can be tested/mocked via PostMan.*
