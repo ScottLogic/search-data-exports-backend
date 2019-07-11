@@ -3,7 +3,7 @@ This code is responsible to making ES queries from the JSON inputted, as we want
 */
 const QueryGenerator = require(`./query.js`);
 
-const esUrl = `http://localhost:9200`;  // URL to elastic search
+const esUrl = ( process.env.ES_SEARCH_API) ? process.env.ES_SEARCH_API : `http://localhost:9200`;  // URL to elastic search
 
 const {Client} = require('@elastic/elasticsearch'); //https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
 const client = new Client( { node: esUrl } );

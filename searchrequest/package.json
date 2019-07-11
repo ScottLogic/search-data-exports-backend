@@ -5,7 +5,10 @@
     "express": "^4.17.1",
     "node": "^12.6.0"
   },
-  "scripts" : {
-    "start" : "node ./app/index.js"
+  "scripts": {
+    "start": "node -r dotenv/config ./app/index.js"
+  },
+  "devDependencies": {
+    "dotenv": "^8.0.0"
   }
 }
