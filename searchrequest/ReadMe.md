@@ -3,8 +3,8 @@
 This node API can be used to receive requests in a specific JSON format, and return Elastic Search results.
 
 ## Layout
-This consistits of 2 sections, an API request handler, and the search process.
-+ `index.js` - The request handler. This takes in the API requests and forwards accordinly to the search class. 
+This consist of 2 sections, an API request handler, and the search process.
++ `index.js` - The request handler. This takes in the API requests and forwards accordingly to the search class. 
 + `search.js` - Javascript class which can be used to send requests to ElasticSearch.  
 + `query.js` - Helper class to deal with JSON transformations for ElasticSearch.
 

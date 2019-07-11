@@ -6,10 +6,6 @@ const SEARCH_FIELDS_POST = [ "Content","Tags^3" ] ; // The ^3 makes tags 3 times
 
 class QuerryGenerator {
 
-    constructor() {
-    
-    }
-
    buildFilters( type , dateRange = []  ) {              
        let filterList = [];
        type && filterList.push({"term" : {"_type":type}} );
@@ -60,7 +56,7 @@ class QuerryGenerator {
 
     buildQueryJson( rawRequest = {} , method  ) {
         const resultsSize = (rawRequest.results) ? rawRequest.results : 10;        
-        // The only filters we care about are type, and dateRange. everything else is actual scored filters. (method) ? method :  
+        // The only filters we care about are type, and dateRange. everything else is actual scored filters.
         const dateRange = rawRequest.search.find( x => x.dateRange);       
         const filtersList = this.buildFilters(  (method) ? method : rawRequest.type, (dateRange) ? dateRange.dateRange : []  );
         const queryList = this.buildQuery(  (method) ? method : rawRequest.type, rawRequest.search.filter( x => !(x.dateRange)));        
@@ -78,9 +74,6 @@ class QuerryGenerator {
 
         return returnJSON;
     }
-
-
-
 }
 
 module.exports = QuerryGenerator;

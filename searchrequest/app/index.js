@@ -1,9 +1,9 @@
 const express = require(`express`);
 const app = express();
 const ESSearch = require(`./search.js`);
-let server = require('http').Server(app);
+const server = require('http').Server(app);
 
-let search = new ESSearch();
+const search = new ESSearch();
 const port = 3000;
 
 // Because the input can come from a few places, (url params, body content etc) we use ES6 notation to combine them all up. 
