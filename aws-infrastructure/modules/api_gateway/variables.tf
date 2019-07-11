@@ -1,5 +1,5 @@
-variable "region" {
-  description = "The AWS region name"
+variable "name_prefix" {
+  description = "Prefix to use when naming resources"
 }
 
 variable "project" {
