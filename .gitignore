@@ -1,4 +1,15 @@
+### Data Import ###
 dataimport/data/
 dataimport/node_modules/
+### Search Requests ###
 searchrequest/node_modules/
 searchrequest/app/brokenexamples.js
+### Terraform ###
+# Compiled files
+*.tfstate
+*.tfstate.backup
+.terraform.tfstate.lock.info
+# Module directory
+aws-infrastructure/.terraform/
+aws-infrastructure/.idea
+aws-infrastructure/modules/lambda/*.zip
