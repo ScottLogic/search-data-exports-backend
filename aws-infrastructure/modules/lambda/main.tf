@@ -5,21 +5,29 @@ data "archive_file" "search" {
   output_path = "${path.module}/search_lambda_function_payload.zip"
 }
 
+data "template_file" "lambda_exec_policy" {
+  template = file("${path.module}/policies/lambda_exec_policy.json")
+
+  vars = {
+    elasticsearch_arn = var.elasticsearch_arn
+  }
+}
+
 resource "aws_iam_role" "lambda_exec_role" {
   name = "${var.project}-${var.environment}-lambda-exec-role"
 
   assume_role_policy = file("${path.module}/policies/lambda_exec_role.json")
 }
 
-resource "aws_iam_policy" "lambda_logging" {
+resource "aws_iam_policy" "lambda_policy" {
   name = "${var.project}-${var.environment}-lambda-exec-policy"
 
-  policy = file("${path.module}/policies/lambda_exec_policy.json")
+  policy = data.template_file.lambda_exec_policy.rendered
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_logs" {
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role        = aws_iam_role.lambda_exec_role.name
-  policy_arn  = aws_iam_policy.lambda_logging.arn
+  policy_arn  = aws_iam_policy.lambda_policy.arn
 }
 
 resource "aws_lambda_function" "search_lambda" {

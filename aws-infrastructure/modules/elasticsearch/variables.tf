@@ -1,7 +1,3 @@
-variable "region" {
-  description = "The AWS region name"
-}
-
 variable "project" {
   description = "The name of the project"
 }
@@ -11,6 +7,7 @@ variable "environment" {
 }
 
 variable "allowed_public_ip" {
-  description = "A public IP which is allowed access to the elasticsearch cluster for maintenance purposes"
+  description = "A public IP which is allowed access to the cluster for maintenance purposes"
 }
+
 
