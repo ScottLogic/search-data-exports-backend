@@ -1,6 +1,10 @@
+### Data Import ###
 dataimport/data/
 dataimport/node_modules/
-
+### Search Requests ###
+searchrequest/node_modules/
+searchrequest/app/brokenexamples.js
+searchrequest/.env
 ### Terraform ###
 # Compiled files
 *.tfstate
@@ -10,3 +14,4 @@ dataimport/node_modules/
 aws-infrastructure/.terraform/
 aws-infrastructure/.idea
 aws-infrastructure/modules/lambda/*.zip
+
