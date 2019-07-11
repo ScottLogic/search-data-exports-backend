@@ -9,12 +9,12 @@ This consist of 2 sections, an API request handler, and the search process.
 + `query.js` - Helper class to deal with JSON transformations for ElasticSearch.
 
 ## Requirements
-+ npm or **yarn** (Prefered)
++ npm
 + ElasticSeach URL. 
 
 ## Setup 
-+ Run `yarn install` to setup pre-requisutes.
-+ Run `yarn start` to start the NodeJS Express API. 
++ Run `npm install` to setup pre-requisutes.
++ Run `npm run start` to start the NodeJS Express API. 
 
 ## Configuration
 ### Ports
