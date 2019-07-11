@@ -1,15 +1,15 @@
 {
-  "name"	 : "DataHelixImport",    
+  "name": "DataHelixImport",
   "dependencies": {
     "@elastic/elasticsearch": "^7.2.0",
     "csvtojson": "^2.0.10",
     "node": "^12.6.0"
   },
   "scripts": {
-    "ESImport" : "node ./app/dataImport.js",
-    "createPosts" : "java -jar ./helix/generator.jar generate --max-rows=1000 --allow-untyped-fields --replace --profile-file=./profile/profile_post.json --output-path=./data/posts.csv",
-    "createUsers" : "java -jar ./helix/generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=./profile/profile_user.json --output-path=./data/users.csv",
-    "helix" : "yarn createUsers & yarn createPosts",
-    "helixESImport" : "yarn createUsers && yarn createPosts && yarn ESImport"
+    "ESImport": "node ./app/dataImport.js",
+    "createPosts": "java -jar ./helix/generator.jar generate --max-rows=1000 --allow-untyped-fields --replace --profile-file=./profile/profile_post.json --output-path=./data/posts.csv",
+    "createUsers": "java -jar ./helix/generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=./profile/profile_user.json --output-path=./data/users.csv",
+    "helix": "npm run createUsers & npm run createPosts",
+    "helixESImport": "npm run createUsers && npm run createPosts && npm run ESImport"
   }
 }

@@ -1,22 +1,22 @@
 # Data Import Process
 
 ## Requirements
-+ Npm or **Yarn** (Prefered) 
++ Npm
 + Node.js
 + Java *(v1.8+)*
 
 ## Setup
-To set up run the command `yarn install` to ensure pre-requisite node modules are downloaded. 
+To set up run the command `npm install` to ensure pre-requisite node modules are downloaded. 
 
 ## Running
 **Before running ensure that you have configured the Elastic Search api link correctly.** See Configuration below.
 
-The following yarn commands are available to use each function seperatly. 
-+ `yarn createPosts` - Create a csv of example posts, default 1000, into `./data/posts.csv`
-+ `yarn createUsers` - Create a csv of example users, default 100, into `./data/users.csv`
-+ `yarn ESImport` - Imports information from the files in `./data` into elastic search. 
-+ `yarn helix` - Run both `createPosts` and `CreateUsers` in succession. 
-+ `yarn helixESImport` - Run both create processes and then import them into Elastic Search. 
+The following npm commands are available to use each function seperatly. 
++ `npm run createPosts` - Create a csv of example posts, default 1000, into `./data/posts.csv`
++ `npm run createUsers` - Create a csv of example users, default 100, into `./data/users.csv`
++ `npm run ESImport` - Imports information from the files in `./data` into elastic search. 
++ `npm run helix` - Run both `createPosts` and `CreateUsers` in succession. 
++ `npm run helixESImport` - Run both create processes and then import them into Elastic Search. 
 
 ## Configuration
 ### Word List files
