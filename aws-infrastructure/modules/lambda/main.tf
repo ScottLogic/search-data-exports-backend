@@ -58,10 +58,10 @@ resource "aws_lambda_function" "search_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "lambda_permission" {
+resource "aws_lambda_permission" "lambda_alias_permission" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.search_lambda.arn
+  function_name = aws_lambda_alias.search_lambda_alias.arn
   principal     = "apigateway.amazonaws.com"
 
   # The /*/*/* part allows invocation from any stage, method and resource path
