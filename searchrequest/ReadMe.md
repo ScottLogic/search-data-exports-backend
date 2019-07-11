@@ -41,7 +41,7 @@ The inputted JSON can be in the format below, and must be properly formatted JSO
 ```JSON
 {
     "type":"user|post|", /* Ignored if using direct endpoint */
-    "results" : 0, /* How many results to return in a set. default:10 */
+    "resultSize" : 0, /* How many results to return in a set. default:10 */
     "page": 0, /* Which page of results is required. default:0 */
     "search": [
         {"field": "fieldName|all",

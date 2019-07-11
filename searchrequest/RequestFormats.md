@@ -2,18 +2,20 @@
 # API call specification
 
 ## API endpoints
-+ `/api/search/` - Used to search all indexes
-+ `/api/search/post/` - End point to search all posts - Accecpts *GET* and *POST*
-+ `/api/search/user/` - End point to search all users - Accecpts *GET* and *POST*
++ `/search/` - Used to search all indexes
++ `/search/post/` - End point to search all posts - Accecpts *GET* and *POST*
++ `/search/user/` - End point to search all users - Accecpts *GET* and *POST*
 
 Generic information on how json requests are to be passed into the node API.
 ```json 
 {
     "type" : "user|post", // defaults to blank, which should search both indexes. 
-    "results" : int, //Default:10
+    "resultSize" : int, //Default:10
     "page" : int, //Default:0
     "search" : [        
-        { "field" : "fieldName|all", "value" : "value" } ... // seach on a specific fields. (e.g _id,Tags,Content,FirstName,LastName) or "all"
+        { "field" : "fieldName|all", // Field Name to search on are "all" for every field.   
+          "value" : "value" // Value to search for } 
+        ... 
         // These can be added to the array list and will all be applied to the results. 
         { "dateRange" : [dateTime,dateTime] } // can be provided to filter by date range, both values must be provided
     ]
