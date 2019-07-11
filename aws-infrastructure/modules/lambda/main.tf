@@ -68,3 +68,10 @@ resource "aws_lambda_permission" "lambda_permission" {
   # within API Gateway REST API.
   source_arn = "${var.api_gateway_execution_arn}/*/*/*"
 }
+
+resource "aws_lambda_alias" "search_lambda_alias" {
+  name = "DEV"
+  description = "Alias to the ${aws_lambda_function.search_lambda.function_name}"
+  function_name = "${aws_lambda_function.search_lambda.function_name}"
+  function_version = "$LATEST"
+}
