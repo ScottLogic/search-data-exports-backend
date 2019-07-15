@@ -1,8 +1,9 @@
 resource "aws_elasticsearch_domain" "test-domain" {
   domain_name = "${var.name_prefix}-es-test-domain"
+  elasticsearch_version = "6.7"
 
   cluster_config {
-    instance_type = "t2.micro.elasticsearch"
+    instance_type = "t2.small.elasticsearch"
     instance_count = 1
   }
 
