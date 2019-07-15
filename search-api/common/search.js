@@ -1,22 +1,19 @@
-/*
-This code is responsible to making ES queries from the JSON inputted, as we want to hide some of the nitty gritty from the users. 
-*/
+/* This code is responsible to making ES queries from the JSON inputted, as we want to hide some of the nitty gritty from the users. */
 const QueryGenerator = require(`./query.js`);
+const {Client} = require('elasticsearch'); 
 
-const esUrl = ( process.env.ES_SEARCH_API) ? process.env.ES_SEARCH_API : `http://localhost:9200`;  // URL to elastic search
 
-const {Client} = require('@elastic/elasticsearch'); //https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
-const client = new Client( { node: esUrl } );
+class ESSearch {    
 
-class ESSearch {
-
-    constructor() {  
+    constructor( ESConnectOptions = { host: `http://localhost:9200` } ) {          
         this._queryGen = new QueryGenerator();      
+        this._connectionOptions = ESConnectOptions;        
+        this._client = new Client( ESConnectOptions );
     }
 
     // Actually perform the search to the Elastic Search
     async doSearch(searchJSON) {
-        return await client.search(searchJSON);        
+        return await this._client.search(searchJSON);        
     }
 
     buildRequestJSON(searchJSON,method) {
