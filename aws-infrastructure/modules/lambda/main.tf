@@ -42,7 +42,7 @@ resource "aws_lambda_function" "search_lambda" {
   function_name     = "${var.name_prefix}-search"
   role              = aws_iam_role.lambda_exec_role.arn
   handler           = "index.handler"
-  runtime           = "nodejs8.10"
+  runtime           = "nodejs10.x"
   description       = "SDE search lambda"
 
   environment {
