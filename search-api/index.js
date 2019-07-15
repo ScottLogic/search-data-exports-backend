@@ -9,7 +9,7 @@ exports.handler = function(event, context, callback) {
     eventJson = JSON.parse(event.body);
   } catch (error) {
     callback(null, {
-      statusCode: '200',
+      statusCode: '400',
       body: JSON.stringify({ 'message': 'INPUT ERROR', 'errorMessage' : error, "content": event.body }),
       headers: {
         'Content-Type': 'application/json',
@@ -17,8 +17,7 @@ exports.handler = function(event, context, callback) {
     });
   }
 
-  if (eventJson) {     
-
+  if (eventJson) {    
     const ESConnectOptions = {    
       host: (process.env.ES_SEARCH_API) ? process.env.ES_SEARCH_API : `http://localhost:9200` ,
       connectionClass: connectionClass,
@@ -28,7 +27,7 @@ exports.handler = function(event, context, callback) {
     };  
     const search = new ESSearch( ESConnectOptions );
 
-    search.search(eventJson).then( (result) => {    
+    search.search(eventJson).then( result => {    
         callback(null, {
             statusCode: '200',
             body: JSON.stringify(result),
@@ -36,9 +35,9 @@ exports.handler = function(event, context, callback) {
               'Content-Type': 'application/json',
             },
           });
-    }).catch( (error) => {      
+    }).catch( error => {      
         callback(null, {
-            statusCode: '200',
+            statusCode: '400',
             body: JSON.stringify({ 'message': 'ERROR', 'errorMessage' : error }),
             headers: {
               'Content-Type': 'application/json',

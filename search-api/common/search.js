@@ -5,7 +5,7 @@ const {Client} = require('elasticsearch');
 
 class ESSearch {    
 
-    constructor( ESConnectOptions = { host: `http://localhost:9200` } ) {          
+    constructor( ESConnectOptions = { } ) {          
         this._queryGen = new QueryGenerator();      
         this._connectionOptions = ESConnectOptions;        
         this._client = new Client( ESConnectOptions );
