@@ -4,7 +4,7 @@ This code is responsible to making ES queries from the JSON inputted, as we want
 const SEARCH_FIELDS_USER = ["LastName","FirstName", "EmailAddress"];
 const SEARCH_FIELDS_POST = [ "Content","Tags^3" ] ; // The ^3 makes tags 3 times more important that content. 
 
-class QuerryGenerator {
+class QueryGenerator {
 
    buildFilters( type , dateRange = []  ) {              
        let filterList = [];
@@ -76,4 +76,4 @@ class QuerryGenerator {
     }
 }
 
-module.exports = QuerryGenerator;
+module.exports = QueryGenerator;
