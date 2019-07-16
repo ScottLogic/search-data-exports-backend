@@ -7,7 +7,7 @@ const STATUS_ERROR = "error";
 
 class Format {
 
-    formatResults( results) {         
+    formatResults( results ) {         
         
         if (!results.hits) {
             return {
@@ -19,8 +19,8 @@ class Format {
         return {
             "Status": this.getStatus(results.timed_out,results._shards),
             "ErrorMessage" : this.getStatusMessage(results.timed_out,results._shards),
-            "TotalResults" : (results.hits.total) ? results.hits.total: 0,
-            "ResultsCount" : results.hits.hits.length,
+            "TotalResults" : results.hits.total || 0,
+            "ResultsCount" : results.hits.hits.length || 0,
             "Results" : results.hits.hits.map( result => this.makeResult(result))
         };
     }
