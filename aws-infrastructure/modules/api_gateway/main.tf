@@ -38,3 +38,10 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   stage_name  = var.environment
 }
+
+module "cors" {
+  source = "./cors"
+
+  api_id          = aws_api_gateway_rest_api.api_gateway.id
+  api_resource_id = aws_api_gateway_resource.search_api_resource.id
+}
