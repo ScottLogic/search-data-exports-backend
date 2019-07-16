@@ -13,6 +13,7 @@ exports.handler = function(event, context, callback) {
       body: JSON.stringify({ 'message': 'INPUT ERROR', 'errorMessage' : error, "content": event.body }),
       headers: {
         'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "*"
       },
     });
   }
@@ -32,7 +33,8 @@ exports.handler = function(event, context, callback) {
             statusCode: '200',
             body: JSON.stringify(result),
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json',              
+              "Access-Control-Allow-Origin": "*"
             },
           });
     }).catch( error => {      
@@ -40,7 +42,8 @@ exports.handler = function(event, context, callback) {
             statusCode: '400',
             body: JSON.stringify({ 'message': 'ERROR', 'errorMessage' : error }),
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json',             
+              "Access-Control-Allow-Origin": "*"
             },
           });
     });
