@@ -8,11 +8,9 @@ class QueryGenerator {
 
    buildFilters( type , dateRange = []  ) {              
        let filterList = [];
-       type && filterList.push({"term" : {"_type":type}} );
-       if (dateRange.length === 2)  {
-        filterList.push({ "range": { "DateCreated": { "gte": dateRange[0] }}});
-        filterList.push({ "range": { "DateCreated": { "lte": dateRange[1] }}});
-       } 
+       if (type) filterList.push({"term" : {"_type":type}} );
+       if (dateRange.length >= 1) filterList.push({ "range": { "DateCreated": { "gte": dateRange[0] }}});
+       if (dateRange.length >= 2) filterList.push({ "range": { "DateCreated": { "lte": dateRange[1] }}});    
        return filterList;
    }
 
