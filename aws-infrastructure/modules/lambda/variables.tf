@@ -10,14 +10,18 @@ variable "environment" {
   description = "The name of the environment we're creating, i.e prod, uat, dev etc."
 }
 
-variable "api_gateway_execution_arn" {
-  description = "The API Gateway execution ARN, needed to we can grant permission to allow API gateway to run our lambdas"
-}
-
-variable "elasticsearch_arn" {
-  description = "The Elasticsearch arn we need to grant our lambda permission to access"
-}
-
 variable "elasticsearch_endpoint" {
   description = "The Elasticsearch endpoint, that's set as an environment variable for the lambdas"
+}
+
+variable "lambda_name" {
+  description = "The name of the lambda we're going to create"
+}
+
+variable "source_arn" {
+  description = "The URN of the resource which will invoke this lambda, so appropriate permissions can be set"
+}
+
+variable "lambda_iam_role_arn" {
+  description = "The iam role to use for this lambda"
 }
