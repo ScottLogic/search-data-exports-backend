@@ -21,15 +21,7 @@ class ESSearch {
             body:searchJSON,
             index: method
         };
-    }
-
-    async searchPosts(requestJSON) {               
-        return this.doSearch(this.buildRequestJSON(this._queryGen.buildQueryJson(requestJSON,"post"),"posts"));
-    }
-
-    async searchUsers(requestJSON) {
-        return this.doSearch(this.buildRequestJSON(this._queryGen.buildQueryJson(requestJSON,"user"),"users"));
-    }
+    }   
 
     async search(requestJSON) {
         return this.doSearch(this.buildRequestJSON(this._queryGen.buildQueryJson(requestJSON)));
