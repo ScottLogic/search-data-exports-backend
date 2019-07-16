@@ -52,7 +52,7 @@ The inputted JSON can be in the format below, and must be properly formatted JSO
         {"field": "fieldName|all",
          "value": "value"},
         ...
-        {"dateRange": [ "Start Date", "End Date"]} // Optionial for Post search.
+        {"dateRange": [ "Start Date", "End Date|optional"]} // optional for Post search. End date can be ommited for open ended date range. 
     ]
 }
 ```
