@@ -12,6 +12,7 @@ Below is an example of how the output JSON will be formatted.
 {
     "status" : "ok|warn|error",
     "statusMsg" : "string",
+    "totalResults": 0,
     "resultsCount" : 0,
     "results" : [
         { "uuid" : "_id",

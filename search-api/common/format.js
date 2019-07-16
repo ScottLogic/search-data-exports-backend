@@ -11,14 +11,14 @@ class Format {
         
         if (!results.hits) {
             return {
-                "status": STATUS_ERROR,
-                "errorMessage" : "No Return Information Found"
+                "Status": STATUS_ERROR,
+                "ErrorMessage" : "No Return Information Found"
             };
         }
 
         return {
-            "status": this.getStatus(results.timed_out,results._shards),
-            "errorMessage" : this.getStatusMessage(results.timed_out,results._shards),
+            "Status": this.getStatus(results.timed_out,results._shards),
+            "ErrorMessage" : this.getStatusMessage(results.timed_out,results._shards),
             "TotalResults" : (results.hits.total) ? results.hits.total: 0,
             "ResultsCount" : results.hits.hits.length,
             "Results" : results.hits.hits.map( result => this.makeResult(result))
@@ -28,7 +28,7 @@ class Format {
     makeResult( result ) {
         return {
             "uuid" : result._id,
-            "type" : result._index,
+            "Type" : result._index,
             ...result._source
         }
     }
