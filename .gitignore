@@ -17,4 +17,4 @@ aws-infrastructure/modules/lambda/*.zip
 # INteliJ stuff
 .idea
 search-api/node_modules
-search-api/*.zip
+#search-api/*.zip
