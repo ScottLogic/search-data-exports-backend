@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const connectionClass = require("http-aws-es");
 const ESSearch = require(`./common/search.js`);
+const Format = require(`./common/format.js`);
 
 const callbackHeaders = {
   "Content-Type": "application/json",
@@ -33,13 +34,15 @@ exports.handler = function(event, context, callback) {
     })
   };
   const search = new ESSearch(ESConnectOptions);
+  const formatter = new Format();
+
 
   search
     .search(eventJson)
     .then(result => {
       callback(null, {
         statusCode: "200",
-        body: JSON.stringify(result),
+        body: JSON.stringify(formatter.formatResults(result)),
         headers: callbackHeaders
       });
     })
