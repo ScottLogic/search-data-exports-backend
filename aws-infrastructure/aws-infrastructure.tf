@@ -107,6 +107,23 @@ module "lambda-generate-report" {
 }
 
 #
+# Define our generate-report lambda
+#
+module "lambda-generate-report" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "generate-report"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  elasticsearch_endpoint    = module.elasticsearch.endpoint
+}
+
+#
 # Create search API and link to search lambda
 #
 module "api-gateway-search" {

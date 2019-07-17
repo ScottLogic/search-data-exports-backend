@@ -1,0 +1,9 @@
+{
+  "name": "DataHelixImport",
+  "dependencies": {
+    "elasticsearch": "^16.3.0",
+    "http-aws-es": "^6.0.0",
+    "aws-sdk": "^2.493.0",
+    "uuid": "^3.3.2"
+  }
+}
