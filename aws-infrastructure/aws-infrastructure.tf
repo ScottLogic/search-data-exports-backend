@@ -1,27 +1,68 @@
 locals {
-  name_prefix =  "${var.project}-${var.environment}"
+  name_prefix             =  "${var.project}-${var.environment}"
+
+  # The /*/*/* part allows invocation from any stage, method and resource path
+  # within API Gateway REST API.
+  api_gateway_source_arn  = "${module.api-gateway.api_gateway_execution_arn}/*/*/*"
 }
 
 provider "aws" {
   region  = var.region
 }
 
-module "lambda" {
-  source                    = "./modules/lambda"
+#
+# Define our iam role for our lambdas - these are shared, so must be created outside of the lambda module otherwise, duplicate errors are generated
+#
+module "lambda_shared_policy" {
+  source = "./modules/lambda_shared_policy"
   name_prefix               = local.name_prefix
   project                   = var.project
   environment               = var.environment
-  api_gateway_execution_arn = module.api-gateway.api_gateway_execution_arn
   elasticsearch_arn         = module.elasticsearch.elasticsearch_arn
-  elasticsearch_endpoint    = module.elasticsearch.endpoint
 }
 
+#
+# Define API gateway
+#
 module "api-gateway" {
   source                    = "./modules/api_gateway"
   name_prefix               = local.name_prefix
   project                   = var.project
   environment               = var.environment
-  search_lambda_invoke_arn  = module.lambda.search_lambda_invoke_arn
+
+  # list of all resource id's which will be added. Used purely as a dependency, as we can't deploy the API gateway until
+  # the resource id's are created.
+  api_resource_ids          = [module.api-gateway-search.api_resource_id]
+}
+
+#
+# Define our search lambda
+#
+module "lambda-search" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "search"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  elasticsearch_endpoint    = module.elasticsearch.endpoint
+}
+
+#
+# Create search API and link to search lambda
+#
+module "api-gateway-search" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway.api_gateway_root_resource_id
+  api_name                  = "search"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-search.invoke_arn
 }
 
 module "elasticsearch" {
