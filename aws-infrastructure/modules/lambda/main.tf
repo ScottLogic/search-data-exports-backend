@@ -13,12 +13,10 @@ resource "aws_lambda_function" "new_lambda" {
   role              = var.lambda_iam_role_arn
   handler           = "index.handler"
   runtime           = "nodejs10.x"
-  description       = "SDE search lambda"
+  description       = var.description
 
   environment {
-    variables = {
-      ES_SEARCH_API = var.elasticsearch_endpoint
-    }
+    variables = var.lambda_env_map
   }
 
   tags = {
