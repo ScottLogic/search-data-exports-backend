@@ -3,6 +3,11 @@ SNS Topic
 ======*/
 resource "aws_sns_topic" "new_sns_topic" {
   name = var.sns_topic_name
+  tags = {
+    Name        = "${var.name_prefix}-search"
+    Environment = var.environment
+    Project     = var.project
+  }
 }
 
 /*====
