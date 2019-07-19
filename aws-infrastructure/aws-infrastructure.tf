@@ -44,12 +44,62 @@ module "lambda-search" {
   project                   = var.project
   environment               = var.environment
   lambda_name               = "search"
+  description               = "SDE search lambda"
 
   lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
 
   source_arn                = local.api_gateway_source_arn
 
-  elasticsearch_endpoint    = module.elasticsearch.endpoint
+  lambda_env_map            = {ES_SEARCH_API : module.elasticsearch.endpoint}
+}
+
+#
+# Create download request SNS topic
+#
+module "sns-email-requests-topic" {
+  source                          = "./modules/sns"
+  name_prefix                     = local.name_prefix
+  project                         = var.project
+  environment                     = var.environment
+  sns_topic_name                  = "email-requests-topic"
+  sns_topic_subscription_protocol = "lambda"
+  sns_topic_subscription_endpoint = module.lambda-generate-report.arn
+}
+
+#
+# Define the download request lambda
+#
+module "lambda-email-request" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "email-request"
+  description               = "SDE email request lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {DOWNLOAD_REQUESTS_SNS_TOPIC : module.sns-email-requests-topic.topic_arn}
+}
+
+#
+# Define the generate report lambda
+#
+module "lambda-generate-report" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "generate-report"
+  description               = "SDE generate report lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {ES_SEARCH_API : module.elasticsearch.endpoint}
 }
 
 #
@@ -63,6 +113,19 @@ module "api-gateway-search" {
   name_prefix               = local.name_prefix
   project                   = var.project
   lambda_invoke_arn         = module.lambda-search.invoke_arn
+}
+
+#
+# Create search API and link to search lambda
+#
+module "api-gateway-email-request" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway.api_gateway_root_resource_id
+  api_name                  = "email-request"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-email-request.invoke_arn
 }
 
 module "elasticsearch" {

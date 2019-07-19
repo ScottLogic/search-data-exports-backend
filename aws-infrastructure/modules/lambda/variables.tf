@@ -10,12 +10,17 @@ variable "environment" {
   description = "The name of the environment we're creating, i.e prod, uat, dev etc."
 }
 
-variable "elasticsearch_endpoint" {
-  description = "The Elasticsearch endpoint, that's set as an environment variable for the lambdas"
-}
-
 variable "lambda_name" {
   description = "The name of the lambda we're going to create"
+}
+
+variable "description" {
+  description = "The description of the lambda we're going to create"
+}
+
+variable "lambda_env_map" {
+  type = "map"
+  description = "A map containing the lambda's environment variables"
 }
 
 variable "source_arn" {
