@@ -16,7 +16,14 @@
       ],
       "Resource": "${elasticsearch_arn}/*",
       "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "s3:PutObject",
+        "s3:PutObjectAcl"
+      ],
+      "Resource": "${elasticsearch_arn}/*",
+      "Effect": "Allow"
     }
-
   ]
 }

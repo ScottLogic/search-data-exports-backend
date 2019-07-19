@@ -3,6 +3,7 @@ data "template_file" "lambda_exec_policy" {
 
   vars = {
     elasticsearch_arn = var.elasticsearch_arn
+    s3_arn            = var.s3_arn
   }
 }
 
