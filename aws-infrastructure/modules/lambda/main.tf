@@ -20,7 +20,7 @@ resource "aws_lambda_function" "new_lambda" {
   }
 
   tags = {
-    Name        = "${var.name_prefix}-search"
+    Name = "${var.name_prefix}-${var.lambda_name}"
     Environment = var.environment
     Project     = var.project
   }
