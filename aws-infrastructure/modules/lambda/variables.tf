@@ -24,7 +24,7 @@ variable "lambda_env_map" {
 }
 
 variable "source_arn" {
-  description = "The URN of the resource which will invoke this lambda, so appropriate permissions can be set"
+  description = "The ARN of the resource which will invoke this lambda, so appropriate permissions can be set"
 }
 
 variable "lambda_iam_role_arn" {
