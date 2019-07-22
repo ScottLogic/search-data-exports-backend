@@ -1,14 +1,14 @@
 # dummy hello world lambda used to create initial lambda
-data "archive_file" "hello_world" {
+data "archive_file" "lambda_archive_file" {
   type        = "zip"
 
-  source_file = "${path.module}/code/index.js"
-  output_path = "${path.module}/search_lambda_function_payload.zip"
+  source_dir  = "${path.module}/../../../${var.lambda_name}-api/"
+  output_path = "${path.module}/../../../${var.lambda_name}-api/${var.lambda_name}-api.zip"
 }
 
 resource "aws_lambda_function" "new_lambda" {
-  filename          = data.archive_file.hello_world.output_path
-  source_code_hash  = data.archive_file.hello_world.output_base64sha256
+  filename          = data.archive_file.lambda_archive_file.output_path
+  source_code_hash  = data.archive_file.lambda_archive_file.output_base64sha256
   function_name     = "${var.name_prefix}-${var.lambda_name}"
   role              = var.lambda_iam_role_arn
   handler           = "index.handler"
