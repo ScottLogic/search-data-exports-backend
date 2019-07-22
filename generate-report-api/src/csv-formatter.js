@@ -3,7 +3,7 @@ class CSVFormatter {
     let hits = searchResult.hits;
 
     if (hits && hits.hits.length) {
-      return Object.keys(hits.hits[0]._source).join(',');
+      return Object.keys(hits.hits[0]._source).join(',') + '\r\n';
     }
 
     return 'NoResults';
