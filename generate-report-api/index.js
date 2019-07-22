@@ -7,8 +7,10 @@ const sendEmail = require('./src/send-email.js');
 
 exports.handler = async (event) => {
   try {
-    console.log("event.body: " + event.body );
-    const data = JSON.parse(event.body);
+    let message = event.Records[0].Sns.Message
+
+    console.log("message: " + message );
+    const data = JSON.parse(message);
 
     const bucketName = process.env.S3_BUCKET_NAME;
     const generateReport = new ReportGenerator(getConfig(), new CSVFormatter(), new S3Output(bucketName));
