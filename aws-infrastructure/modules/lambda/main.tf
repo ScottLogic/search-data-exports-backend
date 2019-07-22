@@ -37,6 +37,13 @@ resource "aws_lambda_permission" "lambda_alias_permission" {
   source_arn = var.source_arn
 }
 
+resource "aws_lambda_permission" "with_sns" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.new_lambda.arn
+  principal     = "sns.amazonaws.com"
+}
+
 resource "aws_lambda_alias" "new_lambda_alias" {
   name = "DEV"
   description = "Alias to the ${aws_lambda_function.new_lambda.function_name}"

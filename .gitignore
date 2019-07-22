@@ -5,6 +5,9 @@ dataimport/node_modules/
 searchrequest/node_modules/
 searchrequest/app/brokenexamples.js
 searchrequest/.env
+### Email Requests ###
+download-request-api/node_modules/
+download-request-api/*.zip
 ### Terraform ###
 # Compiled files
 *.tfstate

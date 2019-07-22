@@ -1,0 +1,6 @@
+{
+  "name": "sde-download-request-api",
+  "dependencies": {
+    "aws-sdk": "^2.493.0"
+  }
+}

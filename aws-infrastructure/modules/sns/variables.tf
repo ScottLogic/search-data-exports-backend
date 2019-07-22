@@ -18,6 +18,14 @@ variable "sns_topic_subscription_protocol" {
   description = "The protocol of the topic subscription e.g. sqs, sms, lambda"
 }
 
-variable "sns_topic_subscription_endpoint" {
-  description = "The endpoint of the topic subscriber"
+variable "sns_topic_subscription_endpoints" {
+  description = "The endpoints of the topic subscribers"
+}
+
+variable "sns_success_feedback_role_arn" {
+  description = "The IAM role for success message delivery feedback"
+}
+
+variable "sns_failure_feedback_role_arn" {
+  description = "The IAM role for failed message delivery feedback"
 }
