@@ -2,9 +2,13 @@ const main = require('./index');
 
 
 const eventBody = {
-    body: {
-        
-    }
-}
+    body: '{ \"search\" : [ { \"dateRange\" : [\"2019-07-21\",\"2019-07-23\"] } ]}'
+};
 
-main.handler("Events","context","CallBack")
+const eventBodyBlank = {
+    body: '{ \"search\" : [ ]}'
+};
+
+
+//main.handler(eventBody,"context","CallBack");
+main.handler(eventBodyBlank,"context","CallBack");

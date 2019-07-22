@@ -46,12 +46,12 @@
                 {
                     "field":"DateCreated",
                     "is":"after",
-                    "value": { "date":"2017-01-01T00:00:00.00Z"}
+                    "value": { "date":"2019-07-21T00:00:00.00Z"}
                 },
                 {
                     "field":"DateCreated",
                     "is":"before",
-                    "value": { "date":"2020-01-01T00:00:00.00Z"}
+                    "value": { "date":"2019-07-23T00:00:00.00Z"}
                 },
                 {
                     "not": { "field":"DateCreated", "is":"null" }
