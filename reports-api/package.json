@@ -1,8 +1,9 @@
 {
   "name": "SDE-Report-Generation",
   "dependencies": {
+    "aws-sdk": "^2.493.0",
     "elasticsearch": "^16.3.0",
     "http-aws-es": "^6.0.0",
-    "aws-sdk": "^2.493.0"
+    "jsdom": "^15.1.1"
   }
 }
