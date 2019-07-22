@@ -1,13 +1,13 @@
+# node_modules
+node_modules/
+# any zip files
+*.zip
+# any env files
+*.env
 ### Data Import ###
 dataimport/data/
-dataimport/node_modules/
 ### Search Requests ###
-searchrequest/node_modules/
 searchrequest/app/brokenexamples.js
-searchrequest/.env
-### Email Requests ###
-download-request-api/node_modules/
-download-request-api/*.zip
 ### Terraform ###
 # Compiled files
 *.tfstate
@@ -19,5 +19,3 @@ aws-infrastructure/.idea
 aws-infrastructure/modules/lambda/*.zip
 # INteliJ stuff
 .idea
-search-api/node_modules
-search-api/*.zip
