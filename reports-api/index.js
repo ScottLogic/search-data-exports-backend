@@ -30,7 +30,7 @@ exports.handler = async function(event, context, callback) {
     }
 
     const ESConnectOptions = {
-        host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : `https://search-sde-dev-es-test-domain-hplsrf7hatpadkuvakzrf3j7wq.eu-west-1.es.amazonaws.com`,
+        host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : `http://localhost:9200`,
         //connectionClass: connectionClass,
         awsConfig: new AWS.Config({
         credentials: new AWS.EnvironmentCredentials("AWS")
