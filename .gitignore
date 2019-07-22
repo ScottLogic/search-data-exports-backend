@@ -18,3 +18,4 @@ aws-infrastructure/modules/lambda/*.zip
 .idea
 search-api/node_modules
 search-api/*.zip
+*node_modules
