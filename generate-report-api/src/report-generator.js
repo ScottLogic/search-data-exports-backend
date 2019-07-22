@@ -15,6 +15,7 @@ class ReportGenerator {
   }
 
   async doSearch( searchJSON ) {
+    console.log('searchJSON = ' +  JSON.stringify(searchJSON, null, 2));
     return this._client.search( searchJSON );
   }
 
@@ -63,7 +64,7 @@ class ReportGenerator {
   }
 
   async runReport( requestJSON ) {
-    const searchJSON = this.buildSearchJSON(this._queryGenerator.buildQueryJson( requestJSON, scrollResultSize ));
+    const searchJSON = this.buildSearchJSON(this._queryGenerator.buildQueryJson( requestJSON, null, scrollResultSize ));
     
     const searchResult = await this.doSearch( searchJSON );
     
