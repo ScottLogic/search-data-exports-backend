@@ -2,6 +2,8 @@ const AWS = require("aws-sdk");
 const connectionClass = require("http-aws-es");
 const graphGenerator = require('./graphGenerator');
 
+const {Client} = require('elasticsearch'); 
+
 
 const callbackHeaders = {
   "Content-Type": "application/json",
@@ -15,19 +17,46 @@ exports.handler = async function(event, context, callback) {
     try {
         eventJson = JSON.parse(event.body);
     } catch (error) {
-        console.log(`Failed Parse - `,error);
-        return;
+        callback(null, {
+            statusCode: "400",
+            body: JSON.stringify({
+              message: "Invalid Input JSON",
+              errorMessage: error,
+              content: event.body
+            }),
+            headers: callbackHeaders
+          });
+          return;
     }
 
     const ESConnectOptions = {
-        host: `http://localhost:9200`,        
+        host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : `https://search-sde-dev-es-test-domain-hplsrf7hatpadkuvakzrf3j7wq.eu-west-1.es.amazonaws.com`,
+        //connectionClass: connectionClass,
+        awsConfig: new AWS.Config({
+        credentials: new AWS.EnvironmentCredentials("AWS")
+        })     
     };
-
-    const g = new graphGenerator(ESConnectOptions);
+    const g = new graphGenerator(ESConnectOptions);    
     
-    const resultList = await g.getReportData(eventJson);
+    const result = await g.getReportData(eventJson).catch( error => {        
+        callback(null, {
+            statusCode: "400",
+            body: JSON.stringify({
+              message: "Error In Generation",
+              errorMessage: error,
+              content: event.body
+            }),
+            headers: callbackHeaders
+          });
+          return;
+    });
 
-    console.log(`Results = `,resultList.aggregations);
+    console.log(result);
 
+    callback(null, {
+        statusCode: "200",
+        body: JSON.stringify('http://some_dud_image_url'),
+        headers: callbackHeaders
+    });
 
 };
