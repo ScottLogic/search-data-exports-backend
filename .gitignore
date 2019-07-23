@@ -25,3 +25,7 @@ searchrequest/app/brokenexamples.js
 
 # IntelliJ stuff
 .idea
+# Stop all modules and envs
+*.zip
+*node_modules
+*.env
