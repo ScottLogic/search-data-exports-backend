@@ -6,7 +6,7 @@ class graphGenerator {
         this._search = new ESSearch(ConnectionOptions);
     }
 
-    // Entry Point
+    // Entry Point. 
     async generateGraph( paramJSON = {} ) {
         const reportData = await this.getReportData(paramJSON);                
         return reportData;
@@ -26,11 +26,10 @@ class graphGenerator {
 
     }
 
-    /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */
-    // The JSON request needed for this report 
+    /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */    
     buildRequestJSON( paramJSON = {} ) {
 
-        const dateRange = paramJSON.search.find( x => x.dateRange); // pull out the date range from params        
+        const dateRange = paramJSON.search.find( x => x.dateRange); 
         let  startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now() );
         const endDate = new Date( dateRange ? dateRange.dateRange[1] : Date.now() );
         !dateRange && startDate.setDate(startDate.getDate() - 1);             
