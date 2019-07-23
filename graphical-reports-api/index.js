@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
-const connectionClass = require("http-aws-es");
-const graphGenerator = require('./graphGenerator');
+const ConnectionClass = require("http-aws-es");
+const GraphGenerator = require('./graphGenerator');
 
 const {Client} = require('elasticsearch'); 
 
@@ -31,14 +31,14 @@ exports.handler = async function(event, context, callback) {
 
     const ESConnectOptions = {
         host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : `http://localhost:9200`,
-        //connectionClass: connectionClass,
+        //connectionClass: ConnectionClass,
         awsConfig: new AWS.Config({
         credentials: new AWS.EnvironmentCredentials("AWS")
         })     
     };
-    const g = new graphGenerator(ESConnectOptions);    
+    const graphGenerator = new GraphGenerator(ESConnectOptions);    
     
-    const result = await g.getReportData(eventJson).catch( error => {        
+    const result = await graphGenerator.generateGraph(eventJson).catch( error => {        
         callback(null, {
             statusCode: "400",
             body: JSON.stringify({

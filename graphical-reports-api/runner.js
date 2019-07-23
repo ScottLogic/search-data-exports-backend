@@ -1,4 +1,5 @@
-/* This is not an actual test file, its a command line method to run the handler.  */
+/* This is for running the code locally, and will be removed from the git report upon conversion to the lambda 
+*/
 
 const main = require('./index');
 

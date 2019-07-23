@@ -28,7 +28,7 @@ class graphGenerator {
 
 
     /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */
-    // The JSON requiest needed for this report 
+    // The JSON request needed for this report 
     buildRequestJSON( paramJSON = {} ) {
 
         const dateRange = paramJSON.search.find( x => x.dateRange); // pull out the date range from params        
