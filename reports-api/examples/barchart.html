@@ -12,12 +12,11 @@
       }
     </style>
   </head>
-
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="./data.js"></script>
 
   <body></body>
-
+  
   <script>
     const actualData = data.aggregations.time_split.buckets.map(item => {
       return { ...item, useFulDate: new Date(item.key_as_string) };
@@ -74,7 +73,8 @@
       .attr("y", -6)
       .attr("dy", "-.71em")
       .style("text-anchor", "end")
-      .text("Messages");
+      .text("Messages")
+      .style("fill","currentcolor");
 
     // X Axis
     svg
