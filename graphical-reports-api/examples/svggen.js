@@ -4,9 +4,9 @@ const inputData = require(`./data`);
 const d3 = require("d3");
 const fs = require("fs");
 
-const actualData = inputData.aggregations.time_split.buckets.map(item => {
-  return { ...item, useFulDate: new Date(item.key_as_string) };
-});
+const actualData = inputData.aggregations.time_split.buckets.map(item => 
+  ({ ...item, formattedDate: new Date(item.key_as_string) })
+);
 
 const fakeDom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
 const margin = { top: 20, right: 20, bottom: 70, left: 40 };
@@ -24,15 +24,15 @@ let svgContainer = body
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-let dateArray = actualData.map((d) => d.useFulDate); 
-var yScale = d3.scaleLinear().range([height, 0]).domain([0,d3.max(actualData, (d) => d.doc_count)]);
-var yAxis = d3.axisLeft().scale(yScale).ticks(5);
-var xScale = d3.scaleTime().range([0, width]).domain([dateArray[0], dateArray[dateArray.length - 1]]);
-var xAxis = d3.axisBottom().scale(xScale).ticks(d3.timeHour);
+let dateArray = actualData.map(d => d.formattedDate); 
+// Now for some reason the scale below, doesnt accept the full list, so we have to split it out, and use the first/last elements only
+const yScale = d3.scaleLinear().range([height, 0]).domain([0,d3.max(actualData, data => data.doc_count)]);
+const yAxis = d3.axisLeft().scale(yScale).ticks(5);
+const xScale = d3.scaleTime().range([0, width]).domain([dateArray[0], dateArray[dateArray.length - 1]]);
+const xAxis = d3.axisBottom().scale(xScale).ticks(d3.timeHour);
 
 svgContainer
   .append("g")
-  .attr("class", "y axis")
   .call(yAxis)
   .append("text")
   .attr("transform", "rotate(-90)")
@@ -44,7 +44,6 @@ svgContainer
 
   svgContainer
   .append("g")
-  .attr("class", "x axis")
   .attr("transform", "translate(0," + height + ")")
   .call(xAxis)
   .selectAll("text")
@@ -58,10 +57,10 @@ svgContainer
         .enter()
             .append("rect")
             .style("fill", "steelblue")
-            .attr("x", function(d) { return xScale( new Date(d.useFulDate) ); })
+            .attr("x", data => xScale( new Date(data.formattedDate) ) )
             .attr("width", width / actualData.length)
-            .attr("y", function(d) { return yScale(d.doc_count); })
-            .attr("height", function(d) { return height - yScale(d.doc_count); });
+            .attr("y", data => yScale(data.doc_count)) 
+            .attr("height", data => height - yScale(data.doc_count));
 
 /* body.select(".container").html() will give the actual SVG for the graphic */
 
