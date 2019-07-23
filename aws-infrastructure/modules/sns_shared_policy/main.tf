@@ -4,7 +4,7 @@ SNS Topic Delivery Status Logging
 ======*/
 resource "aws_iam_role" "aws_iam_role_success" {
   name = "${var.name_prefix}-SNSSuccessFeedback"
-  assume_role_policy = file("${path.module}/policies/feedback_policy.json")
+  assume_role_policy = file("${path.module}/policies/sns_exec_role.json")
   tags = {
     Name        = "${var.name_prefix}-SNSSuccessFeedback"
     Environment = var.environment
@@ -14,7 +14,7 @@ resource "aws_iam_role" "aws_iam_role_success" {
 
 resource "aws_iam_role" "aws_iam_role_failed" {
   name = "${var.name_prefix}-SNSFailureFeedback"
-  assume_role_policy = file("${path.module}/policies/feedback_policy.json")
+  assume_role_policy = file("${path.module}/policies/sns_exec_role.json")
   tags = {
     Name        = "${var.name_prefix}-SNSFailureFeedback"
     Environment = var.environment
@@ -23,7 +23,7 @@ resource "aws_iam_role" "aws_iam_role_failed" {
 }
 
 data "template_file" "exec_policy" {
-  template = file("${path.module}/policies/sns_policy.json")
+  template = file("${path.module}/policies/sns_exec_policy.json")
 }
 
 resource "aws_iam_policy" "lambda_policy" {
