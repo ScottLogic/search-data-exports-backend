@@ -24,7 +24,7 @@ let svgContainer = body
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-let dateArray = actualData.map(d => d.formattedDate); 
+const dateArray = actualData.map(d => d.formattedDate); 
 // Now for some reason the scale below, doesnt accept the full list, so we have to split it out, and use the first/last elements only
 const yScale = d3.scaleLinear().range([height, 0]).domain([0,d3.max(actualData, data => data.doc_count)]);
 const yAxis = d3.axisLeft().scale(yScale).ticks(5);
