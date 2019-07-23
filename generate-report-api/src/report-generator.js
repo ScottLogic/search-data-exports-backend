@@ -8,7 +8,6 @@ class ReportGenerator {
 
   constructor( configOptions = {}, formatter, outputFile ) {
     this._queryGenerator = new QueryGenerator();
-    this._configOptions = configOptions;
     this._client = new Client( configOptions );
     this._formatter = formatter;
     this._outputFile = outputFile;

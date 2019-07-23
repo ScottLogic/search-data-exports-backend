@@ -7,22 +7,22 @@ const sendEmail = require('./src/send-email.js');
 
 exports.handler = async (event) => {
   try {
-    let message = event.Records[0].Sns.Message
+    const message = event.Records[0].Sns.Message
 
     console.log("message: " + message );
     const data = JSON.parse(message);
 
     const bucketName = process.env.S3_BUCKET_NAME;
-    const generateReport = new ReportGenerator(getConfig(), new CSVFormatter(), new S3Output(bucketName));
+    const reportGenerator = new ReportGenerator(getConfig(), new CSVFormatter(), new S3Output(bucketName));
 
-    let reportURI = await generateReport.generate(data.searchCriteria);
+    let reportURI = await reportGenerator.generate(data.searchCriteria);
 
     await sendEmail(data.parameters.emailAddress, reportURI);
 
-    return sendRes(200, { reportURI: reportURI});
+    return getResponse(200, { reportURI: reportURI});
   } catch (e) {
     console.log("Error generating report: " + e.toString() );
-    return sendRes(500, { error:  e.toString() });
+    return getResponse(500, { error:  e.toString() });
   }
 }
 
@@ -36,8 +36,8 @@ const getConfig = () => {
   };
 }
 
-const sendRes = (status, body) => {
-  var response = {
+const getResponse = (status, body) => {
+  return {
     statusCode: status,
     headers: {
       "Content-Type": "application/json",
@@ -45,6 +45,4 @@ const sendRes = (status, body) => {
     },
     body: JSON.stringify(body)
   };
-
-  return response;
 }

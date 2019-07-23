@@ -27,8 +27,6 @@ class S3Output {
       ACL:'public-read'
     }).promise();
 
-    console.log("After S3 putObject:" + response.toString());
-
     return 'https://' + this._bucketName + '.s3.amazonaws.com/' + filename;
   }
 
