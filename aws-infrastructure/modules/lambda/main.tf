@@ -41,7 +41,6 @@ resource "aws_lambda_permission" "with_sns" {
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.new_lambda.arn
-  qualifier     = aws_lambda_alias.new_lambda_alias.name
   principal     = "sns.amazonaws.com"
 }
 
