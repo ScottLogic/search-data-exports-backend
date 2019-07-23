@@ -4,12 +4,14 @@ node_modules/
 # any zip files
 *.zip
 
+# any env files
+*.env
+
 ### Data Import ###
 dataimport/data/
 
 ### Search Requests ###
 searchrequest/app/brokenexamples.js
-searchrequest/.env
 
 ### Terraform ###
 # Compiled files
@@ -18,6 +20,5 @@ searchrequest/.env
 .terraform.tfstate.lock.info
 .terraform/
 
-# INteliJ stuff
+# IntelliJ stuff
 .idea
-
