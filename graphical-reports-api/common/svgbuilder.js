@@ -1,6 +1,5 @@
 const { JSDOM } = require(`jsdom`);
 const d3 = require("d3");
-const fs = require(`fs`);
 
 class SVGBuilder {
   constructor() {
