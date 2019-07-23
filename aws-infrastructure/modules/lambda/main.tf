@@ -1,9 +1,9 @@
-# dummy hello world lambda used to create initial lambda
+# Archive lambda src to be deployed
 data "archive_file" "lambda_archive_file" {
   type        = "zip"
 
-  source_dir  = "${path.module}/../../../${var.lambda_name}-api/"
-  output_path = "${path.module}/../../../${var.lambda_name}-api/${var.lambda_name}-api.zip"
+  source_dir  = "${path.root}/../${var.lambda_name}-api/"
+  output_path = "${path.module}/dist/${var.lambda_name}-api.zip"
 }
 
 resource "aws_lambda_function" "new_lambda" {
