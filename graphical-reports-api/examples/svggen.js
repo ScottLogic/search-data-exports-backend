@@ -13,9 +13,9 @@ const margin = { top: 20, right: 20, bottom: 70, left: 40 };
 const width = 900 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
-let body = d3.select(fakeDom.window.document).select("body");
+const body = d3.select(fakeDom.window.document).select("body");
 
-let svgContainer = body
+const svgContainer = body
   .append("div")
   .attr("class", "container")
   .append("svg")
