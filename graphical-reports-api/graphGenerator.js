@@ -26,7 +26,6 @@ class graphGenerator {
 
     }
 
-
     /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */
     // The JSON request needed for this report 
     buildRequestJSON( paramJSON = {} ) {
@@ -77,8 +76,6 @@ class graphGenerator {
         return filterList;
     }
 
-
 }
-
 
 module.exports = graphGenerator;
