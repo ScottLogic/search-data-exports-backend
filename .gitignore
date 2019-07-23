@@ -1,6 +1,9 @@
 # node_modules
 node_modules/
 
+# dist directory
+dist/
+
 # any zip files
 *.zip
 
