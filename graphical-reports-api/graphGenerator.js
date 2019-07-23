@@ -1,15 +1,18 @@
-const ESSearch = require(`./common/search.js`);
+const ESSearch = require(`./common/search`);
+const SVGBuilder = require(`./common/svgbuilder`);
 
 class graphGenerator {
 
     constructor(ConnectionOptions) {
         this._search = new ESSearch(ConnectionOptions);
+        this._build = new SVGBuilder();
     }
 
     // Entry Point
     async generateGraph( paramJSON = {} ) {
-        const reportData = await this.getReportData(paramJSON);                
-        return reportData;
+        const reportData = await this.getReportData(paramJSON); 
+        const reportSVG = await this.buildGraph(reportData);
+        return reportSVG;
     }
 
     // Gets the date from ES
@@ -17,15 +20,14 @@ class graphGenerator {
         return await this._search.search(this.buildRequestJSON(paramJSON));
     }
 
-    async buildGraph() {
-
+    async buildGraph( searchResults ) {
+        return await this._build.build(searchResults);                
     }
 
     // Saves said graph to the S3 Bucket
     async saveToBucket() {
 
     }
-
 
     /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */
     // The JSON requiest needed for this report 
@@ -79,6 +81,5 @@ class graphGenerator {
 
 
 }
-
 
 module.exports = graphGenerator;
