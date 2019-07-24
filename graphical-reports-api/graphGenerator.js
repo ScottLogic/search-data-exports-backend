@@ -8,7 +8,7 @@ class graphGenerator {
         this._build = new SVGBuilder();
     }
 
-    // Entry Point
+    // Entry Point. 
     async generateGraph( paramJSON = {} ) {
         const reportData = await this.getReportData(paramJSON); 
         const reportSVG = await this.buildGraph(reportData);
@@ -29,11 +29,10 @@ class graphGenerator {
 
     }
 
-    /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */
-    // The JSON requiest needed for this report 
+    /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */    
     buildRequestJSON( paramJSON = {} ) {
 
-        const dateRange = paramJSON.search.find( x => x.dateRange); // pull out the date range from params        
+        const dateRange = paramJSON.search.find( x => x.dateRange); 
         let  startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now() );
         const endDate = new Date( dateRange ? dateRange.dateRange[1] : Date.now() );
         !dateRange && startDate.setDate(startDate.getDate() - 1);             
@@ -78,7 +77,6 @@ class graphGenerator {
         if (dateRange.length >= 2) filterList.push({ "range": { "DateCreated": { "lte": dateRange[1] }}});    
         return filterList;
     }
-
 
 }
 

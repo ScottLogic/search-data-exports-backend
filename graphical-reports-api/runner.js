@@ -1,12 +1,19 @@
-/* This is not an actual test file, its a command line method to run the handler.  */
-const main = require("./index");
+/* This is for running the code locally, and will be removed from the git report upon conversion to the lambda 
+*/
+
+const main = require('./index');
 
 const eventBody = {
-  body: '{ "search" : [ { "dateRange" : ["2019-07-21","2019-07-23"] } ]}'
+    body: '{ \"search\" : [ { \"dateRange\" : [\"2019-07-21\",\"2019-07-23\"] } ]}'
 };
 
-const CallBack = (status, data) => {
-  console.log("CallBack Fired");
+const eventBodyBlank = {
+    body: '{ \"search\" : [ ]}'
 };
 
-main.handler(eventBody, "context", CallBack);
+const CallBack = () => {
+    console.log("WOO");
+}
+
+main.handler(eventBody,"context",CallBack);
+//main.handler(eventBodyBlank,"context",CallBack);

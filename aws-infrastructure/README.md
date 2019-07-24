@@ -59,3 +59,11 @@ The items are:
     * The name of the environment we're creating, i.e prod, uat, dev etc.
 * region
     * The AWS region name
+
+## Deploying Lambdas
+At the moment, for each lambda resource defined, terraform will look for the root level lambda package that matches
+the provided lambda resource name. e.g. for the lambda with name `search`, it will search for the `./search-api` directory,
+archive its contents in a zip, and use that to deploy to AWS.
+
+We should therefore take care to name our lambda directory in the specified format `{$lambda-name}-api`, and run `npm install`
+to install the `node_modules` before running terraform.

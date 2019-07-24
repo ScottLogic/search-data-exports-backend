@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const connectionClass = require("http-aws-es");
+const ConnectionClass = require("http-aws-es");
 const ESSearch = require(`./common/search.js`);
 const Format = require(`./common/format.js`);
 
@@ -28,7 +28,7 @@ exports.handler = function(event, context, callback) {
 
   const ESConnectOptions = {
     host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : `http://localhost:9200`,
-    connectionClass: connectionClass,
+    connectionClass: ConnectionClass,
     awsConfig: new AWS.Config({
       credentials: new AWS.EnvironmentCredentials("AWS")
     })

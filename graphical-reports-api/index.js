@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const connectionClass = require("http-aws-es");
-const graphGenerator = require("./graphGenerator");
+const GraphGenerator = require("./graphGenerator");
+
 
 const callbackHeaders = {
   "Content-Type": "application/json",
@@ -33,9 +34,10 @@ exports.handler = async function(event, context, callback) {
       credentials: new AWS.EnvironmentCredentials("AWS")
     })
   };
-  const g = new graphGenerator(ESConnectOptions);
 
-  const result = await g.generateGraph(eventJson).catch(error => {
+  const graphGenerator = new GraphGenerator(ESConnectOptions);
+
+  const result = await graphGenerator.generateGraph(eventJson).catch(error => {
     callback(null, {
       statusCode: "400",
       body: JSON.stringify({
@@ -47,6 +49,7 @@ exports.handler = async function(event, context, callback) {
     });
     return;
   });
+
 
   callback(null, {
     statusCode: "200",

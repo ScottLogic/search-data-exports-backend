@@ -1,14 +1,14 @@
-# dummy hello world lambda used to create initial lambda
-data "archive_file" "hello_world" {
+# Archive lambda src to be deployed
+data "archive_file" "lambda_archive_file" {
   type        = "zip"
 
-  source_file = "${path.module}/code/index.js"
-  output_path = "${path.module}/search_lambda_function_payload.zip"
+  source_dir  = "${path.root}/../${var.lambda_name}-api/"
+  output_path = "${path.module}/dist/${var.lambda_name}-api.zip"
 }
 
 resource "aws_lambda_function" "new_lambda" {
-  filename          = data.archive_file.hello_world.output_path
-  source_code_hash  = data.archive_file.hello_world.output_base64sha256
+  filename          = data.archive_file.lambda_archive_file.output_path
+  source_code_hash  = data.archive_file.lambda_archive_file.output_base64sha256
   function_name     = "${var.name_prefix}-${var.lambda_name}"
   role              = var.lambda_iam_role_arn
   handler           = "index.handler"
@@ -35,6 +35,14 @@ resource "aws_lambda_permission" "lambda_alias_permission" {
   principal     = "apigateway.amazonaws.com"
 
   source_arn = var.source_arn
+}
+
+resource "aws_lambda_permission" "with_sns" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.new_lambda.arn
+  qualifier     = aws_lambda_alias.new_lambda_alias.name
+  principal     = "sns.amazonaws.com"
 }
 
 resource "aws_lambda_alias" "new_lambda_alias" {

@@ -1,22 +1,31 @@
+# node_modules
+node_modules/
+
+# dist directory
+dist/
+
+# any zip files
+*.zip
+
+# any env files
+*.env
+
 ### Data Import ###
 dataimport/data/
-dataimport/node_modules/
+
 ### Search Requests ###
-searchrequest/node_modules/
 searchrequest/app/brokenexamples.js
-searchrequest/.env
+
 ### Terraform ###
 # Compiled files
 *.tfstate
 *.tfstate.backup
 .terraform.tfstate.lock.info
-# Module directory
-aws-infrastructure/.terraform/
-aws-infrastructure/.idea
-aws-infrastructure/modules/lambda/*.zip
-# INteliJ stuff
+.terraform/
+
+# IntelliJ stuff
 .idea
-search-api/node_modules
-search-api/*.zip
+# Stop all modules and envs
+*.zip
 *node_modules
 *.env
