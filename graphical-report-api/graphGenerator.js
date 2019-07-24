@@ -1,18 +1,20 @@
 const ESSearch = require(`./common/search`);
 const SVGBuilder = require(`./common/svgbuilder`);
+const S3Output = require(`./common/s3-output`);
 
 class graphGenerator {
 
-    constructor(ConnectionOptions) {
+    constructor(ConnectionOptions , bucketName) {
         this._search = new ESSearch(ConnectionOptions);
         this._build = new SVGBuilder();
+        this._store = new S3Output(bucketName);
     }
 
     // Entry Point. 
     async generateGraph( paramJSON = {} ) {
         const reportData = await this.getReportData(paramJSON); 
         const reportSVG = await this.buildGraph(reportData);
-        return reportSVG;
+        return await this.saveToBucket(reportSVG);        
     }
 
     // Gets the date from ES
@@ -25,8 +27,9 @@ class graphGenerator {
     }
 
     // Saves said graph to the S3 Bucket
-    async saveToBucket() {
-
+    async saveToBucket( svgString ) {
+        this._store.append(svgString);
+        return await this._store.close();
     }
 
     /* @TODO : Move these somewhere else? they are special for each report so might be best seperate. */    

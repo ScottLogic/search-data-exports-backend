@@ -34,8 +34,9 @@ exports.handler = async function(event, context, callback) {
       credentials: new AWS.EnvironmentCredentials("AWS")
     })
   };
-
-  const graphGenerator = new GraphGenerator(ESConnectOptions);
+  const bucketName = process.env.S3_BUCKET_NAME;
+  
+  const graphGenerator = new GraphGenerator(ESConnectOptions,bucketName);
 
   const result = await graphGenerator.generateGraph(eventJson).catch(error => {
     callback(null, {
@@ -53,7 +54,7 @@ exports.handler = async function(event, context, callback) {
 
   callback(null, {
     statusCode: "200",
-    body: JSON.stringify(result),
+    body: result,
     headers: callbackHeaders
   });
 };
