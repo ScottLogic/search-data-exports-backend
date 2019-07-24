@@ -153,7 +153,7 @@ module "api-gateway-search" {
 }
 
 #
-# Create search API and link to search lambda
+# Create report API and link to search lambda
 #
 module "api-gateway-report" {
   source                    = "./modules/api_gateway_endpoint"
@@ -166,7 +166,7 @@ module "api-gateway-report" {
 }
 
 #
-# Create search API and link to search lambda
+# Create graphical report API and link to report API
 #
 module "api-gateway-graphical-report" {
   source                    = "./modules/api_gateway_endpoint"
