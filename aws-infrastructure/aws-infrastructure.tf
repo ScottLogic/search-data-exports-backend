@@ -140,6 +140,27 @@ module "lambda-graphical-report" {
 }
 
 #
+# Define the report generator lambda
+#
+module "lambda-report-generator" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "report-generator"
+  description               = "SDE report generator lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {
+    ES_SEARCH_API  : module.elasticsearch.endpoint,
+    S3_BUCKET_NAME : module.s3-bucket.bucket_name
+  }
+}
+
+#
 # Create search API and link to search lambda
 #
 module "api-gateway-search" {
