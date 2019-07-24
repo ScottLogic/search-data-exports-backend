@@ -85,14 +85,12 @@ class ReportGenerator {
   }
 }
 
-const getConfig = () => {
-  return  {
-    host: process.env.ES_SEARCH_API,
-    connectionClass: connectionClass,
-    awsConfig: new AWS.Config({
-      credentials: new AWS.EnvironmentCredentials("AWS")
-    })
-  };
-}
+const getConfig = () => ({
+  host: process.env.ES_SEARCH_API,
+  connectionClass: connectionClass,
+  awsConfig: new AWS.Config({
+    credentials: new AWS.EnvironmentCredentials("AWS")
+  })
+});
 
 module.exports = ReportGenerator;
