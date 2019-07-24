@@ -24,3 +24,17 @@ Output will contain a http link to the image in question for the client to displ
 }
 ```
 
+# Notes on runtime for lambda 
+
+Default lambda settings do not appear to work well for this function, due to its complexity, its cold start time is greater than the default timeout, at the lowest resources allowed.
+After some testing with various allocated memory sizes, we need at least 192MB assigned to stop timeouts on startup. From the limited test data we have, creating the same report each time, here are some approx times for startup/requests for some of the memory tiers.
+
+Tier (MB) | Cold Start Time (ms) | Normal Run Time (ms) | Start Up Cost ($) | Execution Cost ($)
+--- | --- | --- | --- | ---
+192 | 2500 | 500~800 | 0.0007825 | 0.0001565~0.0002504
+256 | 1900~2100 | 300~600 | 0.0007923~0.0008757 | 0.0001251~0.0002502
+512 | 1100 | 200~300 | 0.0009174 | 0.0003962~0.0005943
+
+From the base information we have here, using a larger size Mb increases the cost as well above the benefit in execution time you receive. The benefit from  upgrading to the 256MB memory allocation, gives a sizeable improvement on execution time, along with maintaining the same price bounds.
+
+*This could warrant further experimentation on large lambda functions in regards to at what point, does using a more expensive per 100ms tier actually give positive savings.*
