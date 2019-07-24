@@ -2,6 +2,7 @@ const AWS = require("aws-sdk");
 const connectionClass = require("http-aws-es");
 const GraphGenerator = require("./graphGenerator");
 
+
 const callbackHeaders = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*"
@@ -25,12 +26,15 @@ exports.handler = async function(event, context, callback) {
   }
 
   const ESConnectOptions = {
-    host: process.env.ES_SEARCH_API || `http://localhost:9200`,
+    host: process.env.ES_SEARCH_API
+      ? process.env.ES_SEARCH_API
+      : `http://localhost:9200`,
     //connectionClass: connectionClass,
     awsConfig: new AWS.Config({
       credentials: new AWS.EnvironmentCredentials("AWS")
     })
   };
+
   const graphGenerator = new GraphGenerator(ESConnectOptions);
 
   const result = await graphGenerator.generateGraph(eventJson).catch(error => {
@@ -46,11 +50,10 @@ exports.handler = async function(event, context, callback) {
     return;
   });
 
-  console.log(result);
 
   callback(null, {
     statusCode: "200",
-    body: JSON.stringify("http://some_dud_image_url"),
+    body: JSON.stringify(result),
     headers: callbackHeaders
   });
 };
