@@ -119,6 +119,27 @@ module "lambda-generate-report" {
 }
 
 #
+# Define the graphical report lambda
+#
+module "lambda-graphical-report" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "graphical-report"
+  description               = "SDE generate report lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {
+    ES_SEARCH_API  : module.elasticsearch.endpoint,
+    S3_BUCKET_NAME : module.s3-bucket.bucket_name
+  }
+}
+
+#
 # Create search API and link to search lambda
 #
 module "api-gateway-search" {
@@ -129,6 +150,32 @@ module "api-gateway-search" {
   name_prefix               = local.name_prefix
   project                   = var.project
   lambda_invoke_arn         = module.lambda-search.invoke_arn
+}
+
+#
+# Create report API and link to search lambda
+#
+module "api-gateway-report" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway.api_gateway_root_resource_id
+  api_name                  = "report"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-graphical-report.invoke_arn
+}
+
+#
+# Create graphical report API and link to report API
+#
+module "api-gateway-graphical-report" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway-report.api_resource_id
+  api_name                  = "graphical"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-graphical-report.invoke_arn
 }
 
 #

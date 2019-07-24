@@ -29,7 +29,7 @@ exports.handler = async function(event, context, callback) {
     host: process.env.ES_SEARCH_API
       ? process.env.ES_SEARCH_API
       : `http://localhost:9200`,
-    //connectionClass: connectionClass,
+    connectionClass: connectionClass,
     awsConfig: new AWS.Config({
       credentials: new AWS.EnvironmentCredentials("AWS")
     })
@@ -42,7 +42,7 @@ exports.handler = async function(event, context, callback) {
       statusCode: "400",
       body: JSON.stringify({
         message: "Error In Generation",
-        errorMessage: error,
+        errorMessage: error.message,
         content: event.body
       }),
       headers: callbackHeaders
