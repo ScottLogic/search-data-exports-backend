@@ -160,6 +160,26 @@ module "lambda-report-generator" {
   }
 }
 
+# Define the send email lambda
+#
+module "lambda-send-email" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "send-email"
+  description               = "SDE send email lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {
+    EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
+  }
+}
+
+
 #
 # Create search API and link to search lambda
 #
