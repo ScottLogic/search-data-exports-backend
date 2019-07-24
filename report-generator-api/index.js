@@ -9,5 +9,5 @@ exports.handler = async (event) => {
 
   const reportURL = await reportGenerator.generate(event.searchCriteria);
 
-  return { reportURL } 
+  return { reportURL }; 
 }
