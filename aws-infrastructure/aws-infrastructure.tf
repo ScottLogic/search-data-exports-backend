@@ -263,3 +263,10 @@ module "s3-bucket" {
   project                   = var.project
   environment               = var.environment
 }
+
+module "s3-bucket-site" {
+  source                    = "./modules/s3-site"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+}
