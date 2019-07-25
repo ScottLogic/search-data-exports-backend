@@ -1,8 +1,9 @@
 const svgString = require(`./svg`); // This mocks the inputted SVG string we would be using.
 const tableData = [
-  { tag: "tagName", count: 10 },
-  { tag: "Tag2", count: 4 },
-  { tag: "Tag3", count: 2 }
+  { tag: "#CoolTag", count: 15 },
+  { tag: "#PopularTag", count: 10 },
+  { tag: "#SemiPopular", count: 4 },
+  { tag: "#NotPopular", count: 2 }
 ]; // Mock of example data for the table generation
 
 // Code beings
@@ -18,6 +19,7 @@ const pdfOptions = {
 };
 
 console.log(`Testing HTML to PDF Generation`);
+// Please Note: This doesnt handle its async process well / at all. when converted into a class all methods will need to be async.
 
 const r = pdf
   .create(pdfTemplate({ svgString, textInformation, tableData }), pdfOptions)
@@ -25,5 +27,6 @@ const r = pdf
     console.log(`Error`, err);
     console.log(`Result`, res);
   });
+// .toFile is for testing purposes only. when as a lambda this can return a stream which can be fed into S3.
 
 console.log(`Done`, r);
