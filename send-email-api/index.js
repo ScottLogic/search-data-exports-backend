@@ -14,19 +14,17 @@ exports.handler = async event => {
 };
 
 function sendEmail(email) {
-  var params = {
+  const htmlBody = '<html><head><title>Your report</title></head><body><a href="' + email.reportURL + '">Download report</a><body></html>';
+
+  const params = {
     Destination: {
-        ToAddresses: email.to,
+        ToAddresses: [email.to],
     },
     Message: {
         Body: {
             Html: {
-                Data: email.htmlBody || email.textBody,
-            },
-            Text: {
-                Data: email.textBody || email.htmlBody,
+                Data: htmlBody
             }
-
         },
         Subject: {
             Data: email.subject
