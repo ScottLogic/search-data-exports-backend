@@ -29,3 +29,5 @@ searchrequest/app/brokenexamples.js
 *.zip
 *node_modules
 *.env
+# Stop PDFs
+*.pdf
