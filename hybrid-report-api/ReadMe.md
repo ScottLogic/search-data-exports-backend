@@ -1,5 +1,5 @@
 # Hybrid Report Generation
-**Purpose:** This api is to generate a PDF to be presented to the user, which consists of an svg graph image build from ElasticSearch results, as well as plain text/table built into a PDF>
+**Purpose:** This api is to generate a PDF to be presented to the user, which consists of an svg graph image build from ElasticSearch results, as well as plain text/table built into a PDF.
 
 # Investigation
 Under `./investigation` there is an example of how the process can work. by running `htmltopdf.js` using the command `node ./investigation/htmltopdf.js` it will generate a file called `html-pdf.pdf`. The design of this file should be a PDF version of `htmlbase.html`.
