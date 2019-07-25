@@ -9,3 +9,7 @@ output "elasticsearch_endpoint" {
 output "elasticsearch_kibana_endpoint" {
   value = module.elasticsearch.kibana_endpoint
 }
+
+output "s3_site_endpoint" {
+  value = module.s3-bucket-site.site_endpoint
+}
