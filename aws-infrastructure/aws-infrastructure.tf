@@ -232,6 +232,23 @@ module "api-gateway-download-request" {
   lambda_invoke_arn         = module.lambda-download-request.invoke_arn
 }
 
+#
+# Create step function to create and email report
+#
+module "step-function-create-and-email-report" {
+  source                          = "./modules/step_function"
+  name_prefix                     = local.name_prefix
+  project                         = var.project
+  environment                     = var.environment
+
+  name                            = "create-and-email-csv-report"
+
+  invoked_lambda_function_arn_map = {
+    "report-generator-arn"      : module.lambda-report-generator.alias_arn,
+    "send-email-arn"            : module.lambda-send-email.alias_arn
+  }
+}
+
 module "elasticsearch" {
   source                    = "./modules/elasticsearch"
   name_prefix               = local.name_prefix
