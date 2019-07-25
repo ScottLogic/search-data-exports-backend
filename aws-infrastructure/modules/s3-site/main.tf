@@ -24,4 +24,3 @@ resource "aws_s3_bucket" "sde-bucket-site" {
     Project     = var.project
   }
 }
-
