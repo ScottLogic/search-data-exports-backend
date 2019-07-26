@@ -7,7 +7,7 @@
         {
           "Variable": "$.type",
           "StringEquals": "email",
-          "Next": "Generate and email report"
+          "Next": "Email report request"
         },
         {
           "Variable": "$.type",
@@ -21,7 +21,7 @@
         }
       ]
     },
-    "Generate and email report": {
+    "Email report request": {
       "Type": "Pass",
       "Next": "Publish request to SNS"
     },
