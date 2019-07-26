@@ -13,7 +13,6 @@ workflows:
       - terraform/validate:
           attach-workspace: true
           infrastructure_dir: aws-infrastructure
-          save-workspace: true
           name: terraform-validate
           requires:
             - terraform-init
