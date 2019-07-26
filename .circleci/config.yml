@@ -6,5 +6,5 @@ workflows:
   build-deploy:
     jobs:
       - terraform-orb/validate:
-        infrastructure_dir: aws-infrastructure
-        name: terraform-validate   
+          infrastructure_dir: aws-infrastructure
+          name: terraform-validate
