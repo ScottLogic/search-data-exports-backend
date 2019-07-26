@@ -10,6 +10,6 @@ output "elasticsearch_kibana_endpoint" {
   value = module.elasticsearch.kibana_endpoint
 }
 
-output "s3_site_endpoint" {
-  value = module.s3-bucket-site.site_endpoint
+output "site_domain_name" {
+  value = module.s3-bucket-site.cdn_domain_name
 }
