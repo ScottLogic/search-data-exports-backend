@@ -1,0 +1,10 @@
+{
+  "name": "SDE-Hybrid-Report-Generation",
+  "dependencies": {
+    "d3": "^5.9.7",
+    "elasticsearch": "^16.3.0",
+    "html-pdf": "^2.2.0",
+    "jsdom": "^15.1.1",
+    "uuid": "^3.3.2"
+  }
+}
