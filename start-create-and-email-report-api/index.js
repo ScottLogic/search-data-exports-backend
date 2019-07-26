@@ -12,7 +12,7 @@ exports.handler = async event => {
   };
 
   const params = {
-    stateMachineArn: process.env.CREATE_AND_EMAIL_REPORT_ARN,
+    stateMachineArn: process.env.CREATE_AND_EMAIL_REPORT_STEP_FUNCTION_ARN,
     input: JSON.stringify(input)
   };
 
