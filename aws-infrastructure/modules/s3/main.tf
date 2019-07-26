@@ -9,12 +9,6 @@ resource "aws_s3_bucket" "sde-bucket" {
     expiration {
       days = "1"
     }
-
-    tags = {
-      Name = "${var.name_prefix}-one-day-life"
-      Environment = var.environment
-      Project     = var.project
-    }
   }
 
   tags = {
