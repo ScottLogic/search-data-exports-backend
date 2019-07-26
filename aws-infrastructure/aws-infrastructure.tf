@@ -249,6 +249,22 @@ module "step-function-create-and-email-report" {
   }
 }
 
+#
+# Create step function to request the download of a csv file
+#
+module "step-function-csv-download-request" {
+  source                          = "./modules/step_function"
+  name_prefix                     = local.name_prefix
+  project                         = var.project
+  environment                     = var.environment
+
+  name                            = "csv-download-request"
+
+  invoked_lambda_function_arn_map = {
+    "download-requests-topic-arn" : module.sns-download-requests-topic.topic_arn
+  }
+}
+
 module "elasticsearch" {
   source                    = "./modules/elasticsearch"
   name_prefix               = local.name_prefix

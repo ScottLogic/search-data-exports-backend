@@ -34,13 +34,13 @@ resource "aws_iam_role_policy_attachment" "attachment" {
 }
 
 resource "aws_sfn_state_machine" "state_machine" {
-  name      = var.name
+  name      = "${var.name_prefix}-${var.name}"
   role_arn  = aws_iam_role.role.arn
 
   definition = data.template_file.state_machine.rendered
 
   tags = {
-    Name        = var.name
+    Name        = "${var.name_prefix}-${var.name}"
     Environment = var.environment
     Project     = var.project
   }
