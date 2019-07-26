@@ -195,7 +195,7 @@ module "lambda-start-create-and-email-report" {
   source_arn                = local.api_gateway_source_arn
 
   lambda_env_map            = {
-    CREATE_AND_EMAIL_REPORT_ARN : module.step-function-create-and-email-report.arn
+    CREATE_AND_EMAIL_REPORT_STEP_FUNCTION_ARN : module.step-function-create-and-email-report.arn
   }
 }
 
