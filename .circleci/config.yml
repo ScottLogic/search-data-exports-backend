@@ -1,17 +1,16 @@
 version: 2.1
 orbs:
-  terraform-orb: bankrate/terraform@1.0.0
+  terraform: bankrate/terraform@1.1.2
 jobs:
-  validate-terraform:
-    steps:      
-      - terraform-orb/validate:
-          infrastructure_dir: ./aws-infrastructure          
+  - terraform-orb/validate:
+      infrastructure_dir: infra
+      name: terraform-validate      
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - terraform-orb/validate
       # - deploy:
       #     requires:
       #       - build
