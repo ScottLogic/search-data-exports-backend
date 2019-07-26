@@ -5,6 +5,22 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - terraform/validate:
+      - terraform/init:
+          attach-workspace: true
           infrastructure_dir: aws-infrastructure
+          save-workspace: true
+          name: terraform-init
+      - terraform/validate:
+          attach-workspace: true
+          infrastructure_dir: aws-infrastructure
+          save-workspace: true
           name: terraform-validate
+          requires:
+            - terraform-init
+      - terraform/plan:
+          attach-workspace: true
+          infrastructure_dir: aws-infrastructure
+          environment: dev
+          name: terraform-plan
+          requires:
+            - terraform-validate
