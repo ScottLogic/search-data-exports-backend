@@ -1,3 +1,3 @@
-output "site_endpoint" {
-  value = aws_s3_bucket.sde-bucket-site.website_endpoint
+output "cdn_domain_name" {
+  value = aws_cloudfront_distribution.s3_distribution.domain_name
 }
