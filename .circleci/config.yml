@@ -1,0 +1,24 @@
+version: 2.1
+orbs:
+  terraform-orb: bankrate/terraform@1.0.0
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.15.1
+    steps:
+      - checkout
+      - terraform-orb/validate:
+          checkout: false
+          infrastructure_dir: ./aws-infrastructure          
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      # - deploy:
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only: master
