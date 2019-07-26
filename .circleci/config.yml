@@ -8,7 +8,6 @@ jobs:
     steps:
       - checkout
       - terraform-orb/validate:
-          checkout: false
           infrastructure_dir: ./aws-infrastructure          
 
 workflows:
