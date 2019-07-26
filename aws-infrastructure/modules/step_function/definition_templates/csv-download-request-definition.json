@@ -1,0 +1,46 @@
+{
+  "StartAt": "Choose download type",
+  "States": {
+    "Choose download type": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.type",
+          "StringEquals": "email",
+          "Next": "Generate and email report"
+        },
+        {
+          "Variable": "$.type",
+          "StringEquals": "direct",
+          "Next": "Direct download of report"
+        },
+        {
+          "Variable": "$.type",
+          "StringEquals": "push",
+          "Next": "Generate and push notification"
+        }
+      ]
+    },
+    "Generate and email report": {
+      "Type": "Pass",
+      "Next": "Publish request to SNS"
+    },
+    "Direct download of report": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Generate and push notification": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Publish request to SNS": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${download-requests-topic-arn}",
+        "Message.$": "$"
+      },
+      "End": true
+    }
+  }
+}
