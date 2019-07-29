@@ -74,8 +74,8 @@ module.exports = ({ svgData = "", textInformation = "", tableData = [] }) => {
             <table class="page-content-frequency-table">
             <thead>
                 <tr>
-                <th>Tag</th>
-                <th>Frequency</th>
+                    <th>Tag</th>
+                    <th>Frequency</th>
                 </tr>
             </thead>
             <tbody>
