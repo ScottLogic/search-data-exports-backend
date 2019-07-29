@@ -1,21 +1,40 @@
-version: 2.1
+version: 2.1    
 jobs:
   terraform-validate:
     docker:
       - image: hashicorp/terraform:light
-    working_directory: ~/SearchDataExports-backend/aws-infrastructure
+    working_directory: ~/repo/aws-infrastructure
     steps:
       - checkout:
-          path: ~/SearchDataExports-backend
+          path: ~/repo
       - run:
           name: terraform init
           command: terraform init
       - run:
           name: terraform validate
-          command: terraform validate          
+          command: terraform validate
+  lint-npm-project:
+    parameters:
+      project-name:
+        type: string
+        default: .
+    docker:
+      - image: circleci/node:10.15.1
+    working_directory: "~/repo/<< parameters.project-name >>"
+    steps:
+      - checkout:
+          path: ~/repo
+      - run:
+          name: Installations
+          command: npm ci
+      - run:
+          name: Run ESLint
+          command: npm run lint      
  
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - terraform-validate          
+      - terraform-validate
+      - lint-npm-project:
+          project-name: search-api                  
