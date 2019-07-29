@@ -121,6 +121,27 @@ module "lambda-graphical-report" {
 }
 
 #
+# Define the hybrid report lambda
+#
+module "lambda-hybrid-report" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "hybrid-report"
+  description               = "SDE generate report lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {
+    ES_SEARCH_API  : module.elasticsearch.endpoint,
+    S3_BUCKET_NAME : module.s3-bucket.bucket_name
+  }
+}
+
+#
 # Define the report generator lambda
 #
 module "lambda-report-generator" {
@@ -218,6 +239,19 @@ module "api-gateway-graphical-report" {
   name_prefix               = local.name_prefix
   project                   = var.project
   lambda_invoke_arn         = module.lambda-graphical-report.invoke_arn
+}
+
+#
+# Create hybrid report API and link to report API
+#
+module "api-gateway-hybrid-report" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway-report.api_resource_id
+  api_name                  = "hybrid"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-hybrid-report.invoke_arn
 }
 
 #
