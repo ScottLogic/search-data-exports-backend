@@ -7,11 +7,8 @@ jobs:
     working_directory: ./aws-infrastructure
     steps:
       - checkout
-      - tf:
-          command: init
-      - init
-      - tf:
-          command: validate
+      - tf/init
+      - tf/validate
  
 workflows:
   version: 2
