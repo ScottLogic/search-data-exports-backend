@@ -4,7 +4,7 @@ orbs:
 jobs:
   terraform-validate:
     docker:
-      - image: hashicorp/terraform:light        
+      - image: alpine        
     steps:
       - terraform/validate:
           path: ./aws-infrastructure
