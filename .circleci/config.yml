@@ -1,16 +1,10 @@
 version: 2.1
 orbs:
-  terraform: ovotech/terraform@1.5.1
-jobs:
-  terraform-validate:
-    docker:
-      - image: alpine        
-    steps:
-      - terraform/validate:
-          path: ./aws-infrastructure
-  
+  terraform: ngs/terraform@0.0.1
+ 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - terraform-validate
+      - terraform/validate:
+          name: validate
