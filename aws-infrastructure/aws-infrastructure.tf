@@ -162,6 +162,26 @@ module "lambda-report-generator" {
   }
 }
 
+#
+# Define the report status
+#
+module "lambda-report-status" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "report-status"
+  description               = "SDE report status lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+
+  lambda_env_map            = {
+    "dummy" : "dummy"
+  }
+}
+
 # Define the send email lambda
 #
 module "lambda-send-email" {
@@ -268,6 +288,19 @@ module "api-gateway-download-request" {
 }
 
 #
+# Create download API and link to download lambda
+#
+module "api-gateway-report-status" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway.api_gateway_root_resource_id
+  api_name                  = "report-status"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-report-status.invoke_arn
+}
+
+#
 # Create step function to create and email report
 #
 module "step-function-create-and-email-report" {
@@ -296,7 +329,8 @@ module "step-function-csv-download-request" {
   name                            = "csv-download-request"
 
   invoked_lambda_function_arn_map = {
-    "download-requests-topic-arn" : module.sns-download-requests-topic.topic_arn
+    "download-requests-topic-arn" : module.sns-download-requests-topic.topic_arn,
+    "report-generator-arn"        : module.lambda-report-generator.alias_arn
   }
 }
 
