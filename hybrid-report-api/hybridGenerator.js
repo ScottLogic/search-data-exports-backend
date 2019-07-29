@@ -1,4 +1,5 @@
 const ESSearch = require(`./common/search`);
+const SVGBuilder = require(`./common/svgbuilder`);
 
 class HybridGenerator {
   constructor(ConnectionOptions) {
@@ -6,15 +7,19 @@ class HybridGenerator {
   }
 
   async generateReport(paramJSON = {}) {
-    const reportData = await this.getReportData(paramJSON);    
-    return reportData;
+    const reportData = await this.getReportData(paramJSON);  
+    const svgData = await this.buildSVG( reportData );
+    return svgData;
   }
 
   async getReportData(paramJSON) {
     return await this._search.search(this.buildRequestJSON(paramJSON));
   }
 
-  async buildSVG() {}
+  async buildSVG( ESResults ) {
+      const svgbuilder = new SVGBuilder();
+      return await svgbuilder.build( ESResults );
+  }
 
   async buildHTML() {}
 
@@ -36,7 +41,7 @@ class HybridGenerator {
           types_count: {
             terms: {
               field: "Tags.keyword",
-              size: 30
+              size: 20
             }
           }
         },
