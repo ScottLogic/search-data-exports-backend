@@ -13,6 +13,7 @@ const eventBodyBlank = {
 
 const CallBack = (status,body) => {
     console.log("Complete", body);
+    console.log("complete");
 }
 
 main.handler(eventBody,"context",CallBack);

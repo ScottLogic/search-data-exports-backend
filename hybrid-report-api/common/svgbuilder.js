@@ -7,8 +7,8 @@ class SVGBuilder {
   }
 
   _setDefaults() {
-    this._width = 1000;
-    this._height = 600;
+    this._width = 900;
+    this._height = 400;
     this._radius = Math.min(this._width, this._height) / 2;
   }
 

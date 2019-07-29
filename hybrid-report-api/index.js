@@ -36,7 +36,7 @@ exports.handler = async function(event, context, callback) {
   
   const hybridGenerator = new HybridGenerator(ESConnectOptions);
 
-  const result = await hybridGenerator.generateReport(eventJson).catch(error => {    
+  const result = await hybridGenerator.generateReport(eventJson).catch(error => {            
     callback(null, {
       statusCode: "400",
       body: JSON.stringify({
@@ -48,7 +48,6 @@ exports.handler = async function(event, context, callback) {
     });
     return;
   });
-
   callback(null, {
     statusCode: "200",
     body: result,
