@@ -1,24 +1,9 @@
 version: 2.1
 orbs:
-  terraform: bankrate/terraform@1.1.2
+  terraform: ovotech/terraform@1.5.1
 workflows:
   version: 2
   build-deploy:
     jobs:
       - terraform/validate:
-          infrastructure_dir: aws-infrastructure
-          name: terraform-validate
-      - terraform/init:
-          attach-workspace: true
-          infrastructure_dir: aws-infrastructure
-          save-workspace: true
-          name: terraform-init
-          requires:
-            - terraform-validate          
-      - terraform/plan:
-          attach-workspace: true
-          infrastructure_dir: aws-infrastructure
-          environment: dev
-          name: terraform-plan
-          requires:
-            - terraform-validate
+          path: aws-infrastructure
