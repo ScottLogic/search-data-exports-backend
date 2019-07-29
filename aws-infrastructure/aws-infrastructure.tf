@@ -176,10 +176,6 @@ module "lambda-report-status" {
   lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
 
   source_arn                = local.api_gateway_source_arn
-
-  lambda_env_map            = {
-    "dummy" : "dummy"
-  }
 }
 
 # Define the send email lambda
