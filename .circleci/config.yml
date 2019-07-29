@@ -37,4 +37,6 @@ workflows:
     jobs:
       - terraform-validate
       - lint-npm-project:
-          project-name: search-api                  
+          project-name: search-api
+      - lint-npm-project:
+          project-name: download-request-api                        
