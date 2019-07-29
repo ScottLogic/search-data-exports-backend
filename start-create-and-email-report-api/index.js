@@ -21,7 +21,7 @@ exports.handler = async (event, context, callback) => {
     input: JSON.stringify(input)
   };
 
-  stepFunctions.startExecution(params).promise().then(data => {
+  await stepFunctions.startExecution(params).promise().then(data => {
     console.log('Step function execution response:', data);
 
     callback(null, {
