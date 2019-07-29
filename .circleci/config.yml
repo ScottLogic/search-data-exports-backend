@@ -3,12 +3,14 @@ orbs:
   tf: ngs/terraform@0.0.1
 jobs:
   terraform-validate:
-    executor: terraform
+    docker:
+      - image: hashicorp/terraform
     working_directory: ./aws-infrastructure
     steps:
       - checkout
       - tf/init
-      - tf/validate
+      - tf/tf:
+          command: validate
  
 workflows:
   version: 2
