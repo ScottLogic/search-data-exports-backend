@@ -5,5 +5,9 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - terraform/validate:
-          path: aws-infrastructure
+      - terraform-validate:
+        docker:
+          - image: hashicorp/terraform:light        
+        steps:
+          terraform/validate:
+            - path: ./aws-infrastructure
