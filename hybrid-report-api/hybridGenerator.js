@@ -1,11 +1,13 @@
 const pdf = require('html-pdf'); // npm package being used
 const ESSearch = require('./common/search');
 const SVGBuilder = require('./common/svgbuilder');
+const S3Output = require(`./common/s3-output`);
 const pdfTemplate = require('./template/htmlbase');
 
 class HybridGenerator {
-  constructor(ConnectionOptions) {
+  constructor(ConnectionOptions, bucketName) {
     this._search = new ESSearch(ConnectionOptions);
+    this._store = new S3Output(bucketName);
   }
 
   async generateReport(paramJSON = {}) {
@@ -15,9 +17,9 @@ class HybridGenerator {
       svgData,
       searchResults: reportData
     });
-    //const pdfHandle = await this.buildPDF({ formattedHTML });
-    const pdfHandle = "http://a_valid_url/"
-    return pdfHandle;
+    const pdfBuffer = await this.buildPDF({ formattedHTML });
+    const pdfFileName = await this.saveToBucket( { pdfBuffer });
+    return pdfFileName;
   }
 
   async getReportData(paramJSON) {
@@ -42,7 +44,7 @@ class HybridGenerator {
       orientation: 'portrait',
       border: '10'
     };
-    pdf.create(formattedHTML, pdfOptions).toFile(`hybrid.pdf`, (err, res) => {
+    pdf.create(formattedHTML, pdfOptions).toBuffer((err, res) => {
       if (err) errorResponse(err);
       successResponse(res);
     });
@@ -70,7 +72,10 @@ class HybridGenerator {
     }
   }
 
-  async saveToBucket() {}
+  async saveToBucket( { pdfBuffer }) {
+    this._store.addBuffer(pdfBuffer);
+    return await this._store.close();
+  }
 
   buildRequestJSON(paramJSON = {}) {
     const dateRange = paramJSON.search.find(x => x.dateRange);

@@ -33,8 +33,8 @@ exports.handler = async function(event, context, callback) {
       credentials: new AWS.EnvironmentCredentials('AWS')
     })
   };
-
-  const hybridGenerator = new HybridGenerator(ESConnectOptions);
+  const bucketName = process.env.S3_BUCKET_NAME;
+  const hybridGenerator = new HybridGenerator(ESConnectOptions, bucketName);
 
   const result = await hybridGenerator.generateReport(eventJson).catch(error => {
     callback(null, {
