@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  tf: ngs/terraform@0.0.1
 jobs:
   terraform-validate:
     docker:
@@ -8,9 +6,12 @@ jobs:
     working_directory: ./aws-infrastructure
     steps:
       - checkout
-      - tf/init
-      - tf/tf:
-          command: validate
+      - run:
+          name: terraform init
+          command: terraform init
+      - run:
+          name: terraform validate
+          command: terraform validate          
  
 workflows:
   version: 2
