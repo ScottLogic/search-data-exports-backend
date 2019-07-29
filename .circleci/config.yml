@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   terraform-validate:
     docker:
-      - image: hashicorp/terraform
+      - image: hashicorp/terraform:light
     working_directory: ~/SearchDataExports-backend/aws-infrastructure
     steps:
       - checkout:
