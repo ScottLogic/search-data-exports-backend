@@ -14,8 +14,8 @@ class HybridGenerator {
     const formattedHTML = await this.buildHTML({
       svgData,
       searchResults: reportData
-    });    
-    const pdfHandle = await this.buildPDF({formattedHTML});       
+    });
+    const pdfHandle = await this.buildPDF({ formattedHTML });
     return pdfHandle;
   }
 
@@ -35,33 +35,36 @@ class HybridGenerator {
     });
   }
 
-  makePDF( formattedHTML, successResponse,errorResponce ) {    
+  makePDF(formattedHTML, successResponse, errorResponce) {
     const pdfOptions = {
       format: "A4",
       orientation: "portrait",
       border: "10"
-    };    
-    pdf.create(formattedHTML, pdfOptions).toFile(`hybrid.pdf`,(err,res) => {
+    };
+    pdf.create(formattedHTML, pdfOptions).toFile(`hybrid.pdf`, (err, res) => {
       if (err) errorResponce(err);
       successResponse(res);
     });
   }
 
-  buildPdfWrapper( formattedHTML ) {
-    return new Promise( (resolve, reject) => {
-      this.makePDF( formattedHTML, (successResponse) => {
-        resolve(successResponse);
-      }, (errorResponce) => {
-        reject(errorResponce);
-      } )
+  buildPdfWrapper(formattedHTML) {
+    return new Promise((resolve, reject) => {
+      this.makePDF(
+        formattedHTML,
+        successResponse => {
+          resolve(successResponse);
+        },
+        errorResponce => {
+          reject(errorResponce);
+        }
+      );
     });
   }
 
-  async buildPDF( {formattedHTML = ''}) {
-    try {
-      const pdf = await this.buildPdfWrapper( formattedHTML );      
-      return pdf;
-    } catch ( error ) {
+  async buildPDF({ formattedHTML = "" }) {
+    try {      
+      return await this.buildPdfWrapper(formattedHTML);
+    } catch (error) {
       return;
     }
   }

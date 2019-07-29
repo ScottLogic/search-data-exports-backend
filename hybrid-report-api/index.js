@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const connectionClass = require("http-aws-es"); 
+const connectionClass = require("http-aws-es");
 const HybridGenerator = require("./hybridGenerator");
 
 const callbackHeaders = {
@@ -32,22 +32,24 @@ exports.handler = async function(event, context, callback) {
     awsConfig: new AWS.Config({
       credentials: new AWS.EnvironmentCredentials("AWS")
     })
-  };  
-  
+  };
+
   const hybridGenerator = new HybridGenerator(ESConnectOptions);
 
-  const result = await hybridGenerator.generateReport(eventJson).catch(error => {            
-    callback(null, {
-      statusCode: "400",
-      body: JSON.stringify({
-        message: "Error In Generation",
-        errorMessage: error.message,
-        content: event.body
-      }),
-      headers: callbackHeaders
+  const result = await hybridGenerator
+    .generateReport(eventJson)
+    .catch(error => {
+      callback(null, {
+        statusCode: "400",
+        body: JSON.stringify({
+          message: "Error In Generation",
+          errorMessage: error.message,
+          content: event.body
+        }),
+        headers: callbackHeaders
+      });
+      return;
     });
-    return;
-  });
   callback(null, {
     statusCode: "200",
     body: result,
