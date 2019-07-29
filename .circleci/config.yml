@@ -18,7 +18,6 @@ jobs:
       project-name:
         type: string
         default: .
-    name: "<< parameters.project-name >> lint"
     docker:
       - image: circleci/node:10.15.1
     working_directory: "~/repo/<< parameters.project-name >>"
