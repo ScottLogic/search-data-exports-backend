@@ -5,5 +5,13 @@
     "http-aws-es": "^6.0.0",
     "aws-sdk": "^2.493.0",
     "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "lint": "eslint . --ext js"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }

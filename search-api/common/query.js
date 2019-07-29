@@ -47,8 +47,7 @@ const buildQuery = (type, searchFilters) => {
   return queryList;
 };
 
-const buildQueryJson = (rawRequest = {}, method) => {
-  const resultsSize = rawRequest.resultSize ? rawRequest.resultSize : 10;
+const buildQueryJson = (rawRequest = {}, method, resultsSize = 10) => {
   /* The only filters we care about are type, and dateRange.
        Everything else is actual scored filters. */
   const dateRange = rawRequest.search.find(x => x.dateRange);
