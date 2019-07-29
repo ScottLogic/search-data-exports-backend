@@ -1,0 +1,21 @@
+version: 2.1
+jobs:
+  terraform-validate:
+    docker:
+      - image: hashicorp/terraform:light
+    working_directory: ~/SearchDataExports-backend/aws-infrastructure
+    steps:
+      - checkout:
+          path: ~/SearchDataExports-backend
+      - run:
+          name: terraform init
+          command: terraform init
+      - run:
+          name: terraform validate
+          command: terraform validate          
+ 
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - terraform-validate          
