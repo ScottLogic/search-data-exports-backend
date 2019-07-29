@@ -129,7 +129,7 @@ module "lambda-hybrid-report" {
   project                   = var.project
   environment               = var.environment
   lambda_name               = "hybrid-report"
-  description               = "SDE generate report lambda"
+  description               = "SDE generate hybrid report lambda"
 
   lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
 
