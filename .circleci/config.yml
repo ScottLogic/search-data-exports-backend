@@ -1,11 +1,18 @@
 version: 2.1
 orbs:
-  terraform: ngs/terraform@0.0.1
+  tf: ngs/terraform@0.0.1
+jobs:
+  terraform-validate:
+    executor: terraform
+    working_directory: ./aws-infrastructure
+    steps:
+      - checkout
+      - init
+      - tf:
+          command: validate
  
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - terraform/validate:
-          working-directory: ./aws-infrastructure
-          name: validate
+      - terraform-validate          
