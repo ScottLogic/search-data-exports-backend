@@ -44,4 +44,7 @@ workflows:
           name: download-request-api lint
       - lint-npm-project:
           project-name: send-email-api
-          name: send-email-api lint                        
+          name: send-email-api lint
+      - lint-npm-project:
+          project-name: report-generator-api
+          name: report-generator-api lint          
