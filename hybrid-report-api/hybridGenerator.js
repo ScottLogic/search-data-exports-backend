@@ -35,14 +35,14 @@ class HybridGenerator {
     });
   }
 
-  makePDF(formattedHTML, successResponse, errorResponce) {
+  makePDF(formattedHTML, successResponse, errorResponse) {
     const pdfOptions = {
       format: "A4",
       orientation: "portrait",
       border: "10"
     };
     pdf.create(formattedHTML, pdfOptions).toFile(`hybrid.pdf`, (err, res) => {
-      if (err) errorResponce(err);
+      if (err) errorResponse(err);
       successResponse(res);
     });
   }
@@ -54,15 +54,15 @@ class HybridGenerator {
         successResponse => {
           resolve(successResponse);
         },
-        errorResponce => {
-          reject(errorResponce);
+        errorResponse => {
+          reject(errorResponse);
         }
       );
     });
   }
 
   async buildPDF({ formattedHTML = "" }) {
-    try {      
+    try {
       return await this.buildPdfWrapper(formattedHTML);
     } catch (error) {
       return;
