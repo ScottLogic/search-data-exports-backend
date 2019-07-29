@@ -3,9 +3,10 @@ jobs:
   terraform-validate:
     docker:
       - image: hashicorp/terraform
-    working_directory: ./aws-infrastructure
+    working_directory: ~/SearchDataExports-backend/aws-infrastructure
     steps:
-      - checkout
+      - checkout:
+          path: ~/SearchDataExports-backend
       - run:
           name: terraform init
           command: terraform init
