@@ -28,7 +28,7 @@ exports.handler = async function(event, context, callback) {
     host: process.env.ES_SEARCH_API
       ? process.env.ES_SEARCH_API
       : `http://localhost:9200`,
-    //connectionClass: connectionClass, // Renable this line when converted to a lambda
+    connectionClass: connectionClass, // Renable this line when converted to a lambda
     awsConfig: new AWS.Config({
       credentials: new AWS.EnvironmentCredentials("AWS")
     })
