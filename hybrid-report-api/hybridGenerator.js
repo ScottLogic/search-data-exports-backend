@@ -1,7 +1,7 @@
-const pdf = require("html-pdf"); // npm package being used
-const ESSearch = require(`./common/search`);
-const SVGBuilder = require(`./common/svgbuilder`);
-const pdfTemplate = require("./template/htmlbase");
+const pdf = require('html-pdf'); // npm package being used
+const ESSearch = require('./common/search');
+const SVGBuilder = require('./common/svgbuilder');
+const pdfTemplate = require('./template/htmlbase');
 
 class HybridGenerator {
   constructor(ConnectionOptions) {
@@ -36,14 +36,14 @@ class HybridGenerator {
     });
   }
 
-  makePDF(formattedHTML, successResponse, errorResponce) {
+  makePDF(formattedHTML, successResponse, errorResponse) {
     const pdfOptions = {
-      format: "A4",
-      orientation: "portrait",
-      border: "10"
+      format: 'A4',
+      orientation: 'portrait',
+      border: '10'
     };
     pdf.create(formattedHTML, pdfOptions).toFile(`hybrid.pdf`, (err, res) => {
-      if (err) errorResponce(err);
+      if (err) errorResponse(err);
       successResponse(res);
     });
   }
@@ -55,15 +55,15 @@ class HybridGenerator {
         successResponse => {
           resolve(successResponse);
         },
-        errorResponce => {
-          reject(errorResponce);
+        errorResponse => {
+          reject(errorResponse);
         }
       );
     });
   }
 
-  async buildPDF({ formattedHTML = "" }) {
-    try {      
+  async buildPDF({ formattedHTML = '' }) {
+    try {
       return await this.buildPdfWrapper(formattedHTML);
     } catch (error) {
       return;
@@ -79,13 +79,13 @@ class HybridGenerator {
     !dateRange && startDate.setDate(startDate.getDate() - 1);
 
     return {
-      index: "posts",
+      index: 'posts',
       size: 0,
       body: {
         aggs: {
           types_count: {
             terms: {
-              field: "Tags.keyword",
+              field: 'Tags.keyword',
               size: 20
             }
           }
