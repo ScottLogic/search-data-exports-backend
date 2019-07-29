@@ -94,7 +94,9 @@ module "lambda-download-request" {
 
   source_arn                = local.api_gateway_source_arn
 
-  lambda_env_map            = {DOWNLOAD_REQUESTS_SNS_TOPIC : module.sns-download-requests-topic.topic_arn}
+  lambda_env_map            = {
+    CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN : module.step-function-csv-download-request.arn
+  }
 }
 
 #
