@@ -9,11 +9,9 @@ const callbackHeaders = {
 exports.handler = async (event, context, callback) => {
   console.log("event.body=", event.body);
 
-  const input = JSON.parse(event.body);
-
   const params = {
     stateMachineArn: process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN,
-    input: JSON.stringify(input)
+    input: event.body
   };
 
   await stepFunctions.startExecution(params).promise().then(data => {
