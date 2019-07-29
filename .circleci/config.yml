@@ -47,4 +47,7 @@ workflows:
           name: send-email-api lint
       - lint-npm-project:
           project-name: report-generator-api
-          name: report-generator-api lint          
+          name: report-generator-api lint
+      - lint-npm-project:
+          project-name: start-create-and-email-report-api
+          name: start-create-and-email-report-api lint                      
