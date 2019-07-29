@@ -1,7 +1,7 @@
 const pdf = require('html-pdf'); // npm package being used
 const ESSearch = require('./common/search');
 const SVGBuilder = require('./common/svgbuilder');
-const S3Output = require(`./common/s3-output`);
+const S3Output = require('./common/s3-output');
 const pdfTemplate = require('./template/htmlbase');
 
 class HybridGenerator {
@@ -17,47 +17,54 @@ class HybridGenerator {
       svgData,
       searchResults: reportData
     });
+    console.log(`HTML`,formattedHTML);
     const pdfBuffer = await this.buildPDF({ formattedHTML });
-    const pdfFileName = await this.saveToBucket( { pdfBuffer });
+    console.log(`PDF Buffer:`,pdfBuffer);
+    const pdfFileName = await this.saveToBucket({ pdfBuffer });
+
     return pdfFileName;
   }
 
   async getReportData(paramJSON) {
-    return await this._search.search(this.buildRequestJSON(paramJSON));
+    const reportData = await this._search.search(this.buildRequestJSON(paramJSON));
+    return reportData;
   }
 
-  async buildSVG(ESResults) {
+  static async buildSVG(ESResults) {
     const svgbuilder = new SVGBuilder();
-    return await svgbuilder.build(ESResults);
+    const searchResult = await svgbuilder.build(ESResults);
+    return searchResult;
   }
 
-  async buildHTML({ searchResults, svgData }) {
-    return await pdfTemplate({
+  static async buildHTML({ searchResults, svgData }) {
+    const htmlString = await pdfTemplate({
       svgData,
       tableData: searchResults.aggregations.types_count.buckets
     });
+    return htmlString;
   }
 
-  makePDF(formattedHTML, successResponse, errorResponse) {
+  static makePDF(formattedHTML, successResponse, errorResponse) {
     const pdfOptions = {
       format: 'A4',
       orientation: 'portrait',
       border: '10'
     };
-    pdf.create(formattedHTML, pdfOptions).toBuffer((err, res) => {
+    pdf.create(formattedHTML, pdfOptions).toStream((err, res) => {
+      console.log(`Into Stream function`,err,res);
       if (err) errorResponse(err);
       successResponse(res);
-    });
+    });    
   }
 
   buildPdfWrapper(formattedHTML) {
     return new Promise((resolve, reject) => {
       this.makePDF(
         formattedHTML,
-        successResponse => {
+        (successResponse) => {
           resolve(successResponse);
         },
-        errorResponse => {
+        (errorResponse) => {
           reject(errorResponse);
         }
       );
@@ -66,22 +73,27 @@ class HybridGenerator {
 
   async buildPDF({ formattedHTML = '' }) {
     try {
+      console.log(`BuildPDF`);
       return await this.buildPdfWrapper(formattedHTML);
     } catch (error) {
-      return;
+      console.log(`Error Happened`,error);
+      return null;
     }
   }
 
-  async saveToBucket( { pdfBuffer }) {
+  async saveToBucket({ pdfBuffer }) {
     this._store.addBuffer(pdfBuffer);
-    return await this._store.close();
+    const fileURL = await this._store.close();
+    return fileURL;
   }
 
-  buildRequestJSON(paramJSON = {}) {
+  static buildRequestJSON(paramJSON = {}) {
     const dateRange = paramJSON.search.find(x => x.dateRange);
-    let startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now());
+    const startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now());
     const endDate = new Date(dateRange ? dateRange.dateRange[1] : Date.now());
-    !dateRange && startDate.setDate(startDate.getDate() - 1);
+    if (!dateRange) {
+      startDate.setDate(startDate.getDate() - 1)
+    }
 
     return {
       index: 'posts',
