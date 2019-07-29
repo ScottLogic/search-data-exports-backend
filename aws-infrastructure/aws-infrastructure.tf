@@ -74,7 +74,7 @@ module "sns-download-requests-topic" {
   environment                      = var.environment
   sns_topic_name                   = "download-requests-topic"
   sns_topic_subscription_protocol  = "lambda"
-  sns_topic_subscription_endpoints = [module.lambda-generate-report.arn]
+  sns_topic_subscription_endpoints = [module.lambda-start-create-and-email-report.arn]
   sns_success_feedback_role_arn    = module.sns_shared_policy.sns_success_feedback_iam_role_arn
   sns_failure_feedback_role_arn    = module.sns_shared_policy.sns_failure_feedback_iam_role_arn
 }
@@ -95,27 +95,6 @@ module "lambda-download-request" {
   source_arn                = local.api_gateway_source_arn
 
   lambda_env_map            = {DOWNLOAD_REQUESTS_SNS_TOPIC : module.sns-download-requests-topic.topic_arn}
-}
-
-#
-# Define the generate report lambda
-#
-module "lambda-generate-report" {
-  source                    = "./modules/lambda"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-  lambda_name               = "generate-report"
-  description               = "SDE generate report lambda"
-
-  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
-
-  source_arn                = local.api_gateway_source_arn
-
-  lambda_env_map            = {
-                                ES_SEARCH_API  : module.elasticsearch.endpoint,
-                                S3_BUCKET_NAME : module.s3-bucket.bucket_name
-                              }
 }
 
 #
