@@ -35,7 +35,7 @@ module "sns_shared_policy" {
 #
 # Define API gateway
 #
-module "api-gateway" 
+module "api-gateway" {
   source                    = "./modules/api_gateway"
   name_prefix               = local.name_prefix
   project                   = var.project
