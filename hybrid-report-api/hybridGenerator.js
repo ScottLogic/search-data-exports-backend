@@ -3,7 +3,7 @@ const SVGBuilder = require(`./common/svgbuilder`);
 
 class HybridGenerator {
   constructor(ConnectionOptions) {
-    this._search = new ESSearch(ConnectionOptions);    
+    this._search = new ESSearch(ConnectionOptions);
   }
 
   async generateReport(paramJSON = {}) {
