@@ -7,4 +7,5 @@ workflows:
   build-deploy:
     jobs:
       - terraform/validate:
+          working-directory: ./aws-infrastructure
           name: validate
