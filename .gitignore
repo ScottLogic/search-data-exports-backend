@@ -31,3 +31,6 @@ searchrequest/app/brokenexamples.js
 *.env
 # Stop PDFs
 *.pdf
+
+# CircleCI CLI exe
+circleci.exe

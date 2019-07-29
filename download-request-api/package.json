@@ -1,6 +1,14 @@
 {
-  "name": "sde-download-request-api",
+  "name": "download-request-api",
   "dependencies": {
     "aws-sdk": "^2.493.0"
+  },
+  "scripts": {
+    "lint": "eslint . --ext js"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }
