@@ -39,6 +39,13 @@
         "sns:Publish"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "states:StartExecution"
+      ],
+      "Resource": "*"
     }
   ]
 }

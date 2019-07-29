@@ -7,11 +7,18 @@ const callbackHeaders = {
 };
 
 exports.handler = async (event, context, callback) => {
-  console.log("event.body=", event.body);
+  const message = event.Records[0].Sns.Message;
+
+  const data = JSON.parse(message);
+
+  const input = {
+    emailAddress: data.parameters.emailAddress,
+    searchCriteria: data.searchCriteria
+  };
 
   const params = {
-    stateMachineArn: process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN,
-    input: event.body
+    stateMachineArn: process.env.CREATE_AND_EMAIL_REPORT_STEP_FUNCTION_ARN,
+    input: JSON.stringify(input)
   };
 
   await stepFunctions.startExecution(params).promise().then(data => {
