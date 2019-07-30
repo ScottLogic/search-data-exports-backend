@@ -38,7 +38,7 @@
         "FunctionName": "${send-email-arn}",
         "Payload": {
           "email" : {
-            "to.$": "$.emailAddress",
+            "to.$": "$.parameters.emailAddress",
             "subject": "CSV Email report",
             "reportURL.$": "$.reportOutput.reportURL"
           }
