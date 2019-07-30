@@ -43,7 +43,8 @@
     {
       "Effect": "Allow",
       "Action": [
-        "states:StartExecution"
+        "states:StartExecution",
+        "states:DescribeExecution"
       ],
       "Resource": "*"
     }

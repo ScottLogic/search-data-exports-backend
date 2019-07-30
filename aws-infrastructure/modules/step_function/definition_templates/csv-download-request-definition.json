@@ -27,6 +27,13 @@
     },
     "Direct download of report": {
       "Type": "Pass",
+      "Next": "Generate CSV Report"
+    },
+    "Generate CSV Report": {
+      "Type": "Task",
+      "Resource": "${report-generator-arn}",
+      "ResultPath": "$.reportOutput",
+      "OutputPath": "$.reportOutput",
       "End": true
     },
     "Generate and push notification": {
