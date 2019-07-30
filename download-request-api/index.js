@@ -8,6 +8,8 @@ const callbackHeaders = {
 };
 
 exports.handler = async (event, _, callback) => {
+  console.log('event.body=', event.body);
+
   const params = {
     stateMachineArn: process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN,
     input: event.body
@@ -17,6 +19,8 @@ exports.handler = async (event, _, callback) => {
     .startExecution(params)
     .promise()
     .then((data) => {
+      console.log('Step function execution response:', data);
+
       callback(null, {
         statusCode: 200,
         body: JSON.stringify(data),

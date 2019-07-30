@@ -26,17 +26,17 @@ const getStatusMessage = (timedOut, _shards) => {
   return '';
 };
 
-const formatResults = results => (!results.hits
+const formatResults = results => (results.hits
   ? {
-    Status: STATUS_ERROR,
-    ErrorMessage: 'No Return Information Found'
-  }
-  : {
     Status: getStatus(results.timed_out, results._shards),
     ErrorMessage: getStatusMessage(results.timed_out, results._shards),
     TotalResults: results.hits.total || 0,
     ResultsCount: results.hits.hits.length || 0,
     Results: results.hits.hits.map(result => makeResult(result))
+  }
+  : {
+    Status: STATUS_ERROR,
+    ErrorMessage: 'No Return Information Found'
   }
 );
 
