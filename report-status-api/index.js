@@ -27,7 +27,7 @@ exports.handler = async (event, context, callback) => {
       headers: callbackHeaders
     });
   }).catch((err) => {
-    console.log(err, err.stack);
+    console.error(err, err.stack);
 
     callback(null, {
       statusCode: 500,
