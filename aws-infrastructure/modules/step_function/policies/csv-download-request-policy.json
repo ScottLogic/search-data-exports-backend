@@ -5,6 +5,15 @@
       "Effect": "Allow",
       "Action": "sns:Publish",
       "Resource": "${download-requests-topic-arn}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": [
+        "${report-generator-arn}"
+      ]
     }
   ]
 }
