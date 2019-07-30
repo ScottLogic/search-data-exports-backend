@@ -12,13 +12,13 @@ class HybridGenerator {
 
   async generateReport(paramJSON = {}) {
     const reportData = await this.getReportData(paramJSON);
-    const svgData = await this.buildSVG(reportData);
-    const formattedHTML = await this.buildHTML({
+    const svgData = await HybridGenerator.buildSVG(reportData);
+    const formattedHTML = await HybridGenerator.buildHTML({
       svgData,
       searchResults: reportData
     });
     console.log(`HTML`,formattedHTML);
-    const pdfBuffer = await this.buildPDF({ formattedHTML });
+    const pdfBuffer = await HybridGenerator.buildPDF({ formattedHTML });
     console.log(`PDF Buffer:`,pdfBuffer);
     const pdfFileName = await this.saveToBucket({ pdfBuffer });
 
@@ -26,7 +26,7 @@ class HybridGenerator {
   }
 
   async getReportData(paramJSON) {
-    const reportData = await this._search.search(this.buildRequestJSON(paramJSON));
+    const reportData = await this._search.search(HybridGenerator.buildRequestJSON(paramJSON));
     return reportData;
   }
 
@@ -50,16 +50,16 @@ class HybridGenerator {
       orientation: 'portrait',
       border: '10'
     };
-    pdf.create(formattedHTML, pdfOptions).toStream((err, res) => {
-      console.log(`Into Stream function`,err,res);
+    pdf.create(formattedHTML, pdfOptions).toBuffer((err, res) => {
+      console.log('Into Stream function', err, res);
       if (err) errorResponse(err);
       successResponse(res);
-    });    
+    });
   }
 
-  buildPdfWrapper(formattedHTML) {
+  static buildPdfWrapper(formattedHTML) {
     return new Promise((resolve, reject) => {
-      this.makePDF(
+      HybridGenerator.makePDF(
         formattedHTML,
         (successResponse) => {
           resolve(successResponse);
@@ -71,10 +71,10 @@ class HybridGenerator {
     });
   }
 
-  async buildPDF({ formattedHTML = '' }) {
+  static async buildPDF({ formattedHTML = '' }) {
     try {
       console.log(`BuildPDF`);
-      return await this.buildPdfWrapper(formattedHTML);
+      return await HybridGenerator.buildPdfWrapper(formattedHTML);
     } catch (error) {
       console.log(`Error Happened`,error);
       return null;
