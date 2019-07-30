@@ -23,16 +23,6 @@ module "lambda_shared_policy" {
 }
 
 #
-# Define our iam roles for our SNS topic
-#
-module "sns_shared_policy" {
-  source                    = "./modules/sns_shared_policy"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-}
-
-#
 # Define API gateway
 #
 module "api-gateway" {
@@ -62,21 +52,6 @@ module "lambda-search" {
   source_arn                = local.api_gateway_source_arn
 
   lambda_env_map            = {ES_SEARCH_API : module.elasticsearch.endpoint}
-}
-
-#
-# Create download request SNS topic
-#
-module "sns-download-requests-topic" {
-  source                           = "./modules/sns"
-  name_prefix                      = local.name_prefix
-  project                          = var.project
-  environment                      = var.environment
-  sns_topic_name                   = "download-requests-topic"
-  sns_topic_subscription_protocol  = "lambda"
-  sns_topic_subscription_endpoints = [module.lambda-start-create-and-email-report.arn]
-  sns_success_feedback_role_arn    = module.sns_shared_policy.sns_success_feedback_iam_role_arn
-  sns_failure_feedback_role_arn    = module.sns_shared_policy.sns_failure_feedback_iam_role_arn
 }
 
 #
