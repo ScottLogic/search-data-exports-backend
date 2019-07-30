@@ -1,4 +1,5 @@
-const pdf = require('html-pdf'); // npm package being used
+const chrome = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
 const ESSearch = require('./common/search');
 const SVGBuilder = require('./common/svgbuilder');
 const S3Output = require('./common/s3-output');
@@ -17,11 +18,8 @@ class HybridGenerator {
       svgData,
       searchResults: reportData
     });
-    console.log(`HTML`,formattedHTML);
     const pdfBuffer = await HybridGenerator.buildPDF({ formattedHTML });
-    console.log(`PDF Buffer:`,pdfBuffer);
     const pdfFileName = await this.saveToBucket({ pdfBuffer });
-
     return pdfFileName;
   }
 
@@ -44,41 +42,19 @@ class HybridGenerator {
     return htmlString;
   }
 
-  static makePDF(formattedHTML, successResponse, errorResponse) {
-    const pdfOptions = {
-      format: 'A4',
-      orientation: 'portrait',
-      border: '10'
-    };
-    pdf.create(formattedHTML, pdfOptions).toBuffer((err, res) => {
-      console.log('Into Stream function', err, res);
-      if (err) errorResponse(err);
-      successResponse(res);
-    });
-  }
-
-  static buildPdfWrapper(formattedHTML) {
-    return new Promise((resolve, reject) => {
-      HybridGenerator.makePDF(
-        formattedHTML,
-        (successResponse) => {
-          resolve(successResponse);
-        },
-        (errorResponse) => {
-          reject(errorResponse);
-        }
-      );
-    });
-  }
-
   static async buildPDF({ formattedHTML = '' }) {
-    try {
-      console.log(`BuildPDF`);
-      return await HybridGenerator.buildPdfWrapper(formattedHTML);
-    } catch (error) {
-      console.log(`Error Happened`,error);
-      return null;
-    }
+    const browser = await puppeteer.launch({
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
+    });
+    const page = await browser.newPage();
+    page.setContent(formattedHTML);
+    const buffer = await page.pdf({
+      format: 'A4'
+    });
+    browser.close();
+    return buffer;
   }
 
   async saveToBucket({ pdfBuffer }) {
