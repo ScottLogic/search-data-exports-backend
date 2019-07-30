@@ -213,7 +213,7 @@ module "lambda-start-create-and-email-report" {
   source_arn                = local.api_gateway_source_arn
 
   lambda_env_map            = {
-    CREATE_AND_EMAIL_REPORT_STEP_FUNCTION_ARN : module.step-function-create-and-email-report.arn
+    EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
   }
 }
 
@@ -297,23 +297,6 @@ module "api-gateway-report-status" {
 }
 
 #
-# Create step function to create and email report
-#
-module "step-function-create-and-email-report" {
-  source                          = "./modules/step_function"
-  name_prefix                     = local.name_prefix
-  project                         = var.project
-  environment                     = var.environment
-
-  name                            = "create-and-email-csv-report"
-
-  invoked_lambda_function_arn_map = {
-    "report-generator-arn"      : module.lambda-report-generator.alias_arn,
-    "send-email-arn"            : module.lambda-send-email.alias_arn
-  }
-}
-
-#
 # Create step function to request the download of a csv file
 #
 module "step-function-csv-download-request" {
@@ -325,8 +308,8 @@ module "step-function-csv-download-request" {
   name                            = "csv-download-request"
 
   invoked_lambda_function_arn_map = {
-    "download-requests-topic-arn" : module.sns-download-requests-topic.topic_arn,
     "report-generator-arn"        : module.lambda-report-generator.alias_arn
+    "send-email-arn"              : module.lambda-send-email.alias_arn
   }
 }
 

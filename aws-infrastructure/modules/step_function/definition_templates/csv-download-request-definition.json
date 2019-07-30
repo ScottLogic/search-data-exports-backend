@@ -23,13 +23,34 @@
     },
     "Email report request": {
       "Type": "Pass",
-      "Next": "Publish request to SNS"
+      "Next": "Generate CSV Report for email"
+    },
+    "Generate CSV Report for email": {
+      "Type": "Task",
+      "Resource": "${report-generator-arn}",
+      "ResultPath": "$.reportOutput",
+      "Next": "Email CSV Report link to user"
+    },
+    "Email CSV Report link to user": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${send-email-arn}",
+        "Payload": {
+          "email" : {
+            "to.$": "$.emailAddress",
+            "subject": "CSV Email report",
+            "reportURL.$": "$.reportOutput.reportURL"
+          }
+        }
+      },
+      "End": true
     },
     "Direct download of report": {
       "Type": "Pass",
-      "Next": "Generate CSV Report"
+      "Next": "Generate CSV Report for direct download"
     },
-    "Generate CSV Report": {
+    "Generate CSV Report for direct download": {
       "Type": "Task",
       "Resource": "${report-generator-arn}",
       "ResultPath": "$.reportOutput",
@@ -38,15 +59,6 @@
     },
     "Generate and push notification": {
       "Type": "Pass",
-      "End": true
-    },
-    "Publish request to SNS": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::sns:publish",
-      "Parameters": {
-        "TopicArn": "${download-requests-topic-arn}",
-        "Message.$": "$"
-      },
       "End": true
     }
   }
