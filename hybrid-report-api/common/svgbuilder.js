@@ -1,5 +1,5 @@
-const { JSDOM } = require(`jsdom`);
-const d3 = require("d3");
+const { JSDOM } = require('jsdom');
+const d3 = require('d3');
 
 class SVGBuilder {
   constructor() {
@@ -7,8 +7,9 @@ class SVGBuilder {
   }
 
   _setDefaults() {
-    // Set to 900x400 because this is the only size which scales well into the PDF when generated. 
-    // Have to make sure it is set well in here, because the PDF generation has issues with scaling SVGs well.     
+    /* Set to 900x400 because this is the only size which scales well into the PDF when generated. 
+        Have to make sure it is set well in here, because the PDF generation has issues 
+        with scaling SVGs well. */
     this._width = 900;
     this._height = 400;
     this._radius = Math.min(this._width, this._height) / 2;
@@ -19,24 +20,24 @@ class SVGBuilder {
   }
 
   _buildContainer() {
-    const fakeDom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-    this._body = d3.select(fakeDom.window.document).select("body");
+    const fakeDom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+    this._body = d3.select(fakeDom.window.document).select('body');
     this._svgContainer = this._body
-      .append("div")
-      .attr("class", "container") // class is only used to grab the correct element later.
-      .append("svg")
+      .append('div')
+      .attr('class', 'container') // class is only used to grab the correct element later.
+      .append('svg')
       .data([this._formattedData])
-      .attr("height", this._height)
-      .attr("width", this._width)
-      .append("g")
+      .attr('height', this._height)
+      .attr('width', this._width)
+      .append('g')
       .attr(
-        "transform",
-        "translate(" + this._width / 2 + "," + this._height / 2 + ")"
+        'transform',
+        'translate(" + this._width / 2 + "," + this._height / 2 + ")'
       );
 
-    this._svgContainer.append("g").attr("class", "labels");
-    this._svgContainer.append("g").attr("class", "lines");
-    this._svgContainer.append("g").attr("class", "slices");
+    this._svgContainer.append('g').attr('class', 'labels');
+    this._svgContainer.append('g').attr('class', 'lines');
+    this._svgContainer.append('g').attr('class', 'slices');
   }
 
   _buildArcs() {
@@ -66,59 +67,56 @@ class SVGBuilder {
 
   _buildSlices() {
     const arcs = this._svgContainer
-      .select(".slices")
-      .selectAll("g.slice")
+      .select('.slices')
+      .selectAll('g.slice')
       .data(this._pie);
 
     arcs
       .enter()
-      .append("svg:g")
-      .attr("class", "slice")
-      .append("svg:path")
-      .attr("fill", (entry, index) => this._color[index % this._color.length])
-      .attr("d", this._sliceArc);
+      .append('svg:g')
+      .attr('class', 'slice')
+      .append('svg:path')
+      .attr('fill', (entry, index) => this._color[index % this._color.length])
+      .attr('d', this._sliceArc);
 
     arcs
       .enter()
-      .append("svg:text")
+      .append('svg:text')
       .attr(
-        "transform",
-        entry => "translate(" + this._valueArc.centroid(entry) + ")"
+        'transform',
+        entry => 'translate(" + this._valueArc.centroid(entry) + ")'
       )
-      .attr("text-anchor", "middle")
+      .attr('text-anchor', 'middle')
       .text(entry => entry.data.doc_count);
   }
 
   _buildLabels() {
     const midAngle = d => d.startAngle + (d.endAngle - d.startAngle) / 2;
     this._svgContainer
-      .select(".labels")
-      .selectAll("text")
+      .select('.labels')
+      .selectAll('text')
       .data(this._pie)
       .enter()
-      .append("text")
-      .attr("dy", ".35em")
+      .append('text')
+      .attr('dy', '.35em')
       .text(d => d.data.key)
-      .attr("transform", entry => {
-        let positionArray = this._labelArc.centroid(entry);
+      .attr('transform', (entry) => {
+        const positionArray = this._labelArc.centroid(entry);
         positionArray[0] = this._radius * (midAngle(entry) < Math.PI ? 1 : -1);
-        return "translate(" + positionArray + ")";
+        return `translate(${positionArray})`;
       })
-      .style("text-anchor", entry =>
-        midAngle(entry) < Math.PI ? "start" : "end"
-      );
+      .style('text-anchor', entry => (midAngle(entry) < Math.PI) ? 'start' : 'end');
 
     this._svgContainer
-      .select(".lines")
-      .selectAll("polyline")
+      .select('.lines')
+      .selectAll('polyline')
       .data(this._pie)
       .enter()
-      .append("polyline")
-      .attr("style", "stroke: black;fill: none;stroke-width: 2px;opacity: 0.3;")
-      .attr("points", entry => {
-        let positionArray = this._labelArc.centroid(entry);
-        positionArray[0] =
-          this._radius * 1 * (midAngle(entry) < Math.PI ? 1 : -1);
+      .append('polyline')
+      .attr('style', 'stroke: black;fill: none;stroke-width: 2px;opacity: 0.3;')
+      .attr('points', (entry) => {
+        const positionArray = this._labelArc.centroid(entry);
+        positionArray[0] = this._radius * 1 * (midAngle(entry) < Math.PI ? 1 : -1);
         return [
           this._sliceArc.centroid(entry),
           this._labelArc.centroid(entry),
@@ -135,7 +133,7 @@ class SVGBuilder {
     this._buildPie();
     this._buildSlices();
     this._buildLabels();
-    return this._body.select(".container").html();
+    return this._body.select('.container').html();
   }
 }
 
