@@ -173,23 +173,6 @@ module "lambda-send-email" {
 }
 
 #
-# Define the start step function lambda
-#
-module "lambda-start-create-and-email-report" {
-  source                    = "./modules/lambda"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-  lambda_name               = "start-create-and-email-report"
-  description               = "SDE start step function lambda"
-
-  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
-
-  source_arn                = local.api_gateway_source_arn
-}
-
-
-#
 # Create search API and link to search lambda
 #
 module "api-gateway-search" {
