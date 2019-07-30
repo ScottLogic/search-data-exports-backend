@@ -54,3 +54,6 @@ workflows:
       - lint-npm-project:
           project-name: graphical-report-api
           name: graphical-report-api lint
+      - lint-npm-project:
+          project-name: report-status-api
+          name: report-status-api lint
