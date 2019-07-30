@@ -1,4 +1,4 @@
-version: 2.1    
+version: 2.1
 jobs:
   terraform-validate:
     docker:
@@ -20,7 +20,7 @@ jobs:
         default: .
     docker:
       - image: circleci/node:10.15.1
-    working_directory: "~/repo/<< parameters.project-name >>"
+    working_directory: '~/repo/<< parameters.project-name >>'
     steps:
       - checkout:
           path: ~/repo
@@ -29,8 +29,8 @@ jobs:
           command: npm ci
       - run:
           name: Run ESLint
-          command: npm run lint      
- 
+          command: npm run lint
+
 workflows:
   version: 2
   build-deploy:
@@ -53,4 +53,4 @@ workflows:
           name: start-create-and-email-report-api lint
       - lint-npm-project:
           project-name: graphical-report-api
-          name: graphical-report-api lint                                
+          name: graphical-report-api lint
