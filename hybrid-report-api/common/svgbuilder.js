@@ -7,8 +7,10 @@ class SVGBuilder {
   }
 
   _setDefaults() {
-    this._width = 1000;
-    this._height = 600;
+    // Set to 900x400 because this is the only size which scales well into the PDF when generated. 
+    // Have to make sure it is set well in here, because the PDF generation has issues with scaling SVGs well.     
+    this._width = 900;
+    this._height = 400;
     this._radius = Math.min(this._width, this._height) / 2;
   }
 
