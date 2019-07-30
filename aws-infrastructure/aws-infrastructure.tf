@@ -43,7 +43,8 @@ module "api-gateway" {
   # List of all resource method integration IDs which will be added. Used purely as a dependency, as we can't deploy the
   # API gateway until these IDs are created.
   api_method_integration_ids = [module.api-gateway-search.api_method_integration_id,
-                                module.api-gateway-download-request.api_method_integration_id]
+                                module.api-gateway-download-request.api_method_integration_id,
+                                module.api-gateway-report-status.api_method_integration_id]
 }
 
 #
