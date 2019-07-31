@@ -15,7 +15,7 @@ exports.handler = async (event, context, callback) => {
   await stepFunctions.describeExecution(executionArn).promise().then((data) => {
     console.log('Step function describe response:', data);
 
-    let reportURL = {};
+    let reportURL = '';
     // output from step function is a JSON string rather than object
     if (data.output) reportURL = JSON.parse(data.output).reportURL;
 
