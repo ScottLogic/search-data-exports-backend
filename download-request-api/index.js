@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+
 const stepFunctions = new AWS.StepFunctions();
 
 const headers = {
