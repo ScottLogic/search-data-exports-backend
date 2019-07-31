@@ -1,6 +1,6 @@
-module.exports = ({ svgString = "", textInformation = "", tableData = [] }) => {
-  let tableinformation = "";
-  tableData.forEach(item => {
+module.exports = ({ svgString = '', textInformation = '', tableData = [] }) => {
+  let tableinformation = '';
+  tableData.forEach((item) => {
     tableinformation += `<tr><td>${item.tag}</td><td>${item.count}</td></tr>`;
   });
 

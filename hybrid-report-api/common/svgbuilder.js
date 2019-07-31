@@ -105,7 +105,7 @@ class SVGBuilder {
         positionArray[0] = this._radius * (midAngle(entry) < Math.PI ? 1 : -1);
         return `translate(${positionArray})`;
       })
-      .style('text-anchor', entry => (midAngle(entry) < Math.PI) ? 'start' : 'end');
+      .style('text-anchor', entry => ((midAngle(entry) < Math.PI) ? 'start' : 'end'));
 
     this._svgContainer
       .select('.lines')

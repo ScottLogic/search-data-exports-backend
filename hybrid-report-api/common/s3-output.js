@@ -25,7 +25,7 @@ class S3Output {
     return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
   }
 
-  async close() {    
+  async close() {
     return this.writeBufferToS3();
   }
 }

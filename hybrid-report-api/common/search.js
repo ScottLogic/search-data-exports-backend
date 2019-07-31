@@ -8,7 +8,7 @@ class ESSearch {
   }
 
   // Search the Elastic Search on the given JSON.
-  async search(requestJSON) {    
+  async search(requestJSON) {
     return this._client.search(requestJSON);
   }
 }
