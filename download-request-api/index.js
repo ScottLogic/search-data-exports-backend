@@ -10,7 +10,24 @@ const headers = {
 const stepFunctionArn = process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN;
 const activityArn = process.env.OPEN_CONNECTION_ACTIVITY_ARN;
 
-exports.handler = async event => {
+const getTaskToken = async (type) => {
+  console.log(`type=${type}`);
+
+  if (type !== 'push') {
+    return '';
+  }
+
+  const getActivityTaskParams = {
+    activityArn,
+    workerName: stepFunctionArn
+  };
+
+  const { taskToken } = await stepFunctions.getActivityTask(getActivityTaskParams).promise();
+
+  return taskToken;
+};
+
+exports.handler = async (event) => {
   console.log(`event.body=${event.body}`);
 
   const { type } = JSON.parse(event.body);
@@ -21,7 +38,7 @@ exports.handler = async event => {
   };
 
   const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
-  const taskToken = await getTaskToken(type)  ;
+  const taskToken = await getTaskToken(type);
 
   const { executionArn } = await startExecutionPromise;
 
@@ -35,22 +52,5 @@ exports.handler = async event => {
       taskToken
     }),
     headers
-  } 
-};
-
-const getTaskToken = async (type) => {
-  console.log(`type=${type}`);
-
-  if (type != 'push') {
-    return '';
-  }
-
-  const getActivityTaskParams = {
-    activityArn,
-    workerName: stepFunctionArn
   };
-
-  const { taskToken } = await stepFunctions.getActivityTask(getActivityTaskParams).promise();
-
-  return taskToken;
-}
+};
