@@ -2,6 +2,7 @@
 **Purpose:** This api is to generate a PDF to be presented to the user, which consists of an svg graph image build from ElasticSearch results, as well as plain text/table built into a PDF.
 
 # Deployment for AWS Lambda
+This code requires a *nodejs 8.10* as its version, this is due to puppeteer, the Terraform script will need to be modified to reflect this change.
 Because of limitation on AWS file sizes, the process for this has been split up for the node modules. Under `layers` there is a directory for each lambda layer this process requires.
 + **aws_puppet**
    + This layer is for the control of converting HTML into PDFs via puppeteer. And requires some specific setup when building the modules, else this will not work on AWS. To build this you must use `npm install --save-prod` as it will need to download platform specific modules to run on the linux based AWS.
@@ -20,7 +21,7 @@ The actual lambda to be deployed alongside the modules consists of a zip file co
 + `./common/*`
 + `./template/*`
 
-`node_modules` is not be included as the lambda layers currently contain all modules needed
+`node_modules` is not be included as the lambda layers currently contain all modules needed.
 
 
 # Investigation
