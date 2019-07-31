@@ -30,3 +30,8 @@ variable "source_arn" {
 variable "lambda_iam_role_arn" {
   description = "The iam role to use for this lambda"
 }
+
+variable "node_version" {
+  description = "The version of node to use"
+  default = "nodejs10.x"
+}

@@ -130,6 +130,7 @@ module "lambda-hybrid-report" {
   environment               = var.environment
   lambda_name               = "hybrid-report"
   description               = "SDE generate report lambda"
+  node_version              = "nodejs8.10"
 
   lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
 
