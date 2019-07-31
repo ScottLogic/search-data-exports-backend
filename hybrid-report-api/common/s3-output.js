@@ -14,7 +14,7 @@ class S3Output {
     const s3 = new AWS.S3();
     const filename = `${uuidv4()}.pdf`;
 
-    const response = await s3.putObject({
+    await s3.putObject({
       Bucket: this._bucketName,
       Key: filename,
       ContentType: 'application/pdf',
@@ -25,9 +25,8 @@ class S3Output {
     return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
   }
 
-  async close() {
-    const reportURI = await this.writeBufferToS3();
-    return reportURI;
+  async close() {    
+    return this.writeBufferToS3();
   }
 }
 

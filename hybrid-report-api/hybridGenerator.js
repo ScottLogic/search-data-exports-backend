@@ -19,19 +19,18 @@ class HybridGenerator {
       searchResults: reportData
     });
     const pdfBuffer = await HybridGenerator.buildPDF({ formattedHTML });
-    const pdfFileName = await this.saveToBucket({ pdfBuffer });
-    return pdfFileName;
+    const pdfFileUrl = await this.saveToBucket({ pdfBuffer });
+    return pdfFileUrl;
   }
 
-  async getReportData(paramJSON) {
-    const reportData = await this._search.search(HybridGenerator.buildRequestJSON(paramJSON));
-    return reportData;
+  async getReportData(paramJSON) {    
+    return this._search.search(HybridGenerator.buildRequestJSON(paramJSON));
   }
 
   static async buildSVG(ESResults) {
     const svgbuilder = new SVGBuilder();
     const searchResult = await svgbuilder.build(ESResults);
-    return searchResult;
+    return svgbuilder.build(ESResults);
   }
 
   static async buildHTML({ searchResults, svgData }) {
