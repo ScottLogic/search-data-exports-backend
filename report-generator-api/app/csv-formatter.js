@@ -1,28 +1,29 @@
-class CSVFormatter {
-  formatHeader( searchResult ) {
-    let hits = searchResult.hits;
+const formatHeader = (searchResult) => {
+  const { hits } = searchResult;
 
-    if (hits && hits.hits.length) {
-      return Object.keys(hits.hits[0]._source).join(',') + '\r\n';
-    }
-
-    return 'NoResults';
+  if (hits && hits.hits.length) {
+    return `${Object.keys(hits.hits[0]._source).join(',')}\r\n`;
   }
 
-  formatRows( searchResult ) {
-    const header = this.formatHeader(searchResult);
-    let hits = searchResult.hits;
+  return 'NoResults';
+};
 
-    const replacer = (key, value) => value === null ? '' : value 
+const formatRows = (searchResult) => {
+  const { hits } = searchResult;
 
-    if (hits && hits.hits.length) {
-      let header = Object.keys(hits.hits[0]._source);
-      return hits.hits.map(row => header.map(fieldName => JSON.stringify(row._source[fieldName], replacer)).join(',')).join('\r\n');
-    }
+  const replacer = (key, value) => (value === null ? '' : value);
 
-    return '';
+  if (hits && hits.hits.length) {
+    const header = Object.keys(hits.hits[0]._source);
+    return hits.hits
+      .map(row => header.map(fieldName => JSON.stringify(row._source[fieldName], replacer)).join(','))
+      .join('\r\n');
   }
 
-}
+  return '';
+};
 
-module.exports = CSVFormatter;
+module.exports = {
+  formatHeader,
+  formatRows
+};
