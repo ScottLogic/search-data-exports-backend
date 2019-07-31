@@ -251,6 +251,18 @@ module "api-gateway-report-status" {
 }
 
 #
+# Create step function activity used by CSV download request
+#
+module "step-function-activity-open-connection" {
+  source                          = "./modules/step_function_activity"
+  name_prefix                     = local.name_prefix
+  project                         = var.project
+  environment                     = var.environment
+
+  name                            = "OpenConnection"
+}
+
+#
 # Create step function to request the download of a csv file
 #
 module "step-function-csv-download-request" {
@@ -262,8 +274,9 @@ module "step-function-csv-download-request" {
   name                            = "csv-download-request"
 
   invoked_lambda_function_arn_map = {
-    "report-generator-arn"        : module.lambda-report-generator.alias_arn
-    "send-email-arn"              : module.lambda-send-email.alias_arn
+    "report-generator-arn"          : module.lambda-report-generator.alias_arn
+    "send-email-arn"                : module.lambda-send-email.alias_arn
+    "open-connection-arn"           : module.step-function-activity-open-connection.arn
   }
 }
 

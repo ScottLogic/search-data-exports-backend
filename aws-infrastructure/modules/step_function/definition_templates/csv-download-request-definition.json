@@ -69,7 +69,10 @@
           "StartAt": "Generate CSV Report for push notification",
           "States": {
             "Generate CSV Report for push notification": {
-              "Type": "Pass",
+              "Type": "Task",
+              "Resource": "${report-generator-arn}",
+              "ResultPath": "$.reportOutput",
+              "OutputPath": "$.reportOutput",
               "End": true
             }
           }
@@ -78,7 +81,8 @@
           "StartAt": "OpenConnection",
           "States": {
             "OpenConnection": {
-              "Type": "Pass",
+              "Type": "Task",
+              "Resource": "${open-connection-arn}",
               "End": true
             }
           }
