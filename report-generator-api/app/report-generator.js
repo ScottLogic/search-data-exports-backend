@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const connectionClass = require('http-aws-es');
 const { Client } = require('elasticsearch');
-const QueryGenerator = require('./query.js');
+const buildQueryJson = require('./query.js');
 const Formatter = require('./csv-formatter');
 
 // this should be much higher number (10000), but set low to demonstrate scroll / multi-part upload
@@ -22,7 +22,6 @@ const buildSearchJSON = searchJSON => ({
 
 class ReportGenerator {
   constructor(outputFile) {
-    this._queryGenerator = new QueryGenerator();
     this._client = new Client(getConfig());
     this._outputFile = outputFile;
   }
@@ -52,7 +51,7 @@ class ReportGenerator {
   }
 
   async processBatch(result) {
-    let { hits } = result.hits;
+    let { hits } = result;
     let currentScrollId = result._scroll_id;
 
     while (hits && hits.hits.length) {
@@ -67,7 +66,7 @@ class ReportGenerator {
 
   async runReport(requestJSON) {
     const searchJSON = buildSearchJSON(
-      this._queryGenerator.buildQueryJson(requestJSON, null, scrollResultSize)
+      buildQueryJson(requestJSON, null, scrollResultSize)
     );
 
     const searchResult = await this.doSearch(searchJSON);
