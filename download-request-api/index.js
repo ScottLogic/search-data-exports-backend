@@ -1,37 +1,55 @@
 const AWS = require('aws-sdk');
 const stepFunctions = new AWS.StepFunctions();
 
-const callbackHeaders = {
-  "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*"
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*'
 };
 
-exports.handler = async (event, context, callback) => {
-  console.log("event.body=", event.body);
+const stepFunctionArn = process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN;
+const activityArn = process.env.OPEN_CONNECTION_ACTIVITY_ARN;
 
-  const params = {
-    stateMachineArn: process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN,
+exports.handler = async event => {
+  console.log(`event.body=${event.body}`);
+
+  const { type } = JSON.parse(event.body);
+
+  const startExecutionParams = {
+    stateMachineArn: stepFunctionArn,
     input: event.body
   };
 
-  await stepFunctions.startExecution(params).promise().then(data => {
-    console.log('Step function execution response:', data);
+  const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
+  const taskToken = await getTaskToken(type)  ;
 
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(data),
-      headers: callbackHeaders
-    });
-  }).catch(err => {
-    console.log(err, err.stack);
+  const { executionArn } = await startExecutionPromise;
 
-    callback(null, {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: 'Error occured in step function execution',
-        errorMessage: err
-      }),
-      headers: callbackHeaders
-    });
-  });
+  console.log(`executionArn=${executionArn}`);
+  console.log(`taskToken=${taskToken}`);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      executionArn,
+      taskToken
+    }),
+    headers
+  } 
 };
+
+const getTaskToken = async (type) => {
+  console.log(`type=${type}`);
+
+  if (type != 'push') {
+    return '';
+  }
+
+  const getActivityTaskParams = {
+    activityArn,
+    workerName: stepFunctionArn
+  };
+
+  const { taskToken } = await stepFunctions.getActivityTask(getActivityTaskParams).promise();
+
+  return taskToken;
+}
