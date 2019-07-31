@@ -1,0 +1,18 @@
+service: sde-v2
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+# you can overwrite defaults here
+  stage: dev
+  region: eu-west-1
+
+functions:
+  pushNotificationOpenConnection:
+    handler: functions/pushNotificationOpenConnection.handler
+    events:
+      - websocket:
+          route: OpenConnection
+
+
