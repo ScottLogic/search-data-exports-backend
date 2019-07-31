@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "search-data-exports-terraform-state"
+    region = "eu-west-1"
+    key = "terraform_state"
+  }
+}
+
 locals {
   name_prefix             =  "${var.project}-${var.environment}"
 
