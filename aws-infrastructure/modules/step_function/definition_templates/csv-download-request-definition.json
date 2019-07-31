@@ -17,7 +17,7 @@
         {
           "Variable": "$.type",
           "StringEquals": "push",
-          "Next": "Generate and push notification"
+          "Next": "Push notification report request"
         }
       ]
     },
@@ -57,7 +57,35 @@
       "OutputPath": "$.reportOutput",
       "End": true
     },
-    "Generate and push notification": {
+    "Push notification report request": {
+      "Type": "Pass",
+      "Next": "Push notification parallel"
+    },
+    "Push notification parallel": {
+      "Type": "Parallel",
+      "Next": "IssueCallback",
+      "Branches": [
+        {
+          "StartAt": "Generate CSV Report for push notification",
+          "States": {
+            "Generate CSV Report for push notification": {
+              "Type": "Pass",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "OpenConnection",
+          "States": {
+            "OpenConnection": {
+              "Type": "Pass",
+              "End": true
+            }
+          }
+        }
+      ]
+    },
+    "IssueCallback": {
       "Type": "Pass",
       "End": true
     }
