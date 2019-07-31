@@ -7,7 +7,7 @@ const callbackHeaders = {
   'Access-Control-Allow-Origin': '*'
 };
 
-exports.handler = async function(event, context, callback) {
+exports.handler = async (event, context, callback) => {
   let eventJson;
   try {
     eventJson = JSON.parse(event.body);
@@ -27,16 +27,16 @@ exports.handler = async function(event, context, callback) {
   const ESConnectOptions = {
     host: process.env.ES_SEARCH_API
       ? process.env.ES_SEARCH_API
-      : `http://localhost:9200`,
-    connectionClass: connectionClass, // Renable this line when converted to a lambda
+      : 'http://localhost:9200',
+    connectionClass, // Renable this line when converted to a lambda
     awsConfig: new AWS.Config({
       credentials: new AWS.EnvironmentCredentials('AWS')
     })
   };
+  const bucketName = process.env.S3_BUCKET_NAME;
+  const hybridGenerator = new HybridGenerator(ESConnectOptions, bucketName);
 
-  const hybridGenerator = new HybridGenerator(ESConnectOptions);
-
-  const result = await hybridGenerator.generateReport(eventJson).catch(error => {
+  const result = await hybridGenerator.generateReport(eventJson).catch((error) => {
     callback(null, {
       statusCode: '400',
       body: JSON.stringify({
@@ -46,7 +46,6 @@ exports.handler = async function(event, context, callback) {
       }),
       headers: callbackHeaders
     });
-    return;
   });
   callback(null, {
     statusCode: '200',
