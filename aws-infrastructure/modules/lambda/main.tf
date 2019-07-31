@@ -1,3 +1,8 @@
+# workaround to cope with null lambda_env_map
+locals {
+  local_lambda_env_map  = var.lambda_env_map == null ? [] : [var.lambda_env_map]
+}
+
 # Archive lambda src to be deployed
 data "archive_file" "lambda_archive_file" {
   type        = "zip"
@@ -15,8 +20,11 @@ resource "aws_lambda_function" "new_lambda" {
   runtime           = var.node_version
   description       = var.description
 
-  environment {
-    variables = var.lambda_env_map
+  dynamic environment {
+    for_each = local.local_lambda_env_map
+    content {
+      variables = environment.value
+    }
   }
 
   tags = {

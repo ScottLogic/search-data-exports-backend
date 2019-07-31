@@ -21,6 +21,7 @@ variable "description" {
 variable "lambda_env_map" {
   type = "map"
   description = "A map containing the lambda's environment variables"
+  default = null
 }
 
 variable "source_arn" {

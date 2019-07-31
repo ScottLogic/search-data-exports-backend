@@ -36,14 +36,8 @@
     {
       "Effect": "Allow",
       "Action": [
-        "sns:Publish"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "states:StartExecution"
+        "states:StartExecution",
+        "states:DescribeExecution"
       ],
       "Resource": "*"
     }

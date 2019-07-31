@@ -23,16 +23,6 @@ module "lambda_shared_policy" {
 }
 
 #
-# Define our iam roles for our SNS topic
-#
-module "sns_shared_policy" {
-  source                    = "./modules/sns_shared_policy"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-}
-
-#
 # Define API gateway
 #
 module "api-gateway" {
@@ -43,7 +33,8 @@ module "api-gateway" {
   # List of all resource method integration IDs which will be added. Used purely as a dependency, as we can't deploy the
   # API gateway until these IDs are created.
   api_method_integration_ids = [module.api-gateway-search.api_method_integration_id,
-                                module.api-gateway-download-request.api_method_integration_id]
+                                module.api-gateway-download-request.api_method_integration_id,
+                                module.api-gateway-report-status.api_method_integration_id]
 }
 
 #
@@ -62,21 +53,6 @@ module "lambda-search" {
   source_arn                = local.api_gateway_source_arn
 
   lambda_env_map            = {ES_SEARCH_API : module.elasticsearch.endpoint}
-}
-
-#
-# Create download request SNS topic
-#
-module "sns-download-requests-topic" {
-  source                           = "./modules/sns"
-  name_prefix                      = local.name_prefix
-  project                          = var.project
-  environment                      = var.environment
-  sns_topic_name                   = "download-requests-topic"
-  sns_topic_subscription_protocol  = "lambda"
-  sns_topic_subscription_endpoints = [module.lambda-start-create-and-email-report.arn]
-  sns_success_feedback_role_arn    = module.sns_shared_policy.sns_success_feedback_iam_role_arn
-  sns_failure_feedback_role_arn    = module.sns_shared_policy.sns_failure_feedback_iam_role_arn
 }
 
 #
@@ -129,8 +105,8 @@ module "lambda-hybrid-report" {
   project                   = var.project
   environment               = var.environment
   lambda_name               = "hybrid-report"
-  description               = "SDE generate report lambda"
   node_version              = "nodejs8.10"
+  description               = "SDE generate hybrid report lambda"
 
   lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
 
@@ -163,6 +139,22 @@ module "lambda-report-generator" {
   }
 }
 
+#
+# Define the report status
+#
+module "lambda-report-status" {
+  source                    = "./modules/lambda"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  lambda_name               = "report-status"
+  description               = "SDE report status lambda"
+
+  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
+
+  source_arn                = local.api_gateway_source_arn
+}
+
 # Define the send email lambda
 #
 module "lambda-send-email" {
@@ -181,27 +173,6 @@ module "lambda-send-email" {
     EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
   }
 }
-
-#
-# Define the start step function lambda
-#
-module "lambda-start-create-and-email-report" {
-  source                    = "./modules/lambda"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-  lambda_name               = "start-create-and-email-report"
-  description               = "SDE start step function lambda"
-
-  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
-
-  source_arn                = local.api_gateway_source_arn
-
-  lambda_env_map            = {
-    CREATE_AND_EMAIL_REPORT_STEP_FUNCTION_ARN : module.step-function-create-and-email-report.arn
-  }
-}
-
 
 #
 # Create search API and link to search lambda
@@ -269,20 +240,16 @@ module "api-gateway-download-request" {
 }
 
 #
-# Create step function to create and email report
+# Create download API and link to download lambda
 #
-module "step-function-create-and-email-report" {
-  source                          = "./modules/step_function"
-  name_prefix                     = local.name_prefix
-  project                         = var.project
-  environment                     = var.environment
-
-  name                            = "create-and-email-csv-report"
-
-  invoked_lambda_function_arn_map = {
-    "report-generator-arn"      : module.lambda-report-generator.alias_arn,
-    "send-email-arn"            : module.lambda-send-email.alias_arn
-  }
+module "api-gateway-report-status" {
+  source                    = "./modules/api_gateway_endpoint"
+  api_gateway_id            = module.api-gateway.api_gateway_id
+  api_gateway_parent_id     = module.api-gateway.api_gateway_root_resource_id
+  api_name                  = "report-status"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  lambda_invoke_arn         = module.lambda-report-status.invoke_arn
 }
 
 #
@@ -297,7 +264,8 @@ module "step-function-csv-download-request" {
   name                            = "csv-download-request"
 
   invoked_lambda_function_arn_map = {
-    "download-requests-topic-arn" : module.sns-download-requests-topic.topic_arn
+    "report-generator-arn"        : module.lambda-report-generator.alias_arn
+    "send-email-arn"              : module.lambda-send-email.alias_arn
   }
 }
 

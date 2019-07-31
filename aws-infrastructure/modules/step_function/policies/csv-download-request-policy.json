@@ -3,8 +3,13 @@
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "sns:Publish",
-      "Resource": "${download-requests-topic-arn}"
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": [
+        "${report-generator-arn}",
+        "${send-email-arn}"
+      ]
     }
   ]
 }
