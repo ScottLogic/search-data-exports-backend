@@ -23,16 +23,6 @@ module "lambda_shared_policy" {
 }
 
 #
-# Define our iam roles for our SNS topic
-#
-module "sns_shared_policy" {
-  source                    = "./modules/sns_shared_policy"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-}
-
-#
 # Define API gateway
 #
 module "api-gateway" {
@@ -63,21 +53,6 @@ module "lambda-search" {
   source_arn                = local.api_gateway_source_arn
 
   lambda_env_map            = {ES_SEARCH_API : module.elasticsearch.endpoint}
-}
-
-#
-# Create download request SNS topic
-#
-module "sns-download-requests-topic" {
-  source                           = "./modules/sns"
-  name_prefix                      = local.name_prefix
-  project                          = var.project
-  environment                      = var.environment
-  sns_topic_name                   = "download-requests-topic"
-  sns_topic_subscription_protocol  = "lambda"
-  sns_topic_subscription_endpoints = [module.lambda-start-create-and-email-report.arn]
-  sns_success_feedback_role_arn    = module.sns_shared_policy.sns_success_feedback_iam_role_arn
-  sns_failure_feedback_role_arn    = module.sns_shared_policy.sns_failure_feedback_iam_role_arn
 }
 
 #
@@ -199,27 +174,6 @@ module "lambda-send-email" {
 }
 
 #
-# Define the start step function lambda
-#
-module "lambda-start-create-and-email-report" {
-  source                    = "./modules/lambda"
-  name_prefix               = local.name_prefix
-  project                   = var.project
-  environment               = var.environment
-  lambda_name               = "start-create-and-email-report"
-  description               = "SDE start step function lambda"
-
-  lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn
-
-  source_arn                = local.api_gateway_source_arn
-
-  lambda_env_map            = {
-    CREATE_AND_EMAIL_REPORT_STEP_FUNCTION_ARN : module.step-function-create-and-email-report.arn
-  }
-}
-
-
-#
 # Create search API and link to search lambda
 #
 module "api-gateway-search" {
@@ -298,23 +252,6 @@ module "api-gateway-report-status" {
 }
 
 #
-# Create step function to create and email report
-#
-module "step-function-create-and-email-report" {
-  source                          = "./modules/step_function"
-  name_prefix                     = local.name_prefix
-  project                         = var.project
-  environment                     = var.environment
-
-  name                            = "create-and-email-csv-report"
-
-  invoked_lambda_function_arn_map = {
-    "report-generator-arn"      : module.lambda-report-generator.alias_arn,
-    "send-email-arn"            : module.lambda-send-email.alias_arn
-  }
-}
-
-#
 # Create step function to request the download of a csv file
 #
 module "step-function-csv-download-request" {
@@ -326,8 +263,8 @@ module "step-function-csv-download-request" {
   name                            = "csv-download-request"
 
   invoked_lambda_function_arn_map = {
-    "download-requests-topic-arn" : module.sns-download-requests-topic.topic_arn,
     "report-generator-arn"        : module.lambda-report-generator.alias_arn
+    "send-email-arn"              : module.lambda-send-email.alias_arn
   }
 }
 
