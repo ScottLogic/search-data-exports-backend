@@ -6,7 +6,7 @@ Because of limitation on AWS file sizes, the process for this has been split up 
 + **aws_puppet**
    + This layer is for the control of converting HTML into PDFs via puppeteer. And requires some specific setup when building the modules, else this will not work on AWS. To build this you must use `npm install --save-prod` as it will need to download platform specific modules to run on the linux based AWS.
 + **d3**
-   + This layer contains D3 manipulation and AWS integration. This section can be built as normal with `npm install` and uploaded to the Lambda Layer as neede.
+   + This layer contains D3 manipulation and AWS integration. This section can be built as normal with `npm install` and uploaded to the Lambda Layer as needed.
 
 For the node modules to work within a lambda layer the `node_modules` directory **must** sit under a root directory called `nodejs`, hence the structure for the layers folders. To build the layer zip file up you would do the following process
 ```
