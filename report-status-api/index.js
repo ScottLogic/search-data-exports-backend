@@ -17,7 +17,7 @@ exports.handler = async (event, context, callback) => {
 
     let reportURL = '';
     // output from step function is a JSON string rather than object
-    if (data.output) reportURL = JSON.parse(data.output).reportURL;
+    if (data.output) ({ reportURL } = JSON.parse(data.output));
 
     const result = {
       status: data.status,
