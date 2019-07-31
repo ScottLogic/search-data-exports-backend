@@ -1,5 +1,5 @@
-const { JSDOM } = require(`jsdom`);
-const d3 = require("d3");
+const d3 = require('d3');
+const { JSDOM } = require('jsdom');
 
 class SVGBuilder {
   constructor() {
@@ -7,31 +7,34 @@ class SVGBuilder {
   }
 
   _setDefaults() {
-    this._margin = { top: 20, right: 20, bottom: 70, left: 40 };
+    this._margin = {
+      top: 20,
+      right: 20,
+      bottom: 70,
+      left: 40
+    };
     this._width = 900 - this._margin.left - this._margin.right;
     this._height = 600 - this._margin.top - this._margin.bottom;
   }
 
   _cleanseData(inputData) {
-    this._formattedData = inputData.aggregations.time_split.buckets.map(
-      item => ({ ...item, formattedDate: new Date(item.key_as_string) })
-    );
+    this._formattedData = inputData.aggregations.time_split.buckets.map(item => ({
+      ...item,
+      formattedDate: new Date(item.key_as_string)
+    }));
   }
 
   _buildContainer() {
-    const fakeDom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-    this._body = d3.select(fakeDom.window.document).select("body");
+    const fakeDom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+    this._body = d3.select(fakeDom.window.document).select('body');
     this._svgContainer = this._body
-      .append("div")
-      .attr("class", "container") // class is only used to grab the correct element later.
-      .append("svg")
-      .attr("width", this._width + this._margin.left + this._margin.right)
-      .attr("height", this._height + this._margin.top + this._margin.bottom)
-      .append("g")
-      .attr(
-        "transform",
-        "translate(" + this._margin.left + "," + this._margin.top + ")"
-      );
+      .append('div')
+      .attr('class', 'container') // class is only used to grab the correct element later.
+      .append('svg')
+      .attr('width', this._width + this._margin.left + this._margin.right)
+      .attr('height', this._height + this._margin.top + this._margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${this._margin.left}, ${this._margin.top})`);
   }
 
   _buildScales() {
@@ -56,38 +59,38 @@ class SVGBuilder {
 
   _buildAxis() {
     this._svgContainer
-      .append("g")
+      .append('g')
       .call(this._yAxis)
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", -6)
-      .attr("dy", "-.71em")
-      .style("text-anchor", "end")
-      .text("Messages")
-      .style("fill", "black");
+      .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', -6)
+      .attr('dy', '-.71em')
+      .style('text-anchor', 'end')
+      .text('Messages')
+      .style('fill', 'black');
 
     this._svgContainer
-      .append("g")
-      .attr("transform", "translate(0," + this._height + ")")
+      .append('g')
+      .attr('transform', `translate(0, ${this._height})`)
       .call(this._xAxis)
-      .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", "-.55em")
-      .attr("transform", "rotate(-90)");
+      .selectAll('text')
+      .style('text-anchor', 'end')
+      .attr('dx', '-.8em')
+      .attr('dy', '-.55em')
+      .attr('transform', 'rotate(-90)');
   }
 
   _buildContent() {
     this._svgContainer
-      .selectAll("bar")
+      .selectAll('bar')
       .data(this._formattedData)
       .enter()
-      .append("rect")
-      .style("fill", "steelblue")
-      .attr("x", data => this._xScale(new Date(data.formattedDate)))
-      .attr("width", this._width / this._formattedData.length)
-      .attr("y", data => this._yScale(data.doc_count))
-      .attr("height", data => this._height - this._yScale(data.doc_count));
+      .append('rect')
+      .style('fill', 'steelblue')
+      .attr('x', data => this._xScale(new Date(data.formattedDate)))
+      .attr('width', this._width / this._formattedData.length)
+      .attr('y', data => this._yScale(data.doc_count))
+      .attr('height', data => this._height - this._yScale(data.doc_count));
   }
 
   build(data) {
@@ -96,7 +99,7 @@ class SVGBuilder {
     this._buildScales();
     this._buildAxis();
     this._buildContent();
-    return this._body.select(".container").html();
+    return this._body.select('.container').html();
   }
 }
 
