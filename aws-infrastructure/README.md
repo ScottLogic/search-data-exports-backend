@@ -3,14 +3,16 @@
 ## AWS Infrastructure diagram
 ![](../aws-diagram-export-data.svg)
 
-## First time initialisation
-```
-terraform init
-```
+## Setting up the remote backend
+To prevent conflicts with each other and avoid having to share the terraform state file,
+we have added a Terraform remote backend. On each Terraform run, the state is retrieved and stored
+in an AWS S3 bucket.
+
+To setup the remote backend, follow [these instructions](./terraform-s3-backend-setup.md).
 
 ##Environment Variables
 ### Credentials
-Set the AWS credentials as we don't want these hard coded:
+Set the AWS credentials for the SDE-Terraform user as we don't want these hard coded:
 ```
 set AWS_ACCESS_KEY_ID=XYZ
 set AWS_SECRET_ACCESS_KEY=abcdefghijklmnopqrstuvwxyz
@@ -18,6 +20,11 @@ set AWS_SECRET_ACCESS_KEY=abcdefghijklmnopqrstuvwxyz
 
 Alternatively, other options are available:
 * [Terraform AWS Authentication](https://www.terraform.io/docs/providers/aws/index.html)
+
+## First time initialisation
+```
+terraform init
+```
 
 ## Terraform Commands
 ### Create / update infrastructure
