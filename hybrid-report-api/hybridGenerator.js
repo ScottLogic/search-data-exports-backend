@@ -23,13 +23,12 @@ class HybridGenerator {
     return pdfFileUrl;
   }
 
-  async getReportData(paramJSON) {    
+  async getReportData(paramJSON) {
     return this._search.search(HybridGenerator.buildRequestJSON(paramJSON));
   }
 
   static async buildSVG(ESResults) {
     const svgbuilder = new SVGBuilder();
-    const searchResult = await svgbuilder.build(ESResults);
     return svgbuilder.build(ESResults);
   }
 
@@ -67,7 +66,7 @@ class HybridGenerator {
     const startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now());
     const endDate = new Date(dateRange ? dateRange.dateRange[1] : Date.now());
     if (!dateRange) {
-      startDate.setDate(startDate.getDate() - 1)
+      startDate.setDate(startDate.getDate() - 1);
     }
 
     return {

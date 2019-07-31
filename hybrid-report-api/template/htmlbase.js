@@ -16,7 +16,7 @@ module.exports = ({ svgData = '', textInformation = '', tableData = [] }) => {
             font-family: "Helvetica Neue", "Helvetica";
             color: #555;
         }
-        svgDiv {
+        .svgDiv {
             width:100%;
         }
         h1 {

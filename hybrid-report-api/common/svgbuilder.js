@@ -7,8 +7,8 @@ class SVGBuilder {
   }
 
   _setDefaults() {
-    /* Set to 900x400 because this is the only size which scales well into the PDF when generated. 
-        Have to make sure it is set well in here, because the PDF generation has issues 
+    /* Set to 900x400 because this is the only size which scales well into the PDF when generated.
+        Have to make sure it is set well in here, because the PDF generation has issues
         with scaling SVGs well. */
     this._width = 900;
     this._height = 400;
@@ -32,7 +32,7 @@ class SVGBuilder {
       .append('g')
       .attr(
         'transform',
-        'translate(" + this._width / 2 + "," + this._height / 2 + ")'
+        `translate(${this._width / 2},${this._height / 2})`
       );
 
     this._svgContainer.append('g').attr('class', 'labels');
@@ -84,7 +84,7 @@ class SVGBuilder {
       .append('svg:text')
       .attr(
         'transform',
-        entry => 'translate(" + this._valueArc.centroid(entry) + ")'
+        entry => `translate(${this._valueArc.centroid(entry)})`
       )
       .attr('text-anchor', 'middle')
       .text(entry => entry.data.doc_count);
