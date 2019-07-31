@@ -6,9 +6,9 @@ To allow Terraform to list/get/put S3 bucket objects, we need to create an AWS u
 
 1. In AWS IAM, select Users and click Add user.
 2. Name the user "SDE-Terraform" and select the Programmatic access type.
-3. In permissions, copy permissions from an existing user.
+3. In permissions, copy permissions from an existing user with Administrator access.
 4. Add the "Project: sde" tag.
-5. Finish creating the user and make a note of the access key ID and secret access key.
+5. Finish creating the user and make a note of the access key ID and secret access key. Additionally make a note of the user's ARN.
 
 ## Setup S3 bucket
 
@@ -22,7 +22,7 @@ rollback state versions if needed, and encryption at rest.
 4. Leave default selections in Set permissions and finish creating the bucket.
 5. Open the bucket and select Properties, and add relevant required tags.
 6. Select the Permissions tab, and then the Bucket Policy sub-tab.
-7. Copy the following bucket policy in the provided text area.
+7. Copy the following bucket policy in the provided text area. Replace the SDE-Terraform-User-ARN placeholder with the ARN obtained from the user setup. 
 ```JSON
 {
     "Version": "2012-10-17",
@@ -30,7 +30,7 @@ rollback state versions if needed, and encryption at rest.
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::032044580362:user/SDE-Terraform"
+                "AWS": "<SDE-Terraform-User-ARN>"
             },
             "Action": "s3:ListBucket",
             "Resource": "arn:aws:s3:::search-data-exports-terraform-state"
@@ -38,7 +38,7 @@ rollback state versions if needed, and encryption at rest.
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::032044580362:user/SDE-Terraform"
+                "AWS": "<SDE-Terraform-User-ARN>"
             },
             "Action": [
                 "s3:GetObject",
