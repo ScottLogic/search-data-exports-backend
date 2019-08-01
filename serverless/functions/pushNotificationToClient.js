@@ -15,8 +15,10 @@ module.exports.handler = async (event) => {
 
   await apiGatewayManagementApi.postToConnection({
     ConnectionId: connectionId,
-    Data: JSON.stringify({ message: 'Hello World' })
-  }).promise;
+    Data: JSON.stringify({ reportURL })
+  }).promise();
+
+  console.log('Message sent successfully');
 
   return event;
 };

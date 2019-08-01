@@ -16,7 +16,7 @@ module.exports.handler = async (event) => {
   };
 
   const describeResponse = await stepFunctions.describeExecution(describeExecutionParams).promise();
-  console.log(`describeResponse=${describeResponse}`);
+  console.log(`describeResponse=${JSON.stringify(describeResponse)}`);
 
   const sendTaskSuccessParams = {
     taskToken,
@@ -27,7 +27,7 @@ module.exports.handler = async (event) => {
   };
 
   const activityResponse = await stepFunctions.sendTaskSuccess(sendTaskSuccessParams).promise();
-  console.log(`activityResponse=${activityResponse}`);
+  console.log(`activityResponse=${JSON.stringify(activityResponse)}`);
 
   return {
     statusCode: 200,

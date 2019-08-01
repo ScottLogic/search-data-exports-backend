@@ -15,6 +15,7 @@ provider:
       Action:
         - states:DescribeExecution
         - states:SendTaskSuccess
+        - execute-api:Invoke
       Resource:
         - "*"
 
@@ -32,9 +33,9 @@ functions:
       WEBSOCKET_ENDPOINT_URL:
         !Join
           - ''
-          - - 'wss://'
+          - - 'https://'
             - !Ref WebsocketsApi
-            - '.execute-api'
+            - '.execute-api.'
             - ${opt:region, self:provider.region}
             - '.amazonaws.com/'
             - ${opt:stage, self:provider.stage}
