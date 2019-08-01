@@ -10,8 +10,11 @@
   "private": true,
   "description": "Serverless application definition for the SDE project",
   "dependencies": {
+    "d3": "^5.9.7",
     "elasticsearch": "^16.3.0",
-    "http-aws-es": "^6.0.0"
+    "http-aws-es": "^6.0.0",
+    "jsdom": "^15.1.1",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "lint": "eslint . --ext js"
@@ -24,6 +27,7 @@
     "serverless": "^1.49.0",
     "serverless-step-functions": "^2.2.0",
     "serverless-webpack": "^5.3.1",
-    "webpack": "^4.38.0"
+    "webpack": "^4.38.0",
+    "webpack-node-externals": "^1.7.2"
   }
 }

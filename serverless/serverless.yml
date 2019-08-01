@@ -5,7 +5,10 @@ plugins:
   - serverless-step-functions
 
 custom:
-  esEndpoint: ${ssm:/sde-${self:provider.stage}-es-endpoint}
+  esEndpoint: ${ssm:/sde-${self:provider.stage}-elasticsearch-endpoint}
+  s3BucketName: ${ssm:/sde-${self:provider.stage}-s3-bucket-name}
+  webpack:
+    includeModules: true # enable auto-packing of external modules
 
 package:
   individually: true
@@ -24,6 +27,7 @@ provider:
         - states:DescribeExecution
         - states:SendTaskSuccess
         - execute-api:Invoke
+        - es:ESHttpPost
       Resource:
         - "*"
 
@@ -54,7 +58,7 @@ functions:
           path: download-request
           method: post
           cors: true
-    environment: # Function level environment variables
+    environment:
       CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN: test-1
       OPEN_CONNECTION_ACTIVITY_ARN: test-2
   search:
@@ -64,5 +68,15 @@ functions:
           path: search
           method: post
           cors: true
-    environment: # Function level environment variables
+    environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  graphicalReport:
+    handler: functions/graphicalReport.handler
+    events:
+      - http:
+          path: report/graphical
+          method: post
+          cors: true
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
+      S3_BUCKET_NAME: ${self:custom.s3BucketName}
