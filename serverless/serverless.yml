@@ -17,7 +17,7 @@ service: sde-v2-2
 
 plugins:
   - serverless-webpack
-
+  - serverless-step-functions
 custom:
   esEndpoint: ${ssm:/sde-${self:provider.stage}-es-endpoint}
 

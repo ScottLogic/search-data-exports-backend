@@ -22,6 +22,7 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "serverless": "^1.49.0",
+    "serverless-step-functions": "^2.2.0",
     "serverless-webpack": "^5.3.1",
     "webpack": "^4.38.0"
   }
