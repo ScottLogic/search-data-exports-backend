@@ -37,7 +37,8 @@
       "Effect": "Allow",
       "Action": [
         "states:StartExecution",
-        "states:DescribeExecution"
+        "states:DescribeExecution",
+        "states:GetActivityTask"
       ],
       "Resource": "*"
     }

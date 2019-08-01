@@ -17,7 +17,7 @@
         {
           "Variable": "$.type",
           "StringEquals": "push",
-          "Next": "Generate and push notification"
+          "Next": "Push notification report request"
         }
       ]
     },
@@ -57,8 +57,41 @@
       "OutputPath": "$.reportOutput",
       "End": true
     },
-    "Generate and push notification": {
+    "Push notification report request": {
       "Type": "Pass",
+      "Next": "Push notification parallel"
+    },
+    "Push notification parallel": {
+      "Type": "Parallel",
+      "Next": "IssueCallback",
+      "Branches": [
+        {
+          "StartAt": "Generate CSV Report for push notification",
+          "States": {
+            "Generate CSV Report for push notification": {
+              "Type": "Task",
+              "Resource": "${report-generator-arn}",
+              "ResultPath": "$.reportOutput",
+              "OutputPath": "$.reportOutput",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "OpenConnection",
+          "States": {
+            "OpenConnection": {
+              "Type": "Task",
+              "Resource": "${open-connection-arn}",
+              "End": true
+            }
+          }
+        }
+      ]
+    },
+    "IssueCallback": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-1:032044580362:function:sde-v2-dev-pushNotificationToClient:$LATEST",
       "End": true
     }
   }
