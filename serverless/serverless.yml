@@ -1,0 +1,41 @@
+service: sde-v2
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  tags:
+    project: "${self:service}"
+
+# you can overwrite defaults here
+  stage: dev
+  region: eu-west-1
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - states:DescribeExecution
+        - states:SendTaskSuccess
+        - execute-api:Invoke
+      Resource:
+        - "*"
+
+functions:
+  pushNotificationOpenConnection:
+    handler: functions/pushNotificationOpenConnection.handler
+    description: Notified when client connects to websocket to complete activity
+    events:
+      - websocket:
+          route: OpenConnection
+  pushNotificationToClient:
+    handler: functions/pushNotificationToClient.handler
+    description: Send report URL to client over websocket
+    environment:
+      WEBSOCKET_ENDPOINT_URL:
+        !Join
+          - ''
+          - - 'https://'
+            - !Ref WebsocketsApi
+            - '.execute-api.'
+            - ${opt:region, self:provider.region}
+            - '.amazonaws.com/'
+            - ${opt:stage, self:provider.stage}
