@@ -304,7 +304,7 @@ module "ssm_es_endpoint_parameter" {
   name_prefix               = local.name_prefix
   project                   = var.project
   environment               = var.environment
-  name = "api-gateway-invoke-url"
+  name = "es-endpoint"
   description = "The Elastic Search endpoint for the SDE project"
   type = "String"
   value = module.elasticsearch.endpoint
