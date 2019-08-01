@@ -49,7 +49,7 @@ exports.handler = async (event, context, callback) => {
   });
   callback(null, {
     statusCode: '200',
-    body: result,
+    body: JSON.stringify({ result }),
     headers: callbackHeaders
   });
 };
