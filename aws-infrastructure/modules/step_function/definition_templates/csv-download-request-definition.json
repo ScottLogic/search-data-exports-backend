@@ -90,7 +90,8 @@
       ]
     },
     "IssueCallback": {
-      "Type": "Pass",
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-1:032044580362:function:sde-v2-dev-pushNotificationToClient:$LATEST",
       "End": true
     }
   }
