@@ -20,6 +20,7 @@ class S3Output {
         Bucket: this._bucketName,
         Key: filename,
         ContentType: 'image/svg+xml',
+        ContentDisposition: 'download; fileName="Chart.svg"',
         Body: Buffer.from(this._reportBuffer, 'ascii'),
         ACL: 'public-read'
       })
