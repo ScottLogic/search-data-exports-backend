@@ -18,6 +18,7 @@ class S3Output {
       Bucket: this._bucketName,
       Key: filename,
       ContentType: 'application/pdf',
+      ContentDisposition: 'download; fileName="Report.pdf"',
       Body: this._reportBuffer,
       ACL: 'public-read'
     }).promise();

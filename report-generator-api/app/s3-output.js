@@ -22,6 +22,7 @@ class S3Output {
       Bucket: this._bucketName,
       Key: filename,
       ContentType: 'text/csv',
+      ContentDisposition: 'download; fileName="Report.csv"',
       Body: Buffer.from(this._reportBuffer, 'ascii'),
       ACL: 'public-read'
     }).promise();
