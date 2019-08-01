@@ -1,16 +1,36 @@
+const AWS = require('aws-sdk');
+
+const stepFunctions = new AWS.StepFunctions();
+
 module.exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
+  console.log(`event.body=${event.body}`);
+
+  const { executionArn, taskToken } = JSON.parse(event.body);
+  const { connectionId } = event.requestContext;
+  console.log(`executionArn=${executionArn}`);
+  console.log(`taskToken=${taskToken}`);
+  console.log(`connectionId=${connectionId}`);
+
+  const describeExecutionParams = {
+    executionArn
   };
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+  const describeResponse = await stepFunctions.describeExecution(describeExecutionParams).promise();
+  console.log(`describeResponse=${describeResponse}`);
+
+  const sendTaskSuccessParams = {
+    taskToken,
+    output: JSON.stringify({
+      socket: 'opened',
+      connectionId
+    })
+  };
+
+  const activityResponse = await stepFunctions.sendTaskSuccess(sendTaskSuccessParams).promise();
+  console.log(`activityResponse=${activityResponse}`);
+
+  return {
+    statusCode: 200,
+    body: connectionId
+  };
 };

@@ -8,11 +8,23 @@ provider:
   stage: dev
   region: eu-west-1
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - states:DescribeExecution
+        - states:SendTaskSuccess
+      Resource:
+        - "*"
+
 functions:
   pushNotificationOpenConnection:
     handler: functions/pushNotificationOpenConnection.handler
+    description: Notified when client connects to websocket to complete activity
     events:
       - websocket:
           route: OpenConnection
-
-
+  pushNotificationToClient:
+    handler: functions/pushNotificationToClient.handler
+    description: Send report URL to client over websocket
+    environment:
+      WEBSOCKET_ENDPOINT_URL: 'wss://q05lp0yuc6.execute-api.eu-west-1.amazonaws.com/dev'
