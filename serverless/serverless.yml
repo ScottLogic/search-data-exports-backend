@@ -27,4 +27,12 @@ functions:
     handler: functions/pushNotificationToClient.handler
     description: Send report URL to client over websocket
     environment:
-      WEBSOCKET_ENDPOINT_URL: 'wss://q05lp0yuc6.execute-api.eu-west-1.amazonaws.com/dev'
+      WEBSOCKET_ENDPOINT_URL:
+        !Join
+          - ''
+          - - 'wss://'
+            - !Ref WebsocketsApi
+            - '.execute-api'
+            - ${opt:region, self:provider.region}
+            - '.amazonaws.com/'
+            - ${opt:stage, self:provider.stage}
