@@ -1,0 +1,54 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: sde-v2-2
+#app: your-app-name
+#tenant: your-tenant-name
+
+plugins:
+  - serverless-webpack
+
+custom:
+  esEndpoint: ${ssm:/sde-${self:provider.stage}-es-endpoint}
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: eu-west-1
+
+functions:
+  downloadRequest:
+    handler: functions/downloadRequest.handler
+    events:
+      - http:
+          path: download-request
+          method: post
+          cors: true
+    environment: # Function level environment variables
+      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN: test-1
+      OPEN_CONNECTION_ACTIVITY_ARN: test-2
+  search:
+    handler: functions/search.handler
+    events:
+      - http:
+          path: search
+          method: post
+          cors: true
+    environment: # Function level environment variables
+      ES_SEARCH_API: ${self:custom.esEndpoint}
+
+

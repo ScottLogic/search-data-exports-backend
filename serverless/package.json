@@ -1,0 +1,28 @@
+{
+  "name": "sde-backend",
+  "version": "0.0.1",
+  "author": "Scott Logic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ScottLogic/search-data-exports-backend"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "description": "Serverless application definition for the SDE project",
+  "dependencies": {
+    "elasticsearch": "^16.3.0",
+    "http-aws-es": "^6.0.0"
+  },
+  "scripts": {
+    "lint": "eslint . --ext js"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.493.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "serverless": "^1.49.0",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "^4.38.0"
+  }
+}
