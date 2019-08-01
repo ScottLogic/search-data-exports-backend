@@ -41,7 +41,7 @@ exports.handler = async (event, context, callback) => {
       statusCode: '400',
       body: JSON.stringify({
         message: 'Error In Generation',
-        errorMessage: error.message,
+        errorMessage: JSON.stringify(error.message),
         content: event.body
       }),
       headers: callbackHeaders
@@ -49,7 +49,7 @@ exports.handler = async (event, context, callback) => {
   });
   callback(null, {
     statusCode: '200',
-    body: result,
+    body: JSON.stringify({ result }),
     headers: callbackHeaders
   });
 };
