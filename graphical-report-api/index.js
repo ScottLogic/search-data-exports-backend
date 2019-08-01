@@ -40,7 +40,7 @@ exports.handler = async (event, _, callback) => {
       statusCode: '400',
       body: JSON.stringify({
         message: 'Error In Generation',
-        errorMessage: JSON.stringify(error.message),
+        errorMessage: error.message,
         content: event.body
       }),
       headers: callbackHeaders
