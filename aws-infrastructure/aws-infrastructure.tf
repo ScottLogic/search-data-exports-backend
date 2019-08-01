@@ -298,3 +298,25 @@ module "s3-bucket-site" {
   project                   = var.project
   environment               = var.environment
 }
+
+module "ssm_es_endpoint_parameter" {
+  source                    = "./modules/ssm_parameter"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  name = "api-gateway-invoke-url"
+  description = "The Elastic Search endpoint for the SDE project"
+  type = "String"
+  value = module.elasticsearch.endpoint
+}
+
+module "ssm_s3_bucket_name_parameter" {
+  source                    = "./modules/ssm_parameter"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  name = "s3-bucket-name"
+  description = "The S3 bucket name for the SDE project"
+  type = "String"
+  value = module.s3-bucket.bucket_name
+}
