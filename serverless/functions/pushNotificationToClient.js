@@ -10,7 +10,7 @@ module.exports.handler = async (event) => {
   console.log(`connectionId=${connectionId}`);
 
   const apiGatewayManagementApi = new AWS.ApiGatewayManagementApi({
-    endpoint: process.env.API_ENDPOINT_URL
+    endpoint: process.env.WEBSOCKET_ENDPOINT_URL
   });
 
   await apiGatewayManagementApi.postToConnection({

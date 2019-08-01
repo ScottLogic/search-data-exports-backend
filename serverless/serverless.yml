@@ -3,6 +3,8 @@ service: sde-v2
 provider:
   name: aws
   runtime: nodejs10.x
+  tags:
+    project: "${self:service}"
 
 # you can overwrite defaults here
   stage: dev
