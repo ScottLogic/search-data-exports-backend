@@ -1,14 +1,22 @@
-service: sde-v2
+service: sde-v2-2
+
+plugins:
+  - serverless-webpack
+  - serverless-step-functions
+
+custom:
+  esEndpoint: ${ssm:/sde-${self:provider.stage}-es-endpoint}
+
+package:
+  individually: true
 
 provider:
   name: aws
   runtime: nodejs10.x
-  tags:
-    project: "${self:service}"
-
-# you can overwrite defaults here
   stage: dev
   region: eu-west-1
+  tags:
+    project: "${self:service}"
 
   iamRoleStatements:
     - Effect: Allow
@@ -39,3 +47,22 @@ functions:
             - ${opt:region, self:provider.region}
             - '.amazonaws.com/'
             - ${opt:stage, self:provider.stage}
+  downloadRequest:
+    handler: functions/downloadRequest.handler
+    events:
+      - http:
+          path: download-request
+          method: post
+          cors: true
+    environment: # Function level environment variables
+      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN: test-1
+      OPEN_CONNECTION_ACTIVITY_ARN: test-2
+  search:
+    handler: functions/search.handler
+    events:
+      - http:
+          path: search
+          method: post
+          cors: true
+    environment: # Function level environment variables
+      ES_SEARCH_API: ${self:custom.esEndpoint}
