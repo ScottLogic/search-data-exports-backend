@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "search-data-exports-terraform-state"
+    region = "eu-west-1"
+    key = "terraform_state"
+  }
+}
+
 locals {
   name_prefix             =  "${var.project}-${var.environment}"
 
@@ -106,6 +114,7 @@ module "lambda-hybrid-report" {
   project                   = var.project
   environment               = var.environment
   lambda_name               = "hybrid-report"
+  node_version              = "nodejs8.10"
   description               = "SDE generate hybrid report lambda"
 
   lambda_iam_role_arn       = module.lambda_shared_policy.lambda_iam_role_arn

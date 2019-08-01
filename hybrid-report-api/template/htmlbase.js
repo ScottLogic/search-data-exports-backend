@@ -1,6 +1,6 @@
-module.exports = ({ svgData = "", textInformation = "", tableData = [] }) => {
-  let tableinformation = "";
-  tableData.forEach(item => {
+module.exports = ({ svgData = '', textInformation = '', tableData = [] }) => {
+  let tableinformation = '';
+  tableData.forEach((item) => {
     tableinformation += `<tr><td>${item.key}</td><td>${item.doc_count}</td></tr>`;
   });
 
@@ -16,8 +16,8 @@ module.exports = ({ svgData = "", textInformation = "", tableData = [] }) => {
             font-family: "Helvetica Neue", "Helvetica";
             color: #555;
         }
-        svgDiv {
-           
+        .svgDiv {
+            width:100%;
         }
         h1 {
             text-align: center;

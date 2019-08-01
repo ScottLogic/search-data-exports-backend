@@ -17,7 +17,7 @@ resource "aws_lambda_function" "new_lambda" {
   function_name     = "${var.name_prefix}-${var.lambda_name}"
   role              = var.lambda_iam_role_arn
   handler           = "index.handler"
-  runtime           = "nodejs10.x"
+  runtime           = var.node_version
   description       = var.description
 
   dynamic environment {

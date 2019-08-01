@@ -57,3 +57,6 @@ workflows:
       - lint-npm-project:
           project-name: report-status-api
           name: report-status-api lint
+      - lint-npm-project:
+          project-name: hybrid-report-api
+          name: hybrid-report-api lint

@@ -1,82 +1,73 @@
-const pdf = require('html-pdf'); // npm package being used
+const chrome = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
 const ESSearch = require('./common/search');
 const SVGBuilder = require('./common/svgbuilder');
+const S3Output = require('./common/s3-output');
 const pdfTemplate = require('./template/htmlbase');
 
 class HybridGenerator {
-  constructor(ConnectionOptions) {
+  constructor(ConnectionOptions, bucketName) {
     this._search = new ESSearch(ConnectionOptions);
+    this._store = new S3Output(bucketName);
   }
 
   async generateReport(paramJSON = {}) {
     const reportData = await this.getReportData(paramJSON);
-    const svgData = await this.buildSVG(reportData);
-    const formattedHTML = await this.buildHTML({
+    const svgData = await HybridGenerator.buildSVG(reportData);
+    const formattedHTML = await HybridGenerator.buildHTML({
       svgData,
       searchResults: reportData
     });
-    //const pdfHandle = await this.buildPDF({ formattedHTML });
-    const pdfHandle = "http://a_valid_url/"
-    return pdfHandle;
+    const pdfBuffer = await HybridGenerator.buildPDF({ formattedHTML });
+    const pdfFileUrl = await this.saveToBucket({ pdfBuffer });
+    return pdfFileUrl;
   }
 
   async getReportData(paramJSON) {
-    return await this._search.search(this.buildRequestJSON(paramJSON));
+    return this._search.search(HybridGenerator.buildRequestJSON(paramJSON));
   }
 
-  async buildSVG(ESResults) {
+  static async buildSVG(ESResults) {
     const svgbuilder = new SVGBuilder();
-    return await svgbuilder.build(ESResults);
+    return svgbuilder.build(ESResults);
   }
 
-  async buildHTML({ searchResults, svgData }) {
-    return await pdfTemplate({
+  static async buildHTML({ searchResults, svgData }) {
+    const htmlString = await pdfTemplate({
       svgData,
       tableData: searchResults.aggregations.types_count.buckets
     });
+    return htmlString;
   }
 
-  makePDF(formattedHTML, successResponse, errorResponse) {
-    const pdfOptions = {
-      format: 'A4',
-      orientation: 'portrait',
-      border: '10'
-    };
-    pdf.create(formattedHTML, pdfOptions).toFile(`hybrid.pdf`, (err, res) => {
-      if (err) errorResponse(err);
-      successResponse(res);
+  static async buildPDF({ formattedHTML = '' }) {
+    const browser = await puppeteer.launch({
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
     });
-  }
-
-  buildPdfWrapper(formattedHTML) {
-    return new Promise((resolve, reject) => {
-      this.makePDF(
-        formattedHTML,
-        successResponse => {
-          resolve(successResponse);
-        },
-        errorResponse => {
-          reject(errorResponse);
-        }
-      );
+    const page = await browser.newPage();
+    page.setContent(formattedHTML);
+    const buffer = await page.pdf({
+      format: 'A4'
     });
+    browser.close();
+    return buffer;
   }
 
-  async buildPDF({ formattedHTML = '' }) {
-    try {
-      return await this.buildPdfWrapper(formattedHTML);
-    } catch (error) {
-      return;
-    }
+  async saveToBucket({ pdfBuffer }) {
+    this._store.addBuffer(pdfBuffer);
+    const fileURL = await this._store.close();
+    return fileURL;
   }
 
-  async saveToBucket() {}
-
-  buildRequestJSON(paramJSON = {}) {
+  static buildRequestJSON(paramJSON = {}) {
     const dateRange = paramJSON.search.find(x => x.dateRange);
-    let startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now());
+    const startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now());
     const endDate = new Date(dateRange ? dateRange.dateRange[1] : Date.now());
-    !dateRange && startDate.setDate(startDate.getDate() - 1);
+    if (!dateRange) {
+      startDate.setDate(startDate.getDate() - 1);
+    }
 
     return {
       index: 'posts',
