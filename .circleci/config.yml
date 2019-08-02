@@ -49,9 +49,6 @@ workflows:
           project-name: report-generator-api
           name: report-generator-api lint
       - lint-npm-project:
-          project-name: start-create-and-email-report-api
-          name: start-create-and-email-report-api lint
-      - lint-npm-project:
           project-name: graphical-report-api
           name: graphical-report-api lint
       - lint-npm-project:
