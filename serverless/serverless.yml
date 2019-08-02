@@ -4,7 +4,11 @@ provider:
   name: aws
   runtime: nodejs10.x
   tags:
-    project: "${self:service}"
+    Project: "${self:service}"
+    Environment: "${self:provider.stage}"
+  stackTags:
+    Project: "${self:service}"
+    Environment: "${self:provider.stage}"
 
 # you can overwrite defaults here
   stage: dev
@@ -20,6 +24,10 @@ provider:
         - "*"
 
 functions:
+  report-generator:
+    handler: functions/pushNotificationOpenConnection.handler
+  send-email:
+    handler: functions/pushNotificationOpenConnection.handler
   pushNotificationOpenConnection:
     handler: functions/pushNotificationOpenConnection.handler
     description: Notified when client connects to websocket to complete activity
@@ -39,3 +47,97 @@ functions:
             - ${opt:region, self:provider.region}
             - '.amazonaws.com/'
             - ${opt:stage, self:provider.stage}
+stepFunctions:
+  stateMachines:
+    test:
+      name: "${self:service}-${self:provider.stage}-csv-download-request"
+      definition:
+        Comment: "My test step function"
+        StartAt: "Choose download type"
+        States:
+          "Choose download type":
+            Type: Choice
+            Choices:
+            -
+              Variable: "$.type"
+              StringEquals: email
+              Next: "Email report request"
+            -
+              Variable: "$.type"
+              StringEquals: direct
+              Next: "Direct download of report"
+            -
+              Variable: "$.type"
+              StringEquals: push
+              Next: "Push notification report request"
+          "Email report request":
+            Type: Pass
+            Next: "Generate CSV Report for email"
+          "Generate CSV Report for email":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [report-generator, Arn]
+            ResultPath: "$.reportOutput"
+            Next: "Email CSV Report link to user"
+          "Email CSV Report link to user":
+            Type: Task
+            Resource: "arn:aws:states:::lambda:invoke"
+            Parameters:
+              FunctionName:
+                Fn::GetAtt: [send-email, Arn]
+              Payload:
+                email:
+                  "to.$": "$.parameters.emailAddress"
+                  subject: "CSV Email report"
+                  "reportURL.$": "$.reportOutput.reportURL"
+            End: true
+          "Direct download of report":
+            Type: Pass
+            Next: "Generate CSV Report for direct download"
+          "Generate CSV Report for direct download":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [report-generator, Arn]
+            ResultPath: "$.reportOutput"
+            OutputPath: "$.reportOutput"
+            End: true
+          "Push notification report request":
+            Type: Pass
+            Next: "Push notification parallel"
+          "Push notification parallel":
+            Type: Parallel
+            Next: "Push Report URL To Client"
+            Branches:
+            -
+              StartAt: "Generate CSV Report for push notification"
+              States:
+                "Generate CSV Report for push notification":
+                  Type: Task
+                  Resource:
+                    Fn::GetAtt: [report-generator, Arn]
+                  ResultPath: "$.reportOutput"
+                  OutputPath: "$.reportOutput"
+                  End: true
+            -
+              StartAt: "Await OpenConnection from Client"
+              States:
+                "Await OpenConnection from Client":
+                  Type: Task
+                  Resource:
+                    !Join
+                      - ':'
+                      -
+                        - 'arn:aws:states'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'activity:AwaitOpenConnectionFromClient'
+                  End: true
+          "Push Report URL To Client":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [pushNotificationToClient, Arn]
+            End: true
+  activities:
+    - AwaitOpenConnectionFromClient
+plugins:
+  - serverless-step-functions
