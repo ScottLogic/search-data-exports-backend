@@ -16,10 +16,16 @@ package:
 provider:
   name: aws
   runtime: nodejs10.x
+  tags:
+    Project: "${self:service}"
+    Environment: "${self:provider.stage}"
+  stackTags:
+    Project: "${self:service}"
+    Environment: "${self:provider.stage}"
+
+# you can overwrite defaults here
   stage: dev
   region: eu-west-1
-  tags:
-    project: "${self:service}"
 
   iamRoleStatements:
     - Effect: Allow
@@ -30,6 +36,7 @@ provider:
         - es:ESHttpPost
         - s3:PutObject
         - s3:PutObjectAcl
+        - ses:SendEmail
       Resource:
         - "*"
 
@@ -44,16 +51,18 @@ functions:
     handler: functions/pushNotificationToClient.handler
     description: Send report URL to client over websocket
     environment:
-      WEBSOCKET_ENDPOINT_URL: !Join
-        - ""
-        - - "https://"
-          - !Ref WebsocketsApi
-          - ".execute-api."
-          - ${opt:region, self:provider.region}
-          - ".amazonaws.com/"
-          - ${opt:stage, self:provider.stage}
+      WEBSOCKET_ENDPOINT_URL:
+        !Join
+          - ''
+          - - 'https://'
+            - !Ref WebsocketsApi
+            - '.execute-api.'
+            - ${opt:region, self:provider.region}
+            - '.amazonaws.com/'
+            - ${opt:stage, self:provider.stage}
   downloadRequest:
     handler: functions/downloadRequest.handler
+    description: Triggered when client requests a download
     events:
       - http:
           path: download-request
@@ -64,6 +73,7 @@ functions:
       OPEN_CONNECTION_ACTIVITY_ARN: test-2
   search:
     handler: functions/search.handler
+    description: Performs an ES search and returns the resulting hits
     events:
       - http:
           path: search
@@ -94,10 +104,12 @@ functions:
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
   sendEmail:
     handler: functions/sendEmail.handler
+    description: Sends an email to the specified email address with the report S3 link
     environment:
       EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
   reportStatus:
     handler: functions/reportStatus.handler
+    description: Returns the execution status of a generate report task
     events:
       - http:
           path: report-status
@@ -105,6 +117,99 @@ functions:
           cors: true
   reportGenerator:
     handler: functions/reportGenerator.handler
+    description: Performs an ES search and generates a report in S3
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
+stepFunctions:
+  stateMachines:
+    test:
+      name: "${self:service}-${self:provider.stage}-csv-download-request"
+      definition:
+        Comment: "My test step function"
+        StartAt: "Choose download type"
+        States:
+          "Choose download type":
+            Type: Choice
+            Choices:
+            -
+              Variable: "$.type"
+              StringEquals: email
+              Next: "Email report request"
+            -
+              Variable: "$.type"
+              StringEquals: direct
+              Next: "Direct download of report"
+            -
+              Variable: "$.type"
+              StringEquals: push
+              Next: "Push notification report request"
+          "Email report request":
+            Type: Pass
+            Next: "Generate CSV Report for email"
+          "Generate CSV Report for email":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [reportGenerator, Arn]
+            ResultPath: "$.reportOutput"
+            Next: "Email CSV Report link to user"
+          "Email CSV Report link to user":
+            Type: Task
+            Resource: "arn:aws:states:::lambda:invoke"
+            Parameters:
+              FunctionName:
+                Fn::GetAtt: [sendEmail, Arn]
+              Payload:
+                email:
+                  "to.$": "$.parameters.emailAddress"
+                  subject: "CSV Email report"
+                  "reportURL.$": "$.reportOutput.reportURL"
+            End: true
+          "Direct download of report":
+            Type: Pass
+            Next: "Generate CSV Report for direct download"
+          "Generate CSV Report for direct download":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [reportGenerator, Arn]
+            ResultPath: "$.reportOutput"
+            OutputPath: "$.reportOutput"
+            End: true
+          "Push notification report request":
+            Type: Pass
+            Next: "Push notification parallel"
+          "Push notification parallel":
+            Type: Parallel
+            Next: "Push Report URL To Client"
+            Branches:
+            -
+              StartAt: "Generate CSV Report for push notification"
+              States:
+                "Generate CSV Report for push notification":
+                  Type: Task
+                  Resource:
+                    Fn::GetAtt: [reportGenerator, Arn]
+                  ResultPath: "$.reportOutput"
+                  OutputPath: "$.reportOutput"
+                  End: true
+            -
+              StartAt: "Await OpenConnection from Client"
+              States:
+                "Await OpenConnection from Client":
+                  Type: Task
+                  Resource:
+                    !Join
+                      - ':'
+                      -
+                        - 'arn:aws:states'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'activity:AwaitOpenConnectionFromClient'
+                  End: true
+          "Push Report URL To Client":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [pushNotificationToClient, Arn]
+            End: true
+  activities:
+    - AwaitOpenConnectionFromClient

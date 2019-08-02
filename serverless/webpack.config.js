@@ -8,5 +8,6 @@ module.exports = {
     minimize: false
   },
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-  externals: [nodeExternals()]
+  externals: [nodeExternals()],
+  stats: 'minimal'
 };
