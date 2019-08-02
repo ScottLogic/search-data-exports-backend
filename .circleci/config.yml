@@ -84,7 +84,7 @@ workflows:
           project-name: hybrid-report-api
           name: hybrid-report-api lint
       - serverless-build
-      - serverless-deploy
+      - serverless-deploy:
           requires:
               - serverless-build
             filters:
