@@ -32,6 +32,8 @@ provider:
       Action:
         - states:DescribeExecution
         - states:SendTaskSuccess
+        - states:StartExecution                
+        - states:GetActivityTask
         - execute-api:Invoke
         - es:ESHttpPost
         - s3:PutObject
@@ -69,8 +71,24 @@ functions:
           method: post
           cors: true
     environment:
-      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN: test-1
-      OPEN_CONNECTION_ACTIVITY_ARN: test-2
+      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME: "${self:service}-${self:provider.stage}-csv-download-request"
+      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN:
+        !Join
+          - ':'
+          -
+            - 'arn:aws:states'
+            - Ref: 'AWS::Region'
+            - Ref: 'AWS::AccountId'
+            - 'stateMachine'
+            - '${self:service}-${self:provider.stage}-csv-download-request'
+      OPEN_CONNECTION_ACTIVITY_ARN:
+        !Join
+          - ':'
+          -
+            - 'arn:aws:states'
+            - Ref: 'AWS::Region'
+            - Ref: 'AWS::AccountId'
+            - 'activity:AwaitOpenConnectionFromClient'
   search:
     handler: functions/search.handler
     description: Performs an ES search and returns the resulting hits
@@ -123,7 +141,7 @@ functions:
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
 stepFunctions:
   stateMachines:
-    test:
+    csvDownloadRequest:
       name: "${self:service}-${self:provider.stage}-csv-download-request"
       definition:
         Comment: "My test step function"
