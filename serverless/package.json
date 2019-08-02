@@ -19,7 +19,8 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "lint": "eslint . --ext js"
+    "lint": "eslint . --ext js",
+    "deploy": "sls deploy"
   },
   "devDependencies": {
     "aws-sdk": "^2.493.0",

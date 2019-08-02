@@ -30,6 +30,32 @@ jobs:
       - run:
           name: Run ESLint
           command: npm run lint
+  serverless-build:
+    docker:
+      - image: circleci/node:10.15.1
+    working_directory: '~/repo/serverless'
+    steps:
+      - checkout:
+          path: ~/repo
+      - run:
+          name: Installations
+          command: npm ci
+      - run:
+          name: Run ESLint
+          command: npm run lint
+  serverless-deploy:
+    docker:
+      - image: circleci/node:10.15.1
+    working_directory: '~/repo/serverless'
+    steps:
+      - checkout:
+          path: ~/repo
+      - run:
+          name: Installations
+          command: npm ci
+      - run:
+          name: Serverless deploy
+          command: npm run deploy
 
 workflows:
   version: 2
@@ -57,3 +83,10 @@ workflows:
       - lint-npm-project:
           project-name: hybrid-report-api
           name: hybrid-report-api lint
+      - serverless-build
+      - serverless-deploy
+          requires:
+              - serverless-build
+            filters:
+              branches:
+                only: SDE-114-serverless-npm-project
