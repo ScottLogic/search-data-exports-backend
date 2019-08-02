@@ -89,4 +89,4 @@ workflows:
             - serverless-build
           filters:
             branches:
-              only: SDE-114-serverless-npm-project
+              only: master
