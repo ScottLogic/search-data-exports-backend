@@ -28,6 +28,8 @@ provider:
         - states:SendTaskSuccess
         - execute-api:Invoke
         - es:ESHttpPost
+        - s3:PutObject
+        - s3:PutObjectAcl
       Resource:
         - "*"
 
@@ -42,15 +44,14 @@ functions:
     handler: functions/pushNotificationToClient.handler
     description: Send report URL to client over websocket
     environment:
-      WEBSOCKET_ENDPOINT_URL:
-        !Join
-          - ''
-          - - 'https://'
-            - !Ref WebsocketsApi
-            - '.execute-api.'
-            - ${opt:region, self:provider.region}
-            - '.amazonaws.com/'
-            - ${opt:stage, self:provider.stage}
+      WEBSOCKET_ENDPOINT_URL: !Join
+        - ""
+        - - "https://"
+          - !Ref WebsocketsApi
+          - ".execute-api."
+          - ${opt:region, self:provider.region}
+          - ".amazonaws.com/"
+          - ${opt:stage, self:provider.stage}
   downloadRequest:
     handler: functions/downloadRequest.handler
     events:
@@ -80,3 +81,7 @@ functions:
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
+  sendEmail:
+    handler: functions/sendEmail.handler
+    environment:
+      EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
