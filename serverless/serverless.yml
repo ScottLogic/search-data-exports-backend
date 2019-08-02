@@ -81,6 +81,17 @@ functions:
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
+  hybridReport:
+    handler: functions/hybridReport.handler
+    runtime: nodejs8.10
+    events:
+      - http:
+          path: report/hybrid
+          method: post
+          cors: true
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
+      S3_BUCKET_NAME: ${self:custom.s3BucketName}
   sendEmail:
     handler: functions/sendEmail.handler
     environment:

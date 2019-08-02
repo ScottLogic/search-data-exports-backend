@@ -35,5 +35,8 @@ searchrequest/app/brokenexamples.js
 # Stop PDFs
 *.pdf
 
-# CircleCI CLI exe
+# CircleCI CLI
 circleci.exe
+
+# Webpack
+.webpack
