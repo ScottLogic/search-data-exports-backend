@@ -86,7 +86,7 @@ workflows:
       - serverless-build
       - serverless-deploy:
           requires:
-              - serverless-build
-            filters:
-              branches:
-                only: SDE-114-serverless-npm-project
+            - serverless-build
+          filters:
+            branches:
+              only: SDE-114-serverless-npm-project
