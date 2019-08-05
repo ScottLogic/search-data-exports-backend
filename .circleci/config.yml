@@ -46,7 +46,7 @@ jobs:
     steps:
       - checkout:
           path: ~/repo
-      - command:
+      - run:
           name: Inject REACT_APP_API_URL env variable
           command: |
             curl -X POST --user ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: \
