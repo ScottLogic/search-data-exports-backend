@@ -3,12 +3,15 @@ service: sde
 plugins:
   - serverless-webpack
   - serverless-step-functions
+  - serverless-stack-output
 
 custom:
   esEndpoint: ${ssm:/sde-${self:provider.stage}-elasticsearch-endpoint}
   s3BucketName: ${ssm:/sde-${self:provider.stage}-s3-bucket-name}
   webpack:
     includeModules: true # enable auto-packing of external modules
+  output:
+    handler: build_scripts/output.handler
 
 package:
   individually: true

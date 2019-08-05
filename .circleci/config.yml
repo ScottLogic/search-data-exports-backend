@@ -39,16 +39,31 @@ jobs:
       - run:
           name: Serverless deploy
           command: npm run deploy
+  trigger-front-end-build:
+    docker:
+      - image: byrnedo/alpine-curl
+    working_directory: '~/repo/serverless'
+    steps:
+      - checkout:
+          path: ~/repo
+      - command:
+          name: Inject REACT_APP_API_URL env variable
+          command: curl -X POST -H 'Content-Type: application/json' -d @env/update_rest_api_url.json -u ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: 'https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar'
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - terraform-validate
       - serverless-build
       - serverless-deploy:
           requires:
             - serverless-build
           filters:
             branches:
-              only: master
+              only: SDE-116-inject-env-variables
+      - trigger-front-end-build:
+          requires:
+            - serverless-deploy
+          filters:
+            branches:
+              only: SDE-116-inject-env-variables
