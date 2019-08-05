@@ -13,14 +13,10 @@ jobs:
       - run:
           name: terraform validate
           command: terraform validate
-  lint-npm-project:
-    parameters:
-      project-name:
-        type: string
-        default: .
+  serverless-build:
     docker:
       - image: circleci/node:10.15.1
-    working_directory: '~/repo/<< parameters.project-name >>'
+    working_directory: '~/repo/serverless'
     steps:
       - checkout:
           path: ~/repo
@@ -30,33 +26,29 @@ jobs:
       - run:
           name: Run ESLint
           command: npm run lint
+  serverless-deploy:
+    docker:
+      - image: circleci/node:10.15.1
+    working_directory: '~/repo/serverless'
+    steps:
+      - checkout:
+          path: ~/repo
+      - run:
+          name: Installations
+          command: npm ci
+      - run:
+          name: Serverless deploy
+          command: npm run deploy
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - terraform-validate
-      - lint-npm-project:
-          project-name: search-api
-          name: search-api lint
-      - lint-npm-project:
-          project-name: download-request-api
-          name: download-request-api lint
-      - lint-npm-project:
-          project-name: send-email-api
-          name: send-email-api lint
-      - lint-npm-project:
-          project-name: report-generator-api
-          name: report-generator-api lint
-      - lint-npm-project:
-          project-name: start-create-and-email-report-api
-          name: start-create-and-email-report-api lint
-      - lint-npm-project:
-          project-name: graphical-report-api
-          name: graphical-report-api lint
-      - lint-npm-project:
-          project-name: report-status-api
-          name: report-status-api lint
-      - lint-npm-project:
-          project-name: hybrid-report-api
-          name: hybrid-report-api lint
+      - serverless-build
+      - serverless-deploy:
+          requires:
+            - serverless-build
+          filters:
+            branches:
+              only: master
