@@ -39,13 +39,17 @@ jobs:
       - run:
           name: Serverless deploy
           command: npm run deploy
+      - persist_to_workspace:
+          root: .
+          paths:
+            - env
   trigger-front-end-build:
     docker:
       - image: byrnedo/alpine-curl
     working_directory: '~/repo/serverless'
     steps:
-      - checkout:
-          path: ~/repo
+      - attach_workspace:
+          at: .
       - run:
           name: Inject REACT_APP_API_URL env variable
           command: |
