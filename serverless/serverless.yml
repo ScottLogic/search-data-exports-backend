@@ -1,4 +1,4 @@
-service: sde-v2-2
+service: sde
 
 plugins:
   - serverless-webpack

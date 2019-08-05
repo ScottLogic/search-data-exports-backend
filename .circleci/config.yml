@@ -13,23 +13,6 @@ jobs:
       - run:
           name: terraform validate
           command: terraform validate
-  lint-npm-project:
-    parameters:
-      project-name:
-        type: string
-        default: .
-    docker:
-      - image: circleci/node:10.15.1
-    working_directory: '~/repo/<< parameters.project-name >>'
-    steps:
-      - checkout:
-          path: ~/repo
-      - run:
-          name: Installations
-          command: npm ci
-      - run:
-          name: Run ESLint
-          command: npm run lint
   serverless-build:
     docker:
       - image: circleci/node:10.15.1
@@ -62,27 +45,6 @@ workflows:
   build-deploy:
     jobs:
       - terraform-validate
-      - lint-npm-project:
-          project-name: search-api
-          name: search-api lint
-      - lint-npm-project:
-          project-name: download-request-api
-          name: download-request-api lint
-      - lint-npm-project:
-          project-name: send-email-api
-          name: send-email-api lint
-      - lint-npm-project:
-          project-name: report-generator-api
-          name: report-generator-api lint
-      - lint-npm-project:
-          project-name: graphical-report-api
-          name: graphical-report-api lint
-      - lint-npm-project:
-          project-name: report-status-api
-          name: report-status-api lint
-      - lint-npm-project:
-          project-name: hybrid-report-api
-          name: hybrid-report-api lint
       - serverless-build
       - serverless-deploy:
           requires:
