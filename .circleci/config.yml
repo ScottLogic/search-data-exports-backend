@@ -40,21 +40,21 @@ jobs:
           name: Serverless deploy
           command: npm run deploy
       - persist_to_workspace:
-          root: ~
+          root: .
           paths:
-            - ~/repo/serverless/env
+            - env
   trigger-front-end-build:
     docker:
       - image: byrnedo/alpine-curl
     working_directory: '~/repo/serverless'
     steps:
       - attach_workspace:
-          at: ~
+          at: .
       - run:
           name: Inject REACT_APP_API_URL env variable
           command: |
             curl -X POST --user ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: \
-              --data @~/repo/serverless/env/update_rest_api_url.json \
+              --data @./env/update_rest_api_url.json \
               https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
 
 workflows:
