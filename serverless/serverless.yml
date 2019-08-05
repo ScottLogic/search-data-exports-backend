@@ -139,6 +139,16 @@ functions:
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
+  createPost:
+    handler: functions/createPost.handler
+    description: Save a new post into ES
+    events:
+      - http:
+          path: posts
+          method: post
+          cors: true
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
 stepFunctions:
   stateMachines:
     csvDownloadRequest:
