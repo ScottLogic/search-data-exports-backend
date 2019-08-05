@@ -8,7 +8,7 @@ function getNameValuePair(envVariableName, envVariableValue) {
 }
 
 function handler(data) {
-  fs.mkdirSync('./env');
+  if (!fs.existsSync('./env')) fs.mkdirSync('./env');
 
   const restApiUrlEnv = getNameValuePair('REACT_APP_API_URL', data.ServiceEndpoint);
   fs.writeFileSync('./env/update_rest_api_url.json', JSON.stringify(restApiUrlEnv));
