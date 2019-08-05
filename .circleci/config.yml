@@ -54,7 +54,7 @@ jobs:
           name: Inject REACT_APP_API_URL env variable
           command: |
             curl -X POST --user ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: \
-              --data @./env/update_rest_api_url.json \
+              --data @env/update_rest_api_url.json \
               https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
 
 workflows:
