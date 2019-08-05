@@ -6,8 +6,8 @@ class ESCreate {
     this._client = new Client(ESConnectOptions);
   }
 
-  async create(index, type, body) {    
-    const bodyContent = ESCreate.buildBody(type, body);    
+  async create(index, type, body) {
+    const bodyContent = ESCreate.buildBody(type, body);
     return this._client.index({
       index,
       type,
