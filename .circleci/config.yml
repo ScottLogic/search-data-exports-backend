@@ -98,7 +98,7 @@ workflows:
             - terraform-validate
           filters:
             branches:
-              only: sde-128-backend-repo-cleanup
+              only: master
       - serverless-build
       - serverless-deploy:
           requires:
@@ -106,4 +106,4 @@ workflows:
             - terraform-apply
           filters:
             branches:
-              only: sde-128-backend-repo-cleanup
+              only: master
