@@ -1,0 +1,3 @@
+aws-infrastructure/*
+# Ignore dataimport for now
+dataimport/*
