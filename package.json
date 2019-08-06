@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/ScottLogic/search-data-exports-backend"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "description": "Serverless application definition for the SDE project",
   "dependencies": {
