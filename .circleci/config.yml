@@ -43,7 +43,7 @@ jobs:
           root: .
           paths:
             - env
-  trigger-front-end-build:
+  inject-frontend-env-variables:
     docker:
       - image: byrnedo/alpine-curl
     working_directory: '~/repo/serverless'
@@ -64,28 +64,22 @@ jobs:
               -H 'Content-Type: application/json' \
               --data @env/update_websocket_url.json \
               https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
-      - run:
-          name: Trigger search-data-exports-frontend master build
-          command: |
-            curl -X POST --user ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: \
-              -H 'Content-Type: application/json' \
-              --data "{}" \
-              https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/tree/master
 
 workflows:
   version: 2
   build-deploy:
     jobs:
+      - terraform-validate
       - serverless-build
       - serverless-deploy:
           requires:
             - serverless-build
           filters:
             branches:
-              only: SDE-116-inject-env-variables
-      - trigger-front-end-build:
+              only: master
+      - inject-frontend-env-variables:
           requires:
             - serverless-deploy
           filters:
             branches:
-              only: SDE-116-inject-env-variables
+              only: master
