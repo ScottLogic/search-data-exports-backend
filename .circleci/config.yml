@@ -21,6 +21,9 @@ jobs:
       - checkout:
           path: ~/repo
       - run:
+          name: terraform init
+          command: terraform init
+      - run:
           name: terraform apply
           command: terraform apply -auto-approve
   serverless-build:
