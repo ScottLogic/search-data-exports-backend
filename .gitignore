@@ -40,3 +40,6 @@ circleci.exe
 
 # Webpack
 .webpack
+
+# Env directories
+env/
