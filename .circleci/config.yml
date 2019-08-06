@@ -90,7 +90,7 @@ workflows:
   build-deploy:
     jobs:
       - terraform-validate
-      - terraform-apply
+      - terraform-apply:
           requires:            
             - terraform-validate
           filters:
