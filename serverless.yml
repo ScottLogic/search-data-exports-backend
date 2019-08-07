@@ -257,17 +257,17 @@ stepFunctions:
   activities:
     - AwaitOpenConnectionFromClient
 
-resources: # CloudFormation template syntax https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
+resources: # CloudFormation template syntax: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
   Resources:
     subscriptionsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:custom.subscriptionsTableName}
         AttributeDefinitions:
-          - AttributeName: emailAddress
+          - AttributeName: userId
             AttributeType: S
         KeySchema:
-          - AttributeName: emailAddress
+          - AttributeName: userId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
