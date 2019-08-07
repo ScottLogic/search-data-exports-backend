@@ -8,6 +8,7 @@ plugins:
 custom:
   esEndpoint: ${ssm:/sde-${self:provider.stage}-elasticsearch-endpoint}
   s3BucketName: ${ssm:/sde-${self:provider.stage}-s3-bucket-name}
+  subscriptionsTableName: ${opt:stage, self:provider.stage}-sde-subscriptions
   webpack:
     includeModules: true # enable auto-packing of external modules
   output:
@@ -152,6 +153,17 @@ functions:
           cors: true
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  createSubscription:
+    handler: functions/createSubscription.handler
+    description: Adds a digest subscription for an SDE user
+    events:
+      - http:
+          path: subscriptions
+          method: post
+          cors: true
+    environment:
+      SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+
 stepFunctions:
   stateMachines:
     csvDownloadRequest:
@@ -250,7 +262,7 @@ resources: # CloudFormation template syntax https://docs.aws.amazon.com/AWSCloud
     subscriptionsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.stage}-sde-subscriptions
+        TableName: ${self:custom.subscriptionsTableName}
         AttributeDefinitions:
           - AttributeName: emailAddress
             AttributeType: S
