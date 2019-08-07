@@ -8,6 +8,7 @@ plugins:
 custom:
   esEndpoint: ${ssm:/sde-${self:provider.stage}-elasticsearch-endpoint}
   s3BucketName: ${ssm:/sde-${self:provider.stage}-s3-bucket-name}
+  subscriptionsTableName: ${opt:stage, self:provider.stage}-sde-subscriptions
   webpack:
     includeModules: true # enable auto-packing of external modules
   output:
@@ -245,17 +246,17 @@ stepFunctions:
   activities:
     - AwaitOpenConnectionFromClient
 
-resources: # CloudFormation template syntax https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
+resources: # CloudFormation template syntax: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
   Resources:
     subscriptionsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.stage}-sde-subscriptions
+        TableName: ${self:custom.subscriptionsTableName}
         AttributeDefinitions:
-          - AttributeName: emailAddress
+          - AttributeName: userId
             AttributeType: S
         KeySchema:
-          - AttributeName: emailAddress
+          - AttributeName: userId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
