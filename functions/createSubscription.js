@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 
-const dynamoDb = new AWS.DynamoDB();
+const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient();
+
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
 const responseHeaders = {
@@ -26,36 +27,33 @@ exports.handler = async (event) => {
     return generateErrorResponse('Invalid Input JSON', error, event.body);
   }
 
-  const { emailAddress, type, searchText } = eventJson;
+  const userId = event.requestContext.authorizer.claims.sub;
 
-  const newSubscription = { type, searchText };
+  const { field, value } = eventJson;
 
   const getItemParams = {
     TableName: SUBSCRIPTIONS_TABLE,
-    Key: { emailAddress }
+    Key: { userId }
   };
 
-  const getItemResponse = await dynamoDb.getItem(getItemParams).promise();
+  const getItemResponse = await dynamoDbDocumentClient.get(getItemParams).promise();
 
   let newItem;
   if (getItemResponse.Item) {
     const existingItem = getItemResponse.Item;
     for (const subscription of existingItem.subscriptions) {
-      if (
-        subscription.searchText === newSubscription.searchText &&
-        subscription.type === newSubscription.type
-      ) {
+      if (subscription.field === field && subscription.value === value) {
         return generateErrorResponse('Subscription Already Exists', '', event.body);
       }
     }
     newItem = {
-      emailAddress,
-      subscriptions: [...existingItem.subscriptions, newSubscription]
+      userId,
+      subscriptions: [...existingItem.subscriptions, { field, value }]
     };
   } else {
     newItem = {
-      emailAddress,
-      subscriptions: [newSubscription]
+      userId,
+      subscriptions: [{ field, value }]
     };
   }
 
@@ -64,7 +62,7 @@ exports.handler = async (event) => {
     Item: newItem
   };
 
-  await dynamoDb.putItem(putItemParams).promise();
+  await dynamoDbDocumentClient.put(putItemParams).promise();
 
   return {
     statusCode: 200,
