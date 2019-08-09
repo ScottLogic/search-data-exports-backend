@@ -4,8 +4,6 @@ const client = new Client({ node: process.env.ES_API_URL });
 const ES_INDEX = 'digests';
 const ES_TYPE = 'digest';
 
-console.log(process.env.ES_API_URL)
-
 const createIndex = async () => {
   const indexExists = await client.indices.exists({ index: 'digests' });
 
