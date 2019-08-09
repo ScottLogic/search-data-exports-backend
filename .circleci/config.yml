@@ -95,7 +95,7 @@ jobs:
     working_directory: '~/repo/dataimport'
     steps:
       - aws-parameter-store/load:
-          filter: "Key=sde-dev-elasticsearch-endpoint"
+          filter: "Key=sde-dev-elasticsearch-endpoint,Value=*"
       - checkout:
           path: ~/repo
       - run:
