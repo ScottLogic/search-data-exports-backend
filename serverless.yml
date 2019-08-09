@@ -6,9 +6,11 @@ plugins:
   - serverless-stack-output
 
 custom:
-  esEndpoint: ${ssm:/sde-${self:provider.stage}-elasticsearch-endpoint}
-  s3BucketName: ${ssm:/sde-${self:provider.stage}-s3-bucket-name}
-  subscriptionsTableName: ${opt:stage, self:provider.stage}-sde-subscriptions
+  stage: ${opt:stage, self:provider.stage}
+  region: ${opt:region, self:provider.region}
+  esEndpoint: ${self:custom.stage}-elasticsearch-endpoint}
+  s3BucketName: ${self:custom.stage}-s3-bucket-name}
+  subscriptionsTableName: ${self:custom.stage}-sde-subscriptions
   webpack:
     includeModules: true # enable auto-packing of external modules
   output:
@@ -21,11 +23,11 @@ provider:
   name: aws
   runtime: nodejs10.x
   tags:
-    Project: "${self:service}"
-    Environment: "${self:provider.stage}"
+    Project: ${self:service}
+    Environment: ${self:custom.stage}
   stackTags:
-    Project: "${self:service}"
-    Environment: "${self:provider.stage}"
+    Project: ${self:service}
+    Environment: ${self:custom.stage}
 
 # you can overwrite defaults here
   stage: dev
@@ -43,6 +45,8 @@ provider:
         - s3:PutObject
         - s3:PutObjectAcl
         - ses:SendEmail
+        - dynamodb:GetItem
+        - dynamodb:PutItem
       Resource:
         - "*"
 
@@ -63,9 +67,9 @@ functions:
           - - 'https://'
             - !Ref WebsocketsApi
             - '.execute-api.'
-            - ${opt:region, self:provider.region}
+            - ${self:custom.region}
             - '.amazonaws.com/'
-            - ${opt:stage, self:provider.stage}
+            - ${self:custom.stage}
   downloadRequest:
     handler: functions/downloadRequest.handler
     description: Triggered when client requests a download
@@ -75,7 +79,7 @@ functions:
           method: post
           cors: true
     environment:
-      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME: "${self:service}-${self:provider.stage}-csv-download-request"
+      CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME: "${self:service}-${self:custom.stage}-csv-download-request"
       CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN:
         !Join
           - ':'
@@ -84,7 +88,7 @@ functions:
             - Ref: 'AWS::Region'
             - Ref: 'AWS::AccountId'
             - 'stateMachine'
-            - '${self:service}-${self:provider.stage}-csv-download-request'
+            - '${self:service}-${self:custom.stage}-csv-download-request'
       OPEN_CONNECTION_ACTIVITY_ARN:
         !Join
           - ':'
@@ -153,10 +157,25 @@ functions:
           cors: true
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  createSubscription:
+    handler: functions/createSubscription.handler
+    description: Adds a daily digest subscription for an SDE user
+    events:
+      - http:
+          path: subscriptions
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+    environment:
+      SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+
 stepFunctions:
   stateMachines:
     csvDownloadRequest:
-      name: "${self:service}-${self:provider.stage}-csv-download-request"
+      name: "${self:service}-${self:custom.stage}-csv-download-request"
       definition:
         Comment: "My test step function"
         StartAt: "Choose download type"
@@ -246,10 +265,35 @@ stepFunctions:
   activities:
     - AwaitOpenConnectionFromClient
 
-resources: # CloudFormation template syntax: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
+resources:
   Resources:
-    subscriptionsTable:
-      Type: AWS::DynamoDB::Table
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html
+      Properties:
+        UserPoolName: ${self:custom.stage}-sde-users-pool
+        UsernameAttributes:
+          - email
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
+      Properties:      
+        ClientName: ${self:custom.stage}-sde-user-pool-client
+        UserPoolId:
+          Ref: CognitoUserPool
+        GenerateSecret: false
+    ApiGatewayAuthorizer:
+      DependsOn:
+        - ApiGatewayRestApi
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        Name: ${self:custom.stage}-sde-api-authorizer
+        IdentitySource: method.request.header.Authorization
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        ProviderARNs:
+          - Fn::GetAtt: [CognitoUserPool, Arn]
+    SubscriptionsTable:
+      Type: AWS::DynamoDB::Table # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
       Properties:
         TableName: ${self:custom.subscriptionsTableName}
         AttributeDefinitions:
