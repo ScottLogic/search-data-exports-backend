@@ -94,10 +94,10 @@ jobs:
       - image: circleci/node:10.15.1
     working_directory: '~/repo/dataimport'
     steps:
-      - aws-cli/install
-      - aws-cli/configure
       - checkout:
           path: ~/repo
+      - aws-cli/install
+      - aws-cli/configure
       - run:
           name: Installations
           command: npm ci
