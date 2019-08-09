@@ -1,5 +1,5 @@
 const { Client } = require('@elastic/elasticsearch');
-const client = new Client({ node: 'https://search-sde-dev-es-test-domain-hplsrf7hatpadkuvakzrf3j7wq.eu-west-1.es.amazonaws.com' });
+const client = new Client({ node: process.env.ES_API_URL });
 
 const ES_INDEX = 'digests';
 const ES_TYPE = 'digest';
