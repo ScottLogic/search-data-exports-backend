@@ -8,8 +8,8 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage}
   region: ${opt:region, self:provider.region}
-  esEndpoint: ${self:custom.stage}-elasticsearch-endpoint}
-  s3BucketName: ${self:custom.stage}-s3-bucket-name}
+  esEndpoint: ${ssm:/sde-${self:custom.stage}-elasticsearch-endpoint}
+  s3BucketName: ${ssm:/sde-${self:custom.stage}-s3-bucket-name}
   subscriptionsTableName: ${self:custom.stage}-sde-subscriptions
   webpack:
     includeModules: true # enable auto-packing of external modules
@@ -273,6 +273,8 @@ resources:
         UserPoolName: ${self:custom.stage}-sde-users-pool
         UsernameAttributes:
           - email
+        AutoVerifiedAttributes:
+          - email
     CognitoUserPoolClient:
       Type: AWS::Cognito::UserPoolClient # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
       Properties:      
@@ -280,7 +282,17 @@ resources:
         UserPoolId:
           Ref: CognitoUserPool
         GenerateSecret: false
-    ApiGatewayAuthorizer:
+    CognitoIdentityPool:
+      Type: AWS::Cognito::IdentityPool # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-identitypool.html
+      Properties:
+        IdentityPoolName: ${self:custom.stage}SdeIdentityPool
+        AllowUnauthenticatedIdentities: false
+        CognitoIdentityProviders:
+          - ClientId:
+              Ref: CognitoUserPoolClient
+            ProviderName:
+              Fn::GetAtt: [ "CognitoUserPool", "ProviderName" ]
+    ApiGatewayAuthorizer: # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html
       DependsOn:
         - ApiGatewayRestApi
       Type: AWS::ApiGateway::Authorizer
@@ -305,3 +317,41 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    CognitoIdentityPoolRoles:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties:
+        IdentityPoolId:
+          Ref: CognitoIdentityPool
+        Roles:
+          authenticated:
+            Fn::GetAtt: [CognitoAuthRole, Arn]
+
+    # IAM role used for authenticated users
+    CognitoAuthRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: 'Allow'
+              Principal:
+                Federated: 'cognito-identity.amazonaws.com'
+              Action:
+                - 'sts:AssumeRoleWithWebIdentity'
+              Condition:
+                StringEquals:
+                  'cognito-identity.amazonaws.com:aud':
+                    Ref: CognitoIdentityPool
+                'ForAnyValue:StringLike':
+                  'cognito-identity.amazonaws.com:amr': authenticated
+        Policies:
+          - PolicyName: 'CognitoAuthorizedPolicy'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: 'Allow'
+                  Action:
+                    - 'cognito-sync:*'
+                    - 'cognito-identity:*'
+                  Resource: '*'
