@@ -96,18 +96,10 @@ jobs:
     steps:
       - aws-cli/install
       - aws-cli/configure
-      - checkout:
-          path: ~/repo
-      - run:
-          name: Installations
-          command: npm ci
       - run:
           name: Load AWS Parameters
           command: |
             echo $(aws ssm describe-parameters)
-      - run:
-          name: Create Index
-          command: node app/createIndex.js
 
 workflows:
   version: 2
