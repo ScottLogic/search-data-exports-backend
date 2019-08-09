@@ -99,7 +99,7 @@ jobs:
       - run:
           name: Load AWS Parameters
           command: |
-            echo $(aws ssm describe-parameters)
+            echo $(aws ssm get-parameter --name "sde-dev-elasticsearch-endpoint")
 
 workflows:
   version: 2
