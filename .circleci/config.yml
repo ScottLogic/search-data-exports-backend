@@ -126,6 +126,3 @@ workflows:
       - create-es-index:
           requires:
             - terraform-apply
-          filters:
-            branches:
-              only: master
