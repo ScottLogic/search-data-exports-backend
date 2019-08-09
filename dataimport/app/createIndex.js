@@ -1,5 +1,5 @@
 const { Client } = require('@elastic/elasticsearch');
-const client = new Client({ node: process.env.sde-dev-elasticsearch-endpoint });
+const client = new Client({ node: process.env.ES_API_URL });
 
 const ES_INDEX = 'digests';
 const ES_TYPE = 'digest';
