@@ -94,7 +94,8 @@ jobs:
       - image: circleci/node:10.15.1
     working_directory: '~/repo/dataimport'
     steps:
-      - aws-parameter-store/load
+      - aws-parameter-store/load:
+          filter: "Key=sde-dev-elasticsearch-endpoint"
       - checkout:
           path: ~/repo
       - run:
