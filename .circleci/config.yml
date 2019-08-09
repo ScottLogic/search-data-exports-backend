@@ -103,7 +103,9 @@ jobs:
           command: npm ci
       - run:
           name: Create Index
-          command: ES_API_URL=`aws ssm get-parameter --name sde-dev-elasticsearch-endpoint | jq '.Parameter.Value'` node app/createIndex.js
+          command: |
+            ES_ENDPOINT=$(aws ssm get-parameter --name sde-dev-elasticsearch-endpoint | jq '.Parameter.Value')
+            node app/createIndex.js
 
 workflows:
   version: 2
