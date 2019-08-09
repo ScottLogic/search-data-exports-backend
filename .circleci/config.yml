@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-parameter-store: circleci/aws-parameter-store@1.0.0
+  aws-cli: circleci/aws-cli@0.1.13
 jobs:
   terraform-validate:
     docker:
@@ -94,13 +94,17 @@ jobs:
       - image: circleci/node:10.15.1
     working_directory: '~/repo/dataimport'
     steps:
-      - aws-parameter-store/load:
-          filter: ""
+      - aws-cli/install
+      - aws-cli/configure
       - checkout:
           path: ~/repo
       - run:
           name: Installations
           command: npm ci
+      - run:
+          name: Load AWS Parameters
+          command: |
+            echo $(aws ssm describe-parameters)
       - run:
           name: Create Index
           command: node app/createIndex.js
