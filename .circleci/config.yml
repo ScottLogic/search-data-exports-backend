@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  aws-parameter-store: circleci/aws-parameter-store@1.0.0
 jobs:
   terraform-validate:
     docker:
@@ -87,6 +89,20 @@ jobs:
               -H 'Content-Type: application/json' \
               --data @env/update_websocket_url.json \
               https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
+  create-es-index:
+    docker:
+      - image: circleci/node:10.15.1
+    working_directory: '~/repo/dataimport'
+    steps:
+      - aws-parameter-store/load
+      - checkout:
+          path: ~/repo
+      - run:
+          name: Installations
+          command: npm ci
+      - run:
+          name: Create Index
+          command: node app/createIndex.js
 
 workflows:
   version: 2
@@ -103,6 +119,12 @@ workflows:
       - serverless-deploy:
           requires:
             - serverless-build
+            - terraform-apply
+          filters:
+            branches:
+              only: master
+      - create-es-index:
+          requires:
             - terraform-apply
           filters:
             branches:
