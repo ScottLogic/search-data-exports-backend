@@ -171,6 +171,34 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+  deleteSubscription:
+    handler: functions/deleteSubscription.handler
+    description: Deletes a specified daily digest subscription for an SDE user
+    events:
+      - http:
+          path: subscriptions
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+    environment:
+      SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+  getUserSubscriptions:
+    handler: functions/getUserSubscriptions.handler
+    description: Gets the daily digest subscriptions for an SDE user
+    events:
+      - http:
+          path: subscriptions
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+    environment:
+      SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
 
 stepFunctions:
   stateMachines:
