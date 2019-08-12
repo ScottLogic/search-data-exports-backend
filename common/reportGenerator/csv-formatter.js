@@ -19,9 +19,9 @@ const formatRows = (searchResult) => {
 
   if (hits && hits.hits.length) {
     const header = Object.keys(hits.hits[0]._source);
-    return hits.hits
+    return `${hits.hits
       .map(row => header.map(fieldName => JSON.stringify(row._source[fieldName], replacer)).join(','))
-      .join('\r\n');
+      .join('\r\n')}\r\n`;
   }
 
   return '';
