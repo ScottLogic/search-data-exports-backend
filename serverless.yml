@@ -165,6 +165,9 @@ functions:
           path: subscriptions
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/CreateSubscriptionInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
