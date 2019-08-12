@@ -32,4 +32,7 @@ const createBody = () => ({
   }
 });
 
-createIndex().catch(console.log);
+createIndex().catch((error) => {
+  console.error(error);
+  throw(error);
+});
