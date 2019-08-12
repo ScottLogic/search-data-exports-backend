@@ -68,27 +68,6 @@ jobs:
               -H 'Content-Type: application/json' \
               --data @env/update_websocket_url.json \
               https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
-  inject-frontend-env-variables:
-    docker:
-      - image: byrnedo/alpine-curl
-    working_directory: '~/repo'
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Inject REACT_APP_API_URL env variable
-          command: |
-            curl -X POST --user ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: \
-              -H 'Content-Type: application/json' \
-              --data @env/update_rest_api_url.json \
-              https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
-      - run:
-          name: Inject REACT_APP_WEBSOCKET_ENDPOINT env variable
-          command: |
-            curl -X POST --user ${UPDATE_FRONTEND_ENV_VARS_TOKEN}: \
-              -H 'Content-Type: application/json' \
-              --data @env/update_websocket_url.json \
-              https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
   create-es-index:
     docker:
       - image: circleci/node:10.15.1
