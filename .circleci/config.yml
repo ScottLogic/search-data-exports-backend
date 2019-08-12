@@ -83,6 +83,8 @@ jobs:
       - run:
           name: Create Index
           command: |
+            AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
             ES_ENDPOINT=$(aws ssm get-parameter --name sde-dev-elasticsearch-endpoint | jq -r '.Parameter.Value')
             ES_API_URL=${ES_ENDPOINT} node app/createIndex.js
 
