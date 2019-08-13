@@ -5,9 +5,9 @@ const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
-export default async function handler(event) {
+export async function handler(event) {
   try {
-    validateRequestHeaders();
+    validateRequestHeaders(event);
 
     const userId = event.requestContext.authorizer.claims.sub;
     const { field, value } = JSON.parse(event.body);
@@ -23,7 +23,7 @@ export default async function handler(event) {
       const existingItem = getItemResponse.Item;
       for (const subscription of existingItem.subscriptions) {
         if (subscription.field === field && subscription.value === value) {
-          throw HttpError('400', 'Subscription already exists');
+          throw new HttpError('400', 'Subscription already exists');
         }
       }
       newItem = {
@@ -52,7 +52,8 @@ export default async function handler(event) {
     console.error(error);
     if (error instanceof HttpError) return error.getHTTPResponse();
     return {
-      statusCode: 500
+      statusCode: 500,
+      headers
     };
   }
 }

@@ -21,7 +21,15 @@ export class HttpError extends Error {
 }
 
 export function validateRequestHeaders(event) {
-  if (!event.headers || !event.headers['Content-Type'] || !event.headers['Content-Type']) {
-    throw HttpError(415, 'Request header "Content-Type" must be set to "application/json"');
+  const { headers: requestHeaders } = event;
+  if (requestHeaders) {
+    const contentType = Object.prototype.hasOwnProperty.call(requestHeaders, 'Content-Type')
+      ? requestHeaders['Content-Type']
+      : requestHeaders['content-type'];
+    if (contentType !== 'application/json') {
+      throw new HttpError(415, 'Request header "Content-Type" must be set to "application/json"');
+    }
+  } else {
+    throw new HttpError(415, 'Request did not contain any headers"');
   }
 }
