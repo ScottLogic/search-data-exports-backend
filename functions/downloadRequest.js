@@ -1,11 +1,12 @@
-const AWS = require('aws-sdk');
+import { StepFunctions } from 'aws-sdk';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
-const stepFunctions = new AWS.StepFunctions();
-
-const headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
+const stepFunctions = new StepFunctions();
 
 const stepFunctionArn = process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN;
 const workerName = process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME;
@@ -28,30 +29,31 @@ const getTaskToken = async (type) => {
   return taskToken;
 };
 
-exports.handler = async (event) => {
-  console.log(`event.body=${event.body}`);
+export async function handler(event) {
+  try {
+    validateRequestHeaders(event);
 
-  const { type } = JSON.parse(event.body);
+    console.log(`event.body=${event.body}`);
 
-  const startExecutionParams = {
-    stateMachineArn: stepFunctionArn,
-    input: event.body
-  };
+    const { type } = JSON.parse(event.body);
 
-  const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
-  const taskToken = await getTaskToken(type);
+    const startExecutionParams = {
+      stateMachineArn: stepFunctionArn,
+      input: event.body
+    };
 
-  const { executionArn } = await startExecutionPromise;
+    const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
+    const taskToken = await getTaskToken(type);
 
-  console.log(`executionArn=${executionArn}`);
-  console.log(`taskToken=${taskToken}`);
+    const { executionArn } = await startExecutionPromise;
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      executionArn,
-      taskToken
-    }),
-    headers
-  };
-};
+    console.log(`executionArn=${executionArn}`);
+    console.log(`taskToken=${taskToken}`);
+
+    return generateSuccessResponse({ executionArn, taskToken });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
+  }
+}

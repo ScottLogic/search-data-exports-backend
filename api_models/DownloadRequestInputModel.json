@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "DownloadRequestInputModel",
+  "type": "object",
+  "required": ["type", "parameters", "searchCriteria"],
+  "properties": {
+    "type": { "type": "string", "enum": ["direct", "push", "email"] },
+    "parameters": { "type": ["object", "null"] },
+    "searchCriteria": { "type": "object" }
+  }
+}
