@@ -1,72 +1,52 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from 'aws-sdk';
+import { validateRequestHeaders, HttpError, headers } from '../common/httpUtils';
 
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
-const headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
-
-const generateErrorResponse = (statusCode, message, errorMessage, content) => ({
-  statusCode,
-  headers,
-  body: JSON.stringify({
-    message,
-    errorMessage,
-    content
-  })
-});
-
-exports.handler = async (event) => {
-  let eventJson;
+export async function handler(event) {
   try {
-    eventJson = JSON.parse(event.body);
-  } catch (error) {
-    return generateErrorResponse('Invalid Input JSON', error, event.body);
-  }
+    validateRequestHeaders(event);
 
-  const userId = event.requestContext.authorizer.claims.sub;
+    const userId = event.requestContext.authorizer.claims.sub;
+    const subscription = JSON.parse(event.body);
 
-  const subscription = eventJson;
+    const getItemParams = {
+      TableName: SUBSCRIPTIONS_TABLE,
+      Key: { userId }
+    };
 
-  const getItemParams = {
-    TableName: SUBSCRIPTIONS_TABLE,
-    Key: { userId }
-  };
+    const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
 
-  const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
+    if (!Item) throw new HttpError(400, 'Could not find existing subscriptions for user');
 
-  if (!Item) {
-    return generateErrorResponse(404, 'Could not find subscriptions for user', '', event.body);
-  }
-
-  const subscriptionIndex = Item.subscriptions.findIndex(
-    existingSubscription => existingSubscription.field === subscription.field
-      && existingSubscription.value === subscription.value
-  );
-
-  if (subscriptionIndex === -1) {
-    return generateErrorResponse(
-      404,
-      'Could not find specified subscription for user',
-      '',
-      event.body
+    const subscriptionIndex = Item.subscriptions.findIndex(
+      existingSubscription => existingSubscription.field === subscription.field
+        && existingSubscription.value === subscription.value
     );
+
+    if (subscriptionIndex === -1) throw new HttpError(400, 'Could not find specified subscription for user');
+
+    Item.subscriptions.splice(subscriptionIndex, 1);
+
+    const putItemParams = {
+      TableName: SUBSCRIPTIONS_TABLE,
+      Item
+    };
+
+    await dynamoDbDocumentClient.put(putItemParams).promise();
+
+    return {
+      statusCode: 200,
+      headers
+    };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return {
+      statusCode: 500,
+      headers
+    };
   }
-
-  Item.subscriptions.splice(subscriptionIndex, 1);
-
-  const putItemParams = {
-    TableName: SUBSCRIPTIONS_TABLE,
-    Item
-  };
-
-  await dynamoDbDocumentClient.put(putItemParams).promise();
-
-  return {
-    statusCode: 200,
-    headers
-  };
-};
+}
