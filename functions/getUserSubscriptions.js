@@ -1,25 +1,31 @@
 import { DynamoDB } from 'aws-sdk';
-import { headers } from '../common/httpUtils';
+import {
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
 const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
 export async function handler(event) {
-  const userId = event.requestContext.authorizer.claims.sub;
+  try {
+    const userId = event.requestContext.authorizer.claims.sub;
 
-  const getItemParams = {
-    TableName: SUBSCRIPTIONS_TABLE,
-    Key: { userId }
-  };
+    const getItemParams = {
+      TableName: SUBSCRIPTIONS_TABLE,
+      Key: { userId }
+    };
 
-  const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
+    const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
 
-  const subscriptions = Item ? Item.subscriptions : [];
+    const subscriptions = Item ? Item.subscriptions : [];
 
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify(subscriptions)
-  };
+    return generateSuccessResponse(subscriptions);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
+  }
 }

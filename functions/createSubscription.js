@@ -1,5 +1,10 @@
 import { DynamoDB } from 'aws-sdk';
-import { validateRequestHeaders, HttpError, headers } from '../common/httpUtils';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
 const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
@@ -44,16 +49,10 @@ export async function handler(event) {
 
     await dynamoDbDocumentClient.put(putItemParams).promise();
 
-    return {
-      statusCode: 200,
-      headers
-    };
+    return generateSuccessResponse();
   } catch (error) {
     console.error(error);
     if (error instanceof HttpError) return error.getHTTPResponse();
-    return {
-      statusCode: 500,
-      headers
-    };
+    return generateInternalServerErrorResponse();
   }
 }

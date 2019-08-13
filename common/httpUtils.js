@@ -1,7 +1,30 @@
-export const headers = {
+const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*'
 };
+
+export function generateSuccessResponse(body) {
+  let response = {
+    statusCode: 200,
+    headers
+  };
+  if (body) {
+    response = { ...response, body: JSON.stringify(body) };
+  }
+  return response;
+}
+
+function generateErrorResponse(statusCode, message) {
+  return {
+    statusCode,
+    headers,
+    body: JSON.stringify({ message })
+  };
+}
+
+export function generateInternalServerErrorResponse(error) {
+  return generateErrorResponse(500, error);
+}
 
 export class HttpError extends Error {
   constructor(statusCode, message) {
@@ -10,13 +33,7 @@ export class HttpError extends Error {
   }
 
   getHTTPResponse() {
-    const { message, statusCode } = this;
-    const body = JSON.stringify({ message });
-    return {
-      statusCode,
-      headers,
-      body
-    };
+    return generateErrorResponse(this.statusCode, this.message);
   }
 }
 
