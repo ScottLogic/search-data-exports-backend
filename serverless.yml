@@ -182,6 +182,9 @@ functions:
           path: subscriptions
           method: delete
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/DeleteSubscriptionInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

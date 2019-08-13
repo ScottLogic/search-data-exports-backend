@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "DeleteSubscriptionInputModel",
+  "type": "object",
+  "required": ["field", "value"],
+  "properties": {
+    "field": { "type": "string" },
+    "value": { "type": "string" }
+  }
+}
