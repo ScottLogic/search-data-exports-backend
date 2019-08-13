@@ -36,6 +36,7 @@ data "template_file" "access_policy" {
     elastic_search_arn  = "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${var.project}-${var.environment}-es-test-domain"
     account_id          = data.aws_caller_identity.current.account_id
     allowed_public_ip   = var.allowed_public_ip
+    caller_arn          = data.aws_caller_identity.current.arn
   }
 }
 
