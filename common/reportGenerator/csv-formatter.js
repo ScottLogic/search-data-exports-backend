@@ -11,13 +11,17 @@ const formatHeader = (searchResult) => {
 const formatRows = (searchResult) => {
   const { hits } = searchResult;
 
-  const replacer = (key, value) => (value === null ? '' : value);
+  const replacer = (_, value) => {
+    if (value === null) return '';
+    if (Array.isArray(value)) return value.join(' ');
+    return value;
+  };
 
   if (hits && hits.hits.length) {
     const header = Object.keys(hits.hits[0]._source);
-    return hits.hits
+    return `${hits.hits
       .map(row => header.map(fieldName => JSON.stringify(row._source[fieldName], replacer)).join(','))
-      .join('\r\n');
+      .join('\r\n')}\r\n`;
   }
 
   return '';
