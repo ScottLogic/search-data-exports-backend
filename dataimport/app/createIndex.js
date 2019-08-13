@@ -1,23 +1,70 @@
-const { Client } = require('@elastic/elasticsearch');
-const client = new Client({ node: process.env.ES_API_URL });
+const AWS = require('aws-sdk');
 
-const ES_INDEX = 'digests';
-const ES_TYPE = 'digest';
+const region = process.env.AWS_DEFAULT_REGION;
+const domain = process.env.ES_API_URL.substring(8);
+const endpoint = new AWS.Endpoint(domain);
+const index = 'digests';
+const type = 'digest';
 
 const createIndex = async () => {
-  const indexExists = await client.indices.exists({ index: 'digests' });
+  if (await indexExists()) return;
 
-  if (!indexExists.body) {
-    await client.indices.create({
-      index: ES_INDEX,
-      body: createBody()
-    });
-  }
+  const request = createRequest('PUT', createBody());
+  makeRequest(request).catch((error) => {
+    console.error(error);
+    throw new Error('Failed to create new index');
+  });
+};
+
+const indexExists = async () => {
+  const request = createRequest('HEAD');
+  const response = await makeRequest(request).catch((error) => {
+    console.error(error);
+    throw new Error('Failed to query index existence');
+  });
+
+  return response === 200;
+};
+
+const createRequest = (requestMethod, body = null) => {
+  const request = new AWS.HttpRequest(endpoint, region);
+  setParameters(request, requestMethod, body);
+  setHeaders(request);
+  signRequest(request);
+  return request;
+};
+
+const setParameters = (request, requestMethod, body = null) => {
+  request.method = requestMethod;
+  request.path += `${index}/`;
+  if (body) request.body = JSON.stringify(body);
+};
+
+const setHeaders = (request) => {
+  request.headers['host'] = domain;
+  request.headers['Content-Type'] = 'application/json';
+  request.headers['Content-Length'] = request.body.length;
+};
+
+const signRequest = (request) => {
+  const credentials = new AWS.EnvironmentCredentials('AWS');
+  const signer = new AWS.Signers.V4(request, 'es');
+  signer.addAuthorization(credentials, new Date());
+};
+
+const makeRequest = (request) => {
+  const client = new AWS.HttpClient();
+  return new Promise((resolve, reject) => {
+    client.handleRequest(request, null, (response) => {
+      response.on('data', () => {});
+      response.on('end', () => reject(response.statusCode));
+    }, (error) => reject(error));
+  });
 };
 
 const createBody = () => ({
   mappings: {
-    [ES_TYPE]: {
+    [type]: {
       properties: {
         search: {
           properties: {
@@ -32,7 +79,4 @@ const createBody = () => ({
   }
 });
 
-createIndex().catch((error) => {
-  console.error(error);
-  throw(error);
-});
+createIndex().catch(console.error);
