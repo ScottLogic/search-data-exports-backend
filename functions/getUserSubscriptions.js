@@ -1,15 +1,11 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from 'aws-sdk';
+import { headers } from '../common/httpUtils';
 
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
-const headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
-
-exports.handler = async (event) => {
+export async function handler(event) {
   const userId = event.requestContext.authorizer.claims.sub;
 
   const getItemParams = {
@@ -26,4 +22,4 @@ exports.handler = async (event) => {
     headers,
     body: JSON.stringify(subscriptions)
   };
-};
+}
