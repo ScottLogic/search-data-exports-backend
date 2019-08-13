@@ -78,6 +78,13 @@ functions:
           path: download-request
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/DownloadRequestInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME: "${self:service}-${self:custom.stage}-csv-download-request"
       CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN:
@@ -366,8 +373,6 @@ resources:
         Roles:
           authenticated:
             Fn::GetAtt: [CognitoAuthRole, Arn]
-
-    # IAM role used for authenticated users
     CognitoAuthRole:
       Type: AWS::IAM::Role
       Properties:
@@ -396,3 +401,21 @@ resources:
                     - 'cognito-sync:*'
                     - 'cognito-identity:*'
                   Resource: '*'
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Content-Type: "'application/json'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Content-Type: "'application/json'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

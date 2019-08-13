@@ -8,9 +8,7 @@ export function generateSuccessResponse(body) {
     statusCode: 200,
     headers
   };
-  if (body) {
-    response = { ...response, body: JSON.stringify(body) };
-  }
+  if (body) response = { ...response, body: JSON.stringify(body) };
   return response;
 }
 
