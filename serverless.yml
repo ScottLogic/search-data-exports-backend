@@ -152,6 +152,10 @@ functions:
           path: report-status
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
   reportGenerator:
     handler: functions/reportGenerator.handler
     description: Performs an ES search and generates a report in S3

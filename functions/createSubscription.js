@@ -53,6 +53,6 @@ export async function handler(event) {
   } catch (error) {
     console.error(error);
     if (error instanceof HttpError) return error.getHTTPResponse();
-    return generateInternalServerErrorResponse();
+    return generateInternalServerErrorResponse(error);
   }
 }
