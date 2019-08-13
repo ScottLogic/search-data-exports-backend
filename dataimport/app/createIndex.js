@@ -51,7 +51,7 @@ const makeRequest = (request) => {
   return new Promise((resolve, reject) => {
     client.handleRequest(request, null, (response) => {
       response.on('data', () => {});
-      response.on('end', () => reject(response.statusCode));
+      response.on('end', () => resolve(response.statusCode));
     }, (error) => reject(error));
   });
 };
