@@ -10,18 +10,12 @@ const createIndex = async () => {
   if (await indexExists()) return;
 
   const request = createRequest('PUT', createBody());
-  makeRequest(request).catch((error) => {
-    console.error(error);
-    throw new Error('Failed to create new index');
-  });
+  makeRequest(request);
 };
 
 const indexExists = async () => {
   const request = createRequest('HEAD');
-  const response = await makeRequest(request).catch((error) => {
-    console.error(error);
-    throw new Error('Failed to query index existence');
-  });
+  const response = await makeRequest(request);
 
   return response === 200;
 };
@@ -79,4 +73,7 @@ const createBody = () => ({
   }
 });
 
-createIndex().catch(console.error);
+createIndex().catch((error) => {
+  console.error(error);
+  process.exitCode(1);
+});
