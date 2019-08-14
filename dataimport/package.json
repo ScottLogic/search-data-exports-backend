@@ -11,5 +11,8 @@
     "createUsers": "java -jar ./helix/generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=./profile/profile_user.json --output-path=./data/users.csv",
     "helix": "npm run createUsers & npm run createPosts",
     "helixESImport": "npm run createUsers && npm run createPosts && npm run ESImport"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.507.0"
   }
 }
