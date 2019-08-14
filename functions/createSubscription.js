@@ -1,71 +1,58 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from 'aws-sdk';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
-const responseHeaders = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
-
-const generateErrorResponse = (message, errorMessage, content) => ({
-  statusCode: '400',
-  headers: responseHeaders,
-  body: JSON.stringify({
-    message,
-    errorMessage,
-    content
-  })
-});
-
-exports.handler = async (event) => {
-  let eventJson;
+export async function handler(event) {
   try {
-    eventJson = JSON.parse(event.body);
-  } catch (error) {
-    return generateErrorResponse('Invalid Input JSON', error, event.body);
-  }
+    validateRequestHeaders(event);
 
-  const userId = event.requestContext.authorizer.claims.sub;
+    const userId = event.requestContext.authorizer.claims.sub;
+    const { field, value } = JSON.parse(event.body);
+    const getItemParams = {
+      TableName: SUBSCRIPTIONS_TABLE,
+      Key: { userId }
+    };
 
-  const { field, value } = eventJson;
+    const getItemResponse = await dynamoDbDocumentClient.get(getItemParams).promise();
 
-  const getItemParams = {
-    TableName: SUBSCRIPTIONS_TABLE,
-    Key: { userId }
-  };
-
-  const getItemResponse = await dynamoDbDocumentClient.get(getItemParams).promise();
-
-  let newItem;
-  if (getItemResponse.Item) {
-    const existingItem = getItemResponse.Item;
-    for (const subscription of existingItem.subscriptions) {
-      if (subscription.field === field && subscription.value === value) {
-        return generateErrorResponse('Subscription Already Exists', '', event.body);
+    let newItem;
+    if (getItemResponse.Item) {
+      const existingItem = getItemResponse.Item;
+      for (const subscription of existingItem.subscriptions) {
+        if (subscription.field === field && subscription.value === value) {
+          throw new HttpError('400', 'Subscription already exists');
+        }
       }
+      newItem = {
+        userId,
+        subscriptions: [...existingItem.subscriptions, { field, value }]
+      };
+    } else {
+      newItem = {
+        userId,
+        subscriptions: [{ field, value }]
+      };
     }
-    newItem = {
-      userId,
-      subscriptions: [...existingItem.subscriptions, { field, value }]
+
+    const putItemParams = {
+      TableName: SUBSCRIPTIONS_TABLE,
+      Item: newItem
     };
-  } else {
-    newItem = {
-      userId,
-      subscriptions: [{ field, value }]
-    };
+
+    await dynamoDbDocumentClient.put(putItemParams).promise();
+
+    return generateSuccessResponse();
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
   }
-
-  const putItemParams = {
-    TableName: SUBSCRIPTIONS_TABLE,
-    Item: newItem
-  };
-
-  await dynamoDbDocumentClient.put(putItemParams).promise();
-
-  return {
-    statusCode: 200,
-    headers: responseHeaders
-  };
-};
+}

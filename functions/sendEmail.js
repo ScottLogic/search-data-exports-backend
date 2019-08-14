@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
+import { SES } from 'aws-sdk';
 
-const ses = new AWS.SES();
+const ses = new SES();
 const { EMAIL_SENDER_ADDRESS } = process.env;
 
 function sendEmail(email) {
@@ -26,9 +26,7 @@ function sendEmail(email) {
   return ses.sendEmail(params).promise();
 }
 
-exports.handler = async (event) => {
-  console.log(`EVENT\n${JSON.stringify(event, null, 2)}`);
+export async function handler(event) {
   const result = await sendEmail(event.email);
-  console.log('Sent email successfully', result);
   return result;
-};
+}

@@ -16,6 +16,8 @@
     "comma-dangle": "off",
     "no-underscore-dangle": "off",
     "no-restricted-syntax": "off",
-    "import/no-extraneous-dependencies": ["error", {"ignore": ["aws-sdk"]}]
+    "import/no-extraneous-dependencies": ["error", { "ignore": ["aws-sdk"] }],
+    "import/prefer-default-export": "off",
+    "no-console": "off"
   }
 }

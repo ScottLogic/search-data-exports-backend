@@ -1,29 +1,31 @@
-const AWS = require('aws-sdk');
+import { DynamoDB } from 'aws-sdk';
+import {
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient();
+const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
 const { SUBSCRIPTIONS_TABLE } = process.env;
 
-const headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
+export async function handler(event) {
+  try {
+    const userId = event.requestContext.authorizer.claims.sub;
 
-exports.handler = async (event) => {
-  const userId = event.requestContext.authorizer.claims.sub;
+    const getItemParams = {
+      TableName: SUBSCRIPTIONS_TABLE,
+      Key: { userId }
+    };
 
-  const getItemParams = {
-    TableName: SUBSCRIPTIONS_TABLE,
-    Key: { userId }
-  };
+    const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
 
-  const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
+    const subscriptions = Item ? Item.subscriptions : [];
 
-  const subscriptions = Item ? Item.subscriptions : [];
-
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify(subscriptions)
-  };
-};
+    return generateSuccessResponse(subscriptions);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
+  }
+}

@@ -28,6 +28,8 @@ provider:
   stackTags:
     Project: ${self:service}
     Environment: ${self:custom.stage}
+  logs:
+    restApi: true
 
 # you can overwrite defaults here
   stage: dev
@@ -78,6 +80,13 @@ functions:
           path: download-request
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/DownloadRequestInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME: "${self:service}-${self:custom.stage}-csv-download-request"
       CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN:
@@ -105,6 +114,13 @@ functions:
           path: search
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/SearchInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   graphicalReport:
@@ -114,6 +130,10 @@ functions:
           path: report/graphical
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
@@ -125,6 +145,10 @@ functions:
           path: report/hybrid
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
@@ -141,6 +165,13 @@ functions:
           path: report-status
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/ReportStatusInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
   reportGenerator:
     handler: functions/reportGenerator.handler
     description: Performs an ES search and generates a report in S3
@@ -155,6 +186,13 @@ functions:
           path: posts
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/CreatePostInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   createSubscription:
@@ -165,6 +203,9 @@ functions:
           path: subscriptions/daily
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/CreateSubscriptionInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -179,6 +220,9 @@ functions:
           path: subscriptions/daily
           method: delete
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/DeleteSubscriptionInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -365,8 +409,6 @@ resources:
         Roles:
           authenticated:
             Fn::GetAtt: [CognitoAuthRole, Arn]
-
-    # IAM role used for authenticated users
     CognitoAuthRole:
       Type: AWS::IAM::Role
       Properties:
@@ -395,3 +437,21 @@ resources:
                     - 'cognito-sync:*'
                     - 'cognito-identity:*'
                   Resource: '*'
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Content-Type: "'application/json'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Content-Type: "'application/json'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "SearchInputModel",
+  "type": "object",
+  "required": ["type", "results", "page", "search"],
+  "properties": {
+    "type": { "type": "string" },
+    "results": { "type": "number" },
+    "page": { "type": "number" },
+    "search": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "value"],
+        "properties": { "field": { "type": "string" }, "value": { "type": "string" } }
+      }
+    }
+  }
+}

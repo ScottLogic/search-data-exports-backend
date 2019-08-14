@@ -1,53 +1,34 @@
-const AWS = require('aws-sdk');
-const ConnectionClass = require('http-aws-es');
-const ESSearch = require('../common/search/search.js');
-const formatResults = require('../common/search/format.js');
+import { Config, EnvironmentCredentials } from 'aws-sdk';
+import ConnectionClass from 'http-aws-es';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
+import ESSearch from '../common/search/search';
+import formatResults from '../common/search/format';
 
-const callbackHeaders = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
-
-exports.handler = (event, _, callback) => {
-  let eventJson;
+export async function handler(event) {
   try {
-    eventJson = JSON.parse(event.body);
+    validateRequestHeaders(event);
+
+    const eventJson = JSON.parse(event.body);
+    const ESConnectOptions = {
+      host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
+      connectionClass: ConnectionClass,
+      awsConfig: new Config({
+        credentials: new EnvironmentCredentials('AWS')
+      })
+    };
+    const search = new ESSearch(ESConnectOptions);
+
+    const result = await search.search(eventJson);
+
+    return generateSuccessResponse(formatResults(result));
   } catch (error) {
-    callback(null, {
-      statusCode: '400',
-      body: JSON.stringify({
-        message: 'Invalid Input JSON',
-        errorMessage: error,
-        content: event.body
-      }),
-      headers: callbackHeaders
-    });
-    return;
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
   }
-
-  const ESConnectOptions = {
-    host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
-    connectionClass: ConnectionClass,
-    awsConfig: new AWS.Config({
-      credentials: new AWS.EnvironmentCredentials('AWS')
-    })
-  };
-  const search = new ESSearch(ESConnectOptions);
-
-  search
-    .search(eventJson)
-    .then((result) => {
-      callback(null, {
-        statusCode: '200',
-        body: JSON.stringify(formatResults(result)),
-        headers: callbackHeaders
-      });
-    })
-    .catch((error) => {
-      callback(null, {
-        statusCode: '500',
-        body: JSON.stringify({ message: 'Search Error', errorMessage: error }),
-        headers: callbackHeaders
-      });
-    });
-};
+}
