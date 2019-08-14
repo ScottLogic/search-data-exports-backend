@@ -1,11 +1,12 @@
-const AWS = require('aws-sdk');
+import { StepFunctions } from 'aws-sdk';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
-const stepFunctions = new AWS.StepFunctions();
-
-const headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
+const stepFunctions = new StepFunctions();
 
 const stepFunctionArn = process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_ARN;
 const workerName = process.env.CSV_DOWNLOAD_REQUEST_STEP_FUNCTION_NAME;
@@ -28,30 +29,26 @@ const getTaskToken = async (type) => {
   return taskToken;
 };
 
-exports.handler = async (event) => {
-  console.log(`event.body=${event.body}`);
+export async function handler(event) {
+  try {
+    validateRequestHeaders(event);
 
-  const { type } = JSON.parse(event.body);
+    const { type } = JSON.parse(event.body);
 
-  const startExecutionParams = {
-    stateMachineArn: stepFunctionArn,
-    input: event.body
-  };
+    const startExecutionParams = {
+      stateMachineArn: stepFunctionArn,
+      input: event.body
+    };
 
-  const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
-  const taskToken = await getTaskToken(type);
+    const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
+    const taskToken = await getTaskToken(type);
 
-  const { executionArn } = await startExecutionPromise;
+    const { executionArn } = await startExecutionPromise;
 
-  console.log(`executionArn=${executionArn}`);
-  console.log(`taskToken=${taskToken}`);
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      executionArn,
-      taskToken
-    }),
-    headers
-  };
-};
+    return generateSuccessResponse({ executionArn, taskToken });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
+  }
+}

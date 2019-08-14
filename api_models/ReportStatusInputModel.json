@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "ReportStatusInputModel",
+  "type": "object",
+  "required": ["executionArn"],
+  "properties": {
+    "executionArn": { "type": "string" }
+  }
+}

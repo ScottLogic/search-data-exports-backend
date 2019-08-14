@@ -1,4 +1,4 @@
-const { Client } = require('elasticsearch');
+import { Client } from 'elasticsearch';
 
 class ESCreate {
   constructor(ESConnectOptions = {}) {
@@ -36,4 +36,4 @@ class ESCreate {
   }
 }
 
-module.exports = ESCreate;
+export default ESCreate;

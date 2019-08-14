@@ -1,52 +1,36 @@
-const AWS = require('aws-sdk');
-const ConnectionClass = require('http-aws-es');
-const ESCreate = require('../common/ESCreate');
+import { Config, EnvironmentCredentials } from 'aws-sdk';
+import ConnectionClass from 'http-aws-es';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
+import ESCreate from '../common/ESCreate';
 
-const callbackHeaders = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
-
-exports.handler = (event, _, callback) => {
-  let eventJson;
+export async function handler(event) {
   try {
-    eventJson = JSON.parse(event.body);
+    validateRequestHeaders(event);
+
+    const UserID = event.requestContext.authorizer.claims.sub;
+
+    const post = { ...JSON.parse(event.body), UserID };
+
+    const ESConnectOptions = {
+      host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
+      connectionClass: ConnectionClass,
+      awsConfig: new Config({
+        credentials: new EnvironmentCredentials('AWS')
+      })
+    };
+    const create = new ESCreate(ESConnectOptions);
+
+    await create.create('posts', 'post', post);
+
+    return generateSuccessResponse();
   } catch (error) {
-    callback(null, {
-      statusCode: '400',
-      body: JSON.stringify({
-        message: 'Invalid Input JSON',
-        errorMessage: error,
-        content: event.body
-      }),
-      headers: callbackHeaders
-    });
-    return;
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(error);
   }
-
-  const ESConnectOptions = {
-    host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
-    connectionClass: ConnectionClass,
-    awsConfig: new AWS.Config({
-      credentials: new AWS.EnvironmentCredentials('AWS')
-    })
-  };
-  const create = new ESCreate(ESConnectOptions);
-
-  create
-    .create('posts', 'post', eventJson)
-    .then((result) => {
-      callback(null, {
-        statusCode: '200',
-        body: JSON.stringify({ status: result.result }),
-        headers: callbackHeaders
-      });
-    })
-    .catch((error) => {
-      callback(null, {
-        statusCode: '500',
-        body: JSON.stringify({ message: 'New Post Error', errorMessage: error }),
-        headers: callbackHeaders
-      });
-    });
-};
+}

@@ -1,44 +1,29 @@
-const AWS = require('aws-sdk');
+import { StepFunctions } from 'aws-sdk';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
 
-const stepFunctions = new AWS.StepFunctions();
+const stepFunctions = new StepFunctions();
 
-const callbackHeaders = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
+export async function handler(event) {
+  try {
+    validateRequestHeaders(event);
 
-exports.handler = async (event, context, callback) => {
-  console.log('event.body=', event.body);
+    const executionArn = JSON.parse(event.body);
 
-  const executionArn = JSON.parse(event.body);
-
-  await stepFunctions.describeExecution(executionArn).promise().then((data) => {
-    console.log('Step function describe response:', data);
-
+    const stepFunctionsResult = await stepFunctions.describeExecution(executionArn).promise();
     let reportURL = '';
     // output from step function is a JSON string rather than object
-    if (data.output) ({ reportURL } = JSON.parse(data.output));
-
-    const result = {
-      status: data.status,
-      reportURL
-    };
-
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(result),
-      headers: callbackHeaders
-    });
-  }).catch((err) => {
-    console.error(err, err.stack);
-
-    callback(null, {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: 'Error occured in step function execution',
-        errorMessage: err
-      }),
-      headers: callbackHeaders
-    });
-  });
-};
+    if (stepFunctionsResult.output) ({ reportURL } = JSON.parse(stepFunctionsResult.output));
+    return generateSuccessResponse({ status: stepFunctionsResult.status, reportURL });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(
+      `Error occured in step function execution: ${error}`
+    );
+  }
+}

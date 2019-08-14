@@ -1,55 +1,35 @@
-const AWS = require('aws-sdk');
-const connectionClass = require('http-aws-es');
-const GraphGenerator = require('../common/graphicalReport/graphGenerator');
+import { Config, EnvironmentCredentials } from 'aws-sdk';
+import connectionClass from 'http-aws-es';
+import {
+  validateRequestHeaders,
+  HttpError,
+  generateSuccessResponse,
+  generateInternalServerErrorResponse
+} from '../common/httpUtils';
+import GraphGenerator from '../common/graphicalReport/graphGenerator';
 
-const callbackHeaders = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
-};
-
-exports.handler = async (event, _, callback) => {
-  let eventJson;
+export async function handler(event) {
   try {
-    eventJson = JSON.parse(event.body);
+    validateRequestHeaders(event);
+    const eventJson = JSON.parse(event.body);
+
+    const ESConnectOptions = {
+      host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
+      connectionClass,
+      awsConfig: new Config({
+        credentials: new EnvironmentCredentials('AWS')
+      })
+    };
+    const bucketName = process.env.S3_BUCKET_NAME;
+
+    const graphGenerator = new GraphGenerator(ESConnectOptions, bucketName);
+
+    const result = await graphGenerator.generateGraph(eventJson);
+
+    return generateSuccessResponse(result);
   } catch (error) {
-    callback(null, {
-      statusCode: '400',
-      body: JSON.stringify({
-        message: 'Invalid Input JSON',
-        errorMessage: error,
-        content: event.body
-      }),
-      headers: callbackHeaders
-    });
-    return;
+    console.error(error);
+    if (error instanceof HttpError) return error.getHTTPResponse();
+    return generateInternalServerErrorResponse(`Error in generation: ${error}`);
   }
-
-  const ESConnectOptions = {
-    host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
-    connectionClass,
-    awsConfig: new AWS.Config({
-      credentials: new AWS.EnvironmentCredentials('AWS')
-    })
-  };
-  const bucketName = process.env.S3_BUCKET_NAME;
-
-  const graphGenerator = new GraphGenerator(ESConnectOptions, bucketName);
-
-  const result = await graphGenerator.generateGraph(eventJson).catch((error) => {
-    callback(null, {
-      statusCode: '400',
-      body: JSON.stringify({
-        message: 'Error In Generation',
-        errorMessage: error.message,
-        content: event.body
-      }),
-      headers: callbackHeaders
-    });
-  });
-
-  callback(null, {
-    statusCode: '200',
-    body: JSON.stringify({ result }),
-    headers: callbackHeaders
-  });
-};
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "CreatePostInputModel",
+  "type": "object",
+  "required": ["Post", "Tags"],
+  "properties": {
+    "Post": { "type": "string" },
+    "Tags": { "type": "array", "items": { "type": "string" } }
+  }
+}
