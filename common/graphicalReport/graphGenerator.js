@@ -55,7 +55,7 @@ class graphGenerator {
   async generateGraph(paramJSON = {}) {
     const reportData = await this.getReportData(paramJSON);
     const reportSVG = await this.buildGraph(reportData);
-    return this.saveToBucket(reportSVG);
+    return this.saveToBucket(reportSVG, paramJSON.download);
   }
 
   // Gets the date from ES
@@ -68,9 +68,9 @@ class graphGenerator {
   }
 
   // Saves said graph to the S3 Bucket
-  async saveToBucket(svgString) {
+  async saveToBucket(svgString, downloadMode) {
     this._store.append(svgString);
-    return this._store.close();
+    return this._store.close(downloadMode);
   }
 }
 
