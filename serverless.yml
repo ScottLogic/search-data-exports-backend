@@ -162,7 +162,7 @@ functions:
     description: Adds a daily digest subscription for an SDE user
     events:
       - http:
-          path: subscriptions
+          path: subscriptions/daily
           method: post
           cors: true
           authorizer:
@@ -176,7 +176,7 @@ functions:
     description: Deletes a specified daily digest subscription for an SDE user
     events:
       - http:
-          path: subscriptions
+          path: subscriptions/daily
           method: delete
           cors: true
           authorizer:
@@ -190,7 +190,7 @@ functions:
     description: Gets the daily digest subscriptions for an SDE user
     events:
       - http:
-          path: subscriptions
+          path: subscriptions/daily
           method: get
           cors: true
           authorizer:
@@ -199,6 +199,18 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+  createRealTimeSubscription:
+    handler: functions/createRealTimeSubscription.handler
+    description: Adds a real-time digest subscription for an SDE user
+    events:
+      - http:
+          path: subscriptions/real-time
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
 stepFunctions:
   stateMachines:
