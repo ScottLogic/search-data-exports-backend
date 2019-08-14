@@ -243,6 +243,21 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+  deleteRealTimeSubscription:
+    handler: functions/deleteRealTimeSubscription.handler
+    description: Deletes a specified real-time digest subscription for an SDE user
+    events:
+      - http:
+          path: subscriptions/real-time
+          method: delete
+          cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/DeleteRealTimeSubscriptionInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
 stepFunctions:
   stateMachines:
