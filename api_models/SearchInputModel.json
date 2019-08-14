@@ -7,7 +7,7 @@
     "type": { "type": "string" },
     "results": { "type": "number" },
     "page": { "type": "number" },
-    "searchCriteria": {
+    "search": {
       "type": "array",
       "items": {
         "type": "object",
