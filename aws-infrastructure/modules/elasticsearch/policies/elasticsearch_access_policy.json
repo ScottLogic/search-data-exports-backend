@@ -17,6 +17,14 @@
         }
       },
       "Resource": "${elastic_search_arn}/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "${caller_arn}"
+      },
+      "Action": "es:*",
+      "Resource": "${elastic_search_arn}/*"
     }
   ]
 }

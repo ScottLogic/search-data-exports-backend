@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@0.1.13
 jobs:
   terraform-validate:
     docker:
@@ -66,6 +68,23 @@ jobs:
               -H 'Content-Type: application/json' \
               --data @env/update_websocket_url.json \
               https://circleci.com/api/v1.1/project/github/ScottLogic/search-data-exports-frontend/envvar
+  create-es-index:
+    docker:
+      - image: circleci/node:10.15.1
+    working_directory: '~/repo/dataimport'
+    steps:
+      - checkout:
+          path: ~/repo
+      - aws-cli/install
+      - aws-cli/configure
+      - run:
+          name: Installations
+          command: npm ci
+      - run:
+          name: Create Index
+          command: |
+            ES_ENDPOINT=$(aws ssm get-parameter --name sde-dev-elasticsearch-endpoint | jq -r '.Parameter.Value')
+            ES_API_URL=${ES_ENDPOINT} node app/createIndex.js
 
 workflows:
   version: 2
@@ -82,6 +101,12 @@ workflows:
       - serverless-deploy:
           requires:
             - serverless-build
+            - terraform-apply
+          filters:
+            branches:
+              only: master
+      - create-es-index:
+          requires:
             - terraform-apply
           filters:
             branches:
