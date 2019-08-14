@@ -39,13 +39,8 @@ export async function handler(event) {
       index,
       type,
       body: searchBody
-    }).then((response) => {
-      const results = [];
-      for (const hit of response.body.hits.hits) {
-        results.push(hit._source.search.searchTerm);
-      }
-      return results;
-    });
+    })
+    .then(response => response.body.hits.hits.map(hit => hit._source.search.searchTerm));
 
     return generateSuccessResponse(searchTerms);
   } catch (error) {
