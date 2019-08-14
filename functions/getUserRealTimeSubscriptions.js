@@ -11,7 +11,7 @@ import {
 const index = 'digests';
 const type = 'digest';
 
-const createSearchBody = (userID) => ({
+const createSearchBody = userID => ({
   query: {
     match: { 'search.userID': userID }
   }
@@ -40,8 +40,8 @@ export async function handler(event) {
       type,
       body: searchBody
     }).then((response) => {
-      let results = [];
-      for (let hit of response.body.hits.hits) {
+      const results = [];
+      for (const hit of response.body.hits.hits) {
         results.push(hit._source.search.searchTerm);
       }
       return results;
