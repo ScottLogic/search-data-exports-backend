@@ -12,12 +12,24 @@ const index = 'digests';
 const type = 'digest';
 const fields = ['Content', 'Tags'];
 
-const createBody = (userID, searchQuery) => ({
+const createSearchBody = (userID, searchTerm) => ({
+  query: {
+    bool: {
+      filter: [
+        { match: { 'search.userID': userID } },
+        { match: { 'search.searchTerm': searchTerm } }
+      ]
+    }
+  }
+});
+
+const createIndexBody = (userID, searchTerm) => ({
   search: {
     userID,
+    searchTerm,
     query: {
       multi_match: {
-        query: searchQuery,
+        query: searchTerm,
         fields
       }
     }
@@ -27,8 +39,6 @@ const createBody = (userID, searchQuery) => ({
 export async function handler(event) {
   try {
     validateRequestHeaders(event);
-
-    const userID = event.requestContext.authorizer.claims.sub;
 
     const esConnectOptions = {
       host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
@@ -40,12 +50,25 @@ export async function handler(event) {
 
     const client = new Client(esConnectOptions);
 
-    const body = createBody(userID, JSON.parse(event.body));
+    const userID = event.requestContext.authorizer.claims.sub;
+    const { value } = JSON.parse(event.body);
+
+    const searchBody = createSearchBody(userID, value);
+
+    const digestExists = await client.search({
+      index,
+      type,
+      body: searchBody
+    }).then((response) => response.body.hits.hits > 0);
+
+    if (digestExists) throw new HttpError('400', 'Subscription already exists');
+
+    const indexBody = createIndexBody(userID, value);
 
     await client.index({
       index,
       type,
-      body
+      body: indexBody
     });
 
     return generateSuccessResponse();
