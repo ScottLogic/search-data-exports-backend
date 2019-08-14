@@ -28,6 +28,8 @@ provider:
   stackTags:
     Project: ${self:service}
     Environment: ${self:custom.stage}
+  logs:
+    restApi: true
 
 # you can overwrite defaults here
   stage: dev
@@ -112,6 +114,9 @@ functions:
           path: search
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/SearchInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -125,6 +130,10 @@ functions:
           path: report/graphical
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
@@ -136,6 +145,10 @@ functions:
           path: report/hybrid
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
@@ -152,6 +165,9 @@ functions:
           path: report-status
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/ReportStatusInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
