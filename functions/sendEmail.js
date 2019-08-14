@@ -27,8 +27,6 @@ function sendEmail(email) {
 }
 
 export async function handler(event) {
-  console.log(`EVENT\n${JSON.stringify(event, null, 2)}`);
   const result = await sendEmail(event.email);
-  console.log('Sent email successfully', result);
   return result;
 }

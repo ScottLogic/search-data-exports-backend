@@ -12,12 +12,9 @@ export async function handler(event) {
   try {
     validateRequestHeaders(event);
 
-    console.log('event.body=', event.body);
-
     const executionArn = JSON.parse(event.body);
 
     const stepFunctionsResult = await stepFunctions.describeExecution(executionArn).promise();
-    console.log('Step function describe response:', stepFunctionsResult);
     let reportURL = '';
     // output from step function is a JSON string rather than object
     if (stepFunctionsResult.output) ({ reportURL } = JSON.parse(stepFunctionsResult.output));

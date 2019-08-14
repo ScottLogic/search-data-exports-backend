@@ -33,8 +33,6 @@ export async function handler(event) {
   try {
     validateRequestHeaders(event);
 
-    console.log(`event.body=${event.body}`);
-
     const { type } = JSON.parse(event.body);
 
     const startExecutionParams = {
@@ -46,9 +44,6 @@ export async function handler(event) {
     const taskToken = await getTaskToken(type);
 
     const { executionArn } = await startExecutionPromise;
-
-    console.log(`executionArn=${executionArn}`);
-    console.log(`taskToken=${taskToken}`);
 
     return generateSuccessResponse({ executionArn, taskToken });
   } catch (error) {
