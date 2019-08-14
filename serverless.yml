@@ -260,6 +260,14 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  getUserRealTimeSubscriptions:
+    handler: functions/getUserRealTimeSubscriptions.handler
+    description: Gets the real-time digest subscriptions for an SDE user
+    events:
+      - http:
+          path: subscriptions/real-time
+          method: get
+          cors: true
 
 stepFunctions:
   stateMachines:
