@@ -11,7 +11,7 @@ class S3Output {
     this._reportBuffer = this._reportBuffer.concat(str);
   }
 
-  async writeBufferToS3(downloadMode) {
+  async writeBufferToS3(downloadMode = true) {
     const s3 = new AWS.S3();
     const filename = `${uuidv4()}.svg`;
 
