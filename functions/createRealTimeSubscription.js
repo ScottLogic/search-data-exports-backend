@@ -55,11 +55,11 @@ export async function handler(event) {
 
     const searchBody = createSearchBody(userID, value);
 
-    const digestExists = await client.search({
+    const digestExists = await client.count({
       index,
       type,
       body: searchBody
-    }).then(response => response.body.hits.hits > 0);
+    }).then(response => response.body.count > 0);
 
     if (digestExists) throw new HttpError('400', 'Subscription already exists');
 
