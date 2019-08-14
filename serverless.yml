@@ -258,6 +258,8 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
 
 stepFunctions:
   stateMachines:
