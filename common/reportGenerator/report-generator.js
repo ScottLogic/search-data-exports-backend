@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const connectionClass = require('http-aws-es');
 const { Client } = require('elasticsearch');
-const buildQueryJson = require('./query.js');
+const buildQueryJson = require('../query.js');
 const Formatter = require('./csv-formatter');
 
 // this should be much higher number (10000), but set low to demonstrate scroll / multi-part upload
