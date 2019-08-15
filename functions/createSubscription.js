@@ -15,7 +15,7 @@ export async function handler(event) {
     validateRequestHeaders(event);
 
     const userId = event.requestContext.authorizer.claims.sub;
-    const { field, value } = JSON.parse(event.body);
+    const { value } = JSON.parse(event.body);
     const getItemParams = {
       TableName: SUBSCRIPTIONS_TABLE,
       Key: { userId }
@@ -26,20 +26,10 @@ export async function handler(event) {
     let newItem;
     if (getItemResponse.Item) {
       const existingItem = getItemResponse.Item;
-      for (const subscription of existingItem.subscriptions) {
-        if (subscription.field === field && subscription.value === value) {
-          throw new HttpError('400', 'Subscription already exists');
-        }
-      }
-      newItem = {
-        userId,
-        subscriptions: [...existingItem.subscriptions, { field, value }]
-      };
+      if (existingItem.subscriptions.includes(value)) throw new HttpError('400', 'Subscription already exists');
+      newItem = { userId, subscriptions: [...existingItem.subscriptions, value] };
     } else {
-      newItem = {
-        userId,
-        subscriptions: [{ field, value }]
-      };
+      newItem = { userId, subscriptions: [value] };
     }
 
     const putItemParams = {

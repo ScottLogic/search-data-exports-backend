@@ -1,14 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "SearchInputModel",
+  "title": "GraphicalReportInputModel",
   "type": "object",
-  "required": ["type", "results", "page", "search"],
+  "required": ["download", "search"],
   "properties": {
-    "type": { "type": "string" },
-    "results": { "type": "number" },
-    "page": { "type": "number" },
+    "download": { "type": "boolean" },
     "search": {
       "type": "array",
+      "minItems": 0,
       "items": {
         "type": "object",
         "required": ["value"],
