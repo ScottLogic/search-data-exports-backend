@@ -260,6 +260,23 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  deleteRealTimeSubscription:
+    handler: functions/deleteRealTimeSubscription.handler
+    description: Deletes a specified real-time digest subscription for an SDE user
+    events:
+      - http:
+          path: subscriptions/real-time
+          method: delete
+          cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/DeleteRealTimeSubscriptionInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
   getUserRealTimeSubscriptions:
     handler: functions/getUserRealTimeSubscriptions.handler
     description: Gets the real-time digest subscriptions for an SDE user
@@ -268,6 +285,12 @@ functions:
           path: subscriptions/real-time
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
 
 stepFunctions:
   stateMachines:
