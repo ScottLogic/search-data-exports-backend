@@ -48,7 +48,7 @@ export async function handler(event) {
     })
       .then(response => response.body.deleted);
 
-    if (!totalDeleted) throw new HttpError(400, 'Could not find the specified subscription for user');
+    if (!totalDeleted) throw new HttpError(404, 'Could not find the specified subscription for user');
 
     return generateSuccessResponse();
   } catch (error) {
