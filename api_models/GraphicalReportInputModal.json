@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "GraphicalReportInputModel",
+    "type": "object",
+    "required": ["download", "search"],
+    "properties": {
+      "download": { "type": "boolean" },      
+      "search": {
+        "type": "array",
+        "minItems" : 0,
+        "items": {
+          "type": "object",
+          "required": ["field", "value"],
+          "properties": { "field": { "type": "string" }, "value": { "type": "string" } }
+        }
+      }
+    }
+  }
+  

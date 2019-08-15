@@ -58,7 +58,7 @@ class graphGenerator {
     return this.saveToBucket(reportSVG, paramJSON.download);
   }
 
-  // Gets the date from ES
+  // Gets the search results data from ES
   async getReportData(paramJSON) {
     return this._search.search(buildRequestJSON(paramJSON));
   }
