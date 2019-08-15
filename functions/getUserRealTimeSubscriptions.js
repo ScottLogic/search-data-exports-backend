@@ -40,7 +40,7 @@ export async function handler(event) {
       type,
       body: searchBody
     })
-      .then(response => response.body.hits.hits.map(hit => hit._source.search.searchTerm));
+      .then(response => response.hits.hits.map(hit => hit._source.search.searchTerm));
 
     return generateSuccessResponse(searchTerms);
   } catch (error) {

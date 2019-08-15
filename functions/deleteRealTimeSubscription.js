@@ -46,7 +46,7 @@ export async function handler(event) {
       type,
       body: deleteBody
     })
-      .then(response => response.body.deleted);
+      .then(response => response.deleted);
 
     if (!totalDeleted) throw new HttpError(404, 'Could not find the specified subscription for user');
 
