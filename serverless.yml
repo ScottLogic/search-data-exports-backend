@@ -132,7 +132,7 @@ functions:
           cors: true
           request:
             schema:
-              application/json: ${file(api_models/GraphicalReportInputModal.json)}
+              application/json: ${file(api_models/GraphicalReportInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
