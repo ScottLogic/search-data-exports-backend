@@ -34,6 +34,7 @@ class SVGBuilder {
       .attr('width', this._width + this._margin.left + this._margin.right)
       .attr('height', this._height + this._margin.top + this._margin.bottom)
       .attr('viewbox', `0 0 ${this._width + this._margin.left + this._margin.right} ${this._height + this._margin.top + this._margin.bottom}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
       .append('g')
       .attr('transform', `translate(${this._margin.left}, ${this._margin.top})`);
