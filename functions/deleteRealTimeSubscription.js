@@ -41,11 +41,14 @@ export async function handler(event) {
 
     const deleteBody = createDeleteBody(userID, value);
 
-    await client.deleteByQuery({
+    const totalDeleted = await client.deleteByQuery({
       index,
       type,
       body: deleteBody
-    });
+    })
+      .then(response => response.body.deleted);
+
+    if (!totalDeleted) throw new HttpError(400, 'Could not find the specified subscription for user');
 
     return generateSuccessResponse();
   } catch (error) {
