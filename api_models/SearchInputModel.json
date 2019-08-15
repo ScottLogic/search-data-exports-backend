@@ -11,8 +11,8 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["field", "value"],
-        "properties": { "field": { "type": "string" }, "value": { "type": "string" } }
+        "required": ["value"],
+        "properties": { "value": { "type": "string" } }
       }
     }
   }

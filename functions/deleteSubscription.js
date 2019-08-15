@@ -15,7 +15,7 @@ export async function handler(event) {
     validateRequestHeaders(event);
 
     const userId = event.requestContext.authorizer.claims.sub;
-    const subscription = JSON.parse(event.body);
+    const { value } = JSON.parse(event.body);
 
     const getItemParams = {
       TableName: SUBSCRIPTIONS_TABLE,
@@ -24,14 +24,11 @@ export async function handler(event) {
 
     const { Item } = await dynamoDbDocumentClient.get(getItemParams).promise();
 
-    if (!Item) throw new HttpError(400, 'Could not find existing subscriptions for user');
+    if (!Item) throw new HttpError(404, 'Could not find existing subscriptions for user');
 
-    const subscriptionIndex = Item.subscriptions.findIndex(
-      existingSubscription => existingSubscription.field === subscription.field
-        && existingSubscription.value === subscription.value
-    );
+    const subscriptionIndex = Item.subscriptions.findIndex(value);
 
-    if (subscriptionIndex === -1) throw new HttpError(400, 'Could not find specified subscription for user');
+    if (subscriptionIndex === -1) throw new HttpError(404, 'Could not find specified subscription for user');
 
     Item.subscriptions.splice(subscriptionIndex, 1);
 
