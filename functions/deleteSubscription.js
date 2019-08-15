@@ -26,7 +26,7 @@ export async function handler(event) {
 
     if (!Item) throw new HttpError(404, 'Could not find existing subscriptions for user');
 
-    const subscriptionIndex = Item.subscriptions.findIndex(value);
+    const subscriptionIndex = Item.subscriptions.indexOf(value);
 
     if (subscriptionIndex === -1) throw new HttpError(404, 'Could not find specified subscription for user');
 
