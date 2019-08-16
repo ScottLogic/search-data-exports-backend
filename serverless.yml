@@ -417,7 +417,7 @@ stepFunctions:
             Resource:
               Fn::GetAtt: [createPost, Arn]
             Next: "Find matching real-time digests"
-          "Find matching real-time digests"
+          "Find matching real-time digests":
             Type: Task
             Resource:
               Fn::GetAtt: [matchRealTimeDigests, Arn]
@@ -425,8 +425,8 @@ stepFunctions:
           "Iterator":
             Type: Task
             Resource:
-              Fn::GetAtt: [iterator, Arn],
-            ResultPath: "$.iterator",
+              Fn::GetAtt: [iterator, Arn]
+            ResultPath: "$.iterator"
             Next: "Check all emails sent"
           "Check all emails sent":
             Type: Choice
