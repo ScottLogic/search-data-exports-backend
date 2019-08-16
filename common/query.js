@@ -11,51 +11,23 @@ const buildFilters = (type, dateRange = []) => {
   return filterList;
 };
 
-const makeTermQuery = (field, value) => ({
-  match: { [`${field}`]: value }
-});
+const getFieldList = () => [...SEARCH_FIELDS_POST, ...SEARCH_FIELDS_USER];
 
-const getFieldList = (type) => {
-  switch (type) {
-    case 'post':
-      return SEARCH_FIELDS_POST;
-    case 'user':
-      return SEARCH_FIELDS_USER;
-    default:
-      return [...SEARCH_FIELDS_POST, ...SEARCH_FIELDS_USER];
-  }
-};
-
-const makeMultiFieldQuery = (type, queryData) => ({
+const makeMultiFieldQuery = queryData => ({
   multi_match: {
     query: queryData,
-    fields: getFieldList(type)
+    fields: getFieldList()
   }
 });
 
-const buildQuery = (type, searchFilters) => {
-  const queryList = [];
-  for (const filter of searchFilters) {
-    switch (filter.field) {
-      case 'all':
-        queryList.push(makeMultiFieldQuery(type, filter.value));
-        break;
-      default:
-        queryList.push(makeTermQuery(filter.field, filter.value));
-    }
-  }
-  return queryList;
-};
+const buildQuery = searchFilters => searchFilters.map(filter => makeMultiFieldQuery(filter.value));
 
 const buildQueryJson = (rawRequest = {}, method, resultsSize = 10) => {
   /* The only filters we care about are type, and dateRange.
        Everything else is actual scored filters. */
   const dateRange = rawRequest.search.find(x => x.dateRange);
   const filtersList = buildFilters(method || rawRequest.type, dateRange ? dateRange.dateRange : []);
-  const queryList = buildQuery(
-    method || rawRequest.type,
-    rawRequest.search.filter(x => !x.dateRange)
-  );
+  const queryList = buildQuery(rawRequest.search.filter(x => !x.dateRange));
 
   return {
     query: {

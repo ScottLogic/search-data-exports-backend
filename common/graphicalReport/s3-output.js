@@ -11,7 +11,7 @@ class S3Output {
     this._reportBuffer = this._reportBuffer.concat(str);
   }
 
-  async writeBufferToS3() {
+  async writeBufferToS3(downloadMode = true) {
     const s3 = new AWS.S3();
     const filename = `${uuidv4()}.svg`;
 
@@ -20,7 +20,7 @@ class S3Output {
         Bucket: this._bucketName,
         Key: filename,
         ContentType: 'image/svg+xml',
-        ContentDisposition: 'download; fileName="Chart.svg"',
+        ContentDisposition: `${downloadMode && 'download;'} fileName="Chart.svg"`,
         Body: Buffer.from(this._reportBuffer, 'ascii'),
         ACL: 'public-read'
       })
@@ -29,8 +29,8 @@ class S3Output {
     return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
   }
 
-  async close() {
-    const reportURI = await this.writeBufferToS3();
+  async close(downloadMode) {
+    const reportURI = await this.writeBufferToS3(downloadMode);
     return reportURI;
   }
 }

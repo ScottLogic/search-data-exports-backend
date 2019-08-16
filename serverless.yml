@@ -155,6 +155,9 @@ functions:
           path: report/graphical
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/GraphicalReportInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
