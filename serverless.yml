@@ -406,6 +406,43 @@ stepFunctions:
             Resource:
               Fn::GetAtt: [pushNotificationToClient, Arn]
             End: true
+    createPostRequest:
+      name: "${self:service}-${self:custom.stage}-create-post-request"
+      definition:
+        Comment: "Create post and send real-time digests for matching searches"
+        StartAt: "Create post"
+        States:
+          "Create post":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [createPost, Arn]
+            Next: "Find matching real-time digests"
+          "Find matching real-time digests"
+            Type: Task
+            Resource:
+              Fn::GetAtt: [matchRealTimeDigests, Arn]
+            Next: "Iterator"
+          "Iterator":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [iterator, Arn],
+            ResultPath: "$.iterator",
+            Next: "Check all emails sent"
+          "Check all emails sent":
+            Type: Choice
+            Choices:
+            -
+              Variable: "$.iterator.shouldContinue"
+              BooleanEquals: true
+              Next: "Send email"
+            Default: "Done"
+          "Send email":
+            Type: Pass
+            InputPath: "$.iterator.data"
+            Next: "Iterator"
+          "Done":
+            Type: Pass
+            End: true
   activities:
     - AwaitOpenConnectionFromClient
 
