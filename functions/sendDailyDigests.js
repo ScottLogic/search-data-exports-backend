@@ -59,6 +59,11 @@ const formatInputQueryBody = (combinations, dateBegin, dateEnd) => combinations
     }
   ));
 
+/*
+  Parses multisearch result and outputs an object specifying the user and the digest
+  sections to be sent via email. Ensures that posts occuring in multiple digest sections
+  are only included once.
+*/
 const transformMultiSearchResult = (userId, subscriptionCombinations, mSearchResult) => {
   const searchHits = mSearchResult.responses.map(response => response.hits.hits.map(hit => ({
     PostId: hit._id,
@@ -92,15 +97,13 @@ const sendDailyDigestEmail = (result) => {
 const processUserSubscriptions = async (userId, subscriptions) => {
   console.log(`Processing ${subscriptions.length} subscriptions of user with ID: ${userId}`);
   if (!subscriptions.length) return;
+
   const subscriptionCombinations = getSubscriptionCombinations(subscriptions);
-  console.log('subscriptionCombinations = ', subscriptionCombinations);
   const buildQueryInput = formatInputQueryBody(
     subscriptionCombinations,
     getDateBegin(),
     getDateEnd()
   );
-
-  console.log('buildQueryInput = ', buildQueryInput);
 
   const body = [];
   for (const input of buildQueryInput) {
@@ -109,12 +112,7 @@ const processUserSubscriptions = async (userId, subscriptions) => {
   }
   const msearchInput = { body };
 
-  console.log('msearchInput = ', msearchInput);
-
   const mSearchResult = await esSearchClient.doMultiSearch(msearchInput);
-
-  console.log('mSearchResult = ', mSearchResult);
-
   const result = transformMultiSearchResult(userId, subscriptionCombinations, mSearchResult);
 
   sendDailyDigestEmail(result);
