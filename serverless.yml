@@ -211,6 +211,11 @@ functions:
     description: Save a new post into ES
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  matchRealTimeDigests:
+    handler: functions/matchRealTimeDigests.handler
+    description: Uses ES to match a new post to existing digests
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
   createSubscription:
     handler: functions/createSubscription.handler
     description: Adds a daily digest subscription for an SDE user
