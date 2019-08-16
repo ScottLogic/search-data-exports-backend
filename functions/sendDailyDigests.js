@@ -39,7 +39,9 @@ const getDateEnd = () => {
 */
 const getSubscriptionCombinations = subscriptions => subscriptions
   .reduce(
-    (combinations, value) => combinations.concat(combinations.map(set => [value, ...set])),
+    (combinations, subscription) => combinations.concat(combinations.map(
+      set => [subscription, ...set]
+    )),
     [[]]
   )
   .filter(set => set.length)
