@@ -49,6 +49,7 @@ provider:
         - ses:SendEmail
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:Scan
       Resource:
         - "*"
 
@@ -294,6 +295,17 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  sendDailyDigests:
+    handler: functions/sendDailyDigests.handler
+    description: Runs daily, calculates daily digests based on user subscriptions and triggers digest emails
+    events:
+      - schedule:
+          name: sde-${self:custom.stage}-scheduled-daily-digests
+          description: 'A daily event to trigger the sendDailyDigests function'
+          rate: cron(0 1 * * ? *)
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
+      SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
 
 stepFunctions:
   stateMachines:
