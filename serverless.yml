@@ -216,6 +216,9 @@ functions:
     description: Uses ES to match a new post to existing digests
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  iterator:
+    handler: functions/iterator.handler
+    description: Gets the data for the next email to be sent
   createSubscription:
     handler: functions/createSubscription.handler
     description: Adds a daily digest subscription for an SDE user
