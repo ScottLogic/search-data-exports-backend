@@ -22,7 +22,7 @@ export async function handler(event) {
     };
     const create = new ESCreate(ESConnectOptions);
 
-    const body = ESCreate.buildBody(type, post);
+    const body = ESCreate.buildBody('post', post);
 
     await create.create('posts', 'post', body);
 
