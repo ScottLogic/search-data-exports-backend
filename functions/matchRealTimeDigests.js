@@ -84,8 +84,8 @@ export async function handler(event) {
     })
       .then(response => (
         Promise.all(response.aggregations.userIDs.buckets.map(async entry => (
-          buildEmailData(entry, event)))
-        )
+          buildEmailData(entry, event)
+        )))
       ));
 
     return { emailData };
