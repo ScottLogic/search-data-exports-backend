@@ -14,14 +14,8 @@ const type = 'digest';
 const idAggMaxSize = 1000000;
 const searchTermAggMaxSize = 1000000;
 
-const createSearchBody = (Content, Tags) => ({
-  size: 0,
-  aggs: createAggregations(),
-  query: createQuery(Content, Tags)
-});
-
 const createAggregations = () => ({
-  userIDs : {
+  userIDs: {
     terms: {
       field: 'search.userID',
       size: idAggMaxSize
@@ -53,12 +47,18 @@ const createQuery = (Content, Tags) => ({
   }
 });
 
+const createSearchBody = (Content, Tags) => ({
+  size: 0,
+  aggs: createAggregations(),
+  query: createQuery(Content, Tags)
+});
+
 const buildEmailData = async (entry, post) => ({
   userID: entry.key,
   results: [
     {
       searchTerms: entry.searchTerms.buckets.map(searchTerm => searchTerm.key),
-      posts: [ post ]
+      posts: [post]
     }
   ]
 });
@@ -82,9 +82,11 @@ export async function handler(event) {
       type,
       body: searchBody
     })
-      .then(response => 
-        Promise.all(response.aggregations.userIDs.buckets.map(async entry => await buildEmailData(entry, event)))  
-      );
+      .then(response => (
+        Promise.all(response.aggregations.userIDs.buckets.map(async entry => (
+          buildEmailData(entry, event)))
+        )
+      ));
 
     return { emailData };
   } catch (error) {
