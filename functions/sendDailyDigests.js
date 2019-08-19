@@ -5,7 +5,7 @@ import buildQueryJson from '../common/query';
 
 const dynamoDbDocumentClient = new DynamoDB.DocumentClient();
 
-const { SUBSCRIPTIONS_TABLE: TableName, ES_SEARCH_API } = process.env;
+const { SUBSCRIPTIONS_TABLE: TableName, ES_SEARCH_API, EMAIL_MAX_POSTS } = process.env;
 
 const ESConnectOptions = {
   host: ES_SEARCH_API,
@@ -59,6 +59,10 @@ const formatInputQueryBody = (combinations, dateBegin, dateEnd) => combinations
     }
   ));
 
+const trimDigest = () => {
+  // Not implemented
+};
+
 /*
   Parses multisearch result and outputs an object specifying the user and the digest
   sections to be sent via email. Ensures that posts occuring in multiple digest sections
@@ -74,6 +78,8 @@ const transformMultiSearchResult = (userId, subscriptionCombinations, mSearchRes
 
   const includedPostIds = new Set();
 
+  let totalCount = 0;
+
   for (let i = 0; i < subscriptionCombinations.length; i += 1) {
     if (searchHits[i].length) {
       const uniquePosts = searchHits[i].filter(hit => !includedPostIds.has(hit.PostId));
@@ -83,9 +89,11 @@ const transformMultiSearchResult = (userId, subscriptionCombinations, mSearchRes
           searchTerms: subscriptionCombinations[i],
           posts: uniquePosts
         });
+        totalCount += uniquePosts.length;
       }
     }
   }
+  if (totalCount > EMAIL_MAX_POSTS) result.results = trimDigest(result.results, totalCount);
   return result;
 };
 

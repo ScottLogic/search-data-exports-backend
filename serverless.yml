@@ -306,6 +306,7 @@ functions:
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+      EMAIL_MAX_POSTS: 50
 
 stepFunctions:
   stateMachines:
