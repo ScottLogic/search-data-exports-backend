@@ -57,9 +57,8 @@ const formatInputQueryBody = (combinations, dateBegin, dateEnd) => combinations
     }
   ));
 
-const trimDigest = () => {
-  // Not implemented yet
-};
+// Not implemented yet
+const trimDigest = results => results;
 
 /*
   Parses multisearch result and outputs an object specifying the user and the digest
