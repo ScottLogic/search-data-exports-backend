@@ -126,11 +126,11 @@ functions:
         !Join
           - ':'
           -
-            - 'arn:aws:state'
+            - 'arn:aws:states'
             - Ref: 'AWS::Region'
             - Ref: 'AWS::AccountId'
             - 'stateMachine'
-            - '${self:service}-${self:custom.stage}-create-post-request'
+            - '${self:service}-${self:custom.stage}-create-post-request-step-function'
   search:
     handler: functions/search.handler
     description: Performs an ES search and returns the resulting hits
@@ -406,8 +406,8 @@ stepFunctions:
             Resource:
               Fn::GetAtt: [pushNotificationToClient, Arn]
             End: true
-    createPostRequest:
-      name: "${self:service}-${self:custom.stage}-create-post-request"
+    createPostRequestStepFunction:
+      name: "${self:service}-${self:custom.stage}-create-post-request-step-function"
       definition:
         Comment: "Create post and send real-time digests for matching searches"
         StartAt: "Create post"

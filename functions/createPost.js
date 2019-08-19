@@ -7,7 +7,6 @@ import {
 import ESCreate from '../common/ESCreate';
 
 export async function handler(event) {
-  console.log(event);
   try {
     const UserID = event.requestContext.authorizer.claims.sub;
 
