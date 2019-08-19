@@ -8,9 +8,7 @@ import ESCreate from '../common/ESCreate';
 
 export async function handler(event) {
   try {
-    const UserID = event.requestContext.authorizer.claims.sub;
-
-    const post = { ...JSON.parse(event.body), UserID };
+    const post = { ...event };
 
     const ESConnectOptions = {
       host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',

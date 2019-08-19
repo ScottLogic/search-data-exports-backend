@@ -426,19 +426,19 @@ stepFunctions:
             Type: Task
             Resource:
               Fn::GetAtt: [iterator, Arn]
-            ResultPath: "$.iterator"
             Next: "Check all emails sent"
           "Check all emails sent":
             Type: Choice
             Choices:
             -
-              Variable: "$.iterator.shouldContinue"
+              Variable: "$.shouldContinue"
               BooleanEquals: true
               Next: "Send email"
             Default: "Done"
           "Send email":
             Type: Pass
-            InputPath: "$.iterator.data"
+            InputPath: "$.data"
+            ResultPath: null
             Next: "Iterator"
           "Done":
             Type: Pass

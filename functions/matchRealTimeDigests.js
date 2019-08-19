@@ -86,8 +86,7 @@ export async function handler(event) {
         Promise.all(response.aggregations.userIDs.buckets.map(async entry => await buildEmailData(entry, event)))  
       );
 
-    console.log(emailData);
-    return emailData;
+    return { emailData };
   } catch (error) {
     console.error(error);
     if (error instanceof HttpError) return error.getHTTPResponse();

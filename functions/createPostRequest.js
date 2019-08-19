@@ -14,12 +14,18 @@ export async function handler(event) {
   try {
     validateRequestHeaders(event);
 
-    const startExecutionParams = {
-      stateMachineArn: stepFunctionArn,
-      input: event.body
+    const UserID = event.requestContext.authorizer.claims.sub;
+    const input = {
+      UserID,
+      ...JSON.parse(event.body)
     };
 
-    await stepFunctions.startExecution(startExecutionParams);
+    const startExecutionParams = {
+      stateMachineArn: stepFunctionArn,
+      input: JSON.stringify(input)
+    };
+
+    await stepFunctions.startExecution(startExecutionParams).promise();
 
     return generateSuccessResponse();
   } catch (error) {
