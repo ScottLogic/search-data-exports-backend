@@ -58,7 +58,7 @@ const buildEmailData = async (entry, post) => ({
   results: [
     {
       searchTerms: entry.searchTerms.buckets.map(searchTerm => searchTerm.key),
-      posts: post
+      posts: [ post ]
     }
   ]
 });
