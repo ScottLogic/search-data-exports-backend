@@ -33,11 +33,17 @@ export async function handler(event) {
   try {
     validateRequestHeaders(event);
 
-    const { type } = JSON.parse(event.body);
+    const bodyJSON = JSON.parse(event.body);
+    const { type } = bodyJSON;
 
     const startExecutionParams = {
       stateMachineArn: stepFunctionArn,
-      input: event.body
+      input: JSON.stringify({
+        ...bodyJSON,
+        parameters: {
+          emailAddress: event.requestContext.authorizer.claims.email
+        }
+      })
     };
 
     const startExecutionPromise = stepFunctions.startExecution(startExecutionParams).promise();
