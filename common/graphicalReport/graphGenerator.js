@@ -1,6 +1,6 @@
-const ESSearch = require('./search');
-const SVGBuilder = require('./svgbuilder');
-const S3Output = require('./s3-output');
+import ESSearch from './search';
+import SVGBuilder from './svgbuilder';
+import S3Output from './s3-output';
 
 const buildRequestJSON = (paramJSON = {}) => {
   const dateRange = paramJSON.search.find(x => x.dateRange);
@@ -74,4 +74,4 @@ class graphGenerator {
   }
 }
 
-module.exports = graphGenerator;
+export default graphGenerator;

@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const uuidv4 = require('uuid/v4');
+import { S3 } from 'aws-sdk';
+import uuidv4 from 'uuid/v4';
+import { fileTimeout } from '../s3_expiry';
 
 class S3Output {
   constructor(bucketName) {
@@ -11,7 +12,7 @@ class S3Output {
   }
 
   async writeBufferToS3() {
-    const s3 = new AWS.S3();
+    const s3 = new S3();
     const filename = `${uuidv4()}.pdf`;
 
     await s3.putObject({
@@ -20,7 +21,8 @@ class S3Output {
       ContentType: 'application/pdf',
       ContentDisposition: 'download; fileName="Report.pdf"',
       Body: this._reportBuffer,
-      ACL: 'public-read'
+      ACL: 'public-read',
+      Expires: fileTimeout()
     }).promise();
 
     return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
@@ -31,4 +33,4 @@ class S3Output {
   }
 }
 
-module.exports = S3Output;
+export default S3Output;
