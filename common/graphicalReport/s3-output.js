@@ -15,8 +15,6 @@ class S3Output {
   async writeBufferToS3(downloadMode = true) {
     const s3 = new S3();
     const filename = `${uuidv4()}.svg`;
-    const expireDate = new Date(Date.now());
-    expireDate.setHours(expireDate.getHours() + (process.env.S3_OBJECT_TIMEOUT || 1));
 
     await s3
       .putObject({
