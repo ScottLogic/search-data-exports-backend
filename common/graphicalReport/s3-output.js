@@ -14,6 +14,8 @@ class S3Output {
   async writeBufferToS3(downloadMode = true) {
     const s3 = new AWS.S3();
     const filename = `${uuidv4()}.svg`;
+    const expireDate = new Date(Date.now());
+    expireDate.setHours(expireDate.getHours() + (process.env.S3_OBJECT_TIMEOUT || 1));
 
     await s3
       .putObject({
@@ -22,7 +24,8 @@ class S3Output {
         ContentType: 'image/svg+xml',
         ContentDisposition: `${downloadMode && 'download;'} fileName="Chart.svg"`,
         Body: Buffer.from(this._reportBuffer, 'ascii'),
-        ACL: 'public-read'
+        ACL: 'public-read',
+        Expires: expireDate
       })
       .promise();
 

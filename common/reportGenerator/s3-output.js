@@ -17,6 +17,8 @@ class S3Output {
     console.log(`Bucketname=${this._bucketName}`);
     console.log(`Before S3 putObject - report size=${this._reportBuffer.length}`);
     const filename = `${uuidv4()}.csv`;
+    const expireDate = new Date(Date.now());
+    expireDate.setHours(expireDate.getHours() + (process.env.S3_OBJECT_TIMEOUT || 1));
 
     await s3.putObject({
       Bucket: this._bucketName,
@@ -24,7 +26,8 @@ class S3Output {
       ContentType: 'text/csv',
       ContentDisposition: 'download; fileName="Report.csv"',
       Body: Buffer.from(this._reportBuffer, 'ascii'),
-      ACL: 'public-read'
+      ACL: 'public-read',
+      Expires: expireDate
     }).promise();
 
     return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
