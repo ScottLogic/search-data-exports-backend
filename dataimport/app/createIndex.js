@@ -63,8 +63,15 @@ const createBody = () => ({
         search: {
           properties: {
             query: { type: 'percolator' },
-            userID: { type: 'text' },
-            searchTerm: { type: 'text' }
+            userID: { type: 'keyword' },
+            searchTerm: { 
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword'
+                }
+              }
+            }
           }
         },
         Content: { type: 'text' },

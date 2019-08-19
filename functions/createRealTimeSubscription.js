@@ -59,7 +59,7 @@ export async function handler(event) {
       index,
       type,
       body: searchBody
-    }).then(response => response.body.count > 0);
+    }).then(response => response.count > 0);
 
     if (digestExists) throw new HttpError('400', 'Subscription already exists');
 
