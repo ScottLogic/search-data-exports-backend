@@ -3,7 +3,6 @@ import ConnectionClass from 'http-aws-es';
 import ESSearch from '../common/search/search';
 import buildQueryJson from '../common/query';
 
-
 const { ES_SEARCH_API, EMAIL_MAX_POSTS } = process.env;
 
 const ESConnectOptions = {
