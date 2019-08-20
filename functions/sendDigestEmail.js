@@ -1,38 +1,9 @@
 import { SES, CognitoIdentityServiceProvider } from 'aws-sdk';
+import createHtmlBody from '../common/digestEmailHtml';
 
 const ses = new SES();
 const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider();
 const { EMAIL_SENDER_ADDRESS, USER_POOL_ID } = process.env;
-
-const createDigestSection = result => (
-  `<h3>New posts matching your digests for <i>${result.searchTerms.join(', ')}</i>:</h3>
-  ${result.posts.map(post => (
-    `<div style="background-color: whitesmoke; border: 1px solid black;">
-      <div>
-        <div>${post.UserID}</div>
-        <div>${post.DateCreated}</div>
-      </div>
-      <hr>
-      <div>
-        ${post.Content}
-      </div>
-      <div>
-        ${post.Tags.join(' ')}
-      </div>
-    </div>`
-  ))}`
-);
-
-const createHtmlBody = results => (
-  `<html>
-    <head>
-      <title>Your digest</title>
-    </head>
-    <body>
-      ${results.map(result => createDigestSection(result))}
-    </body>
-  </html>`
-);
 
 export async function handler(event) {
   const cognitoParams = {
