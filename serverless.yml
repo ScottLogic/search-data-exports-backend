@@ -52,6 +52,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:Scan
         - lambda:InvokeFunction
+        - cognito-idp:AdminGetUser
       Resource:
         - "*"
 
@@ -222,6 +223,13 @@ functions:
   realTimeDigestEmailIterator:
     handler: functions/realTimeDigestEmailIterator.handler
     description: Gets the data for the next email to be sent
+  sendDigestEmail:
+    handler: functions/sendDigestEmail.handler
+    description: Sends an email to a given user containing posts matching their digests
+    environment:
+      EMAIL_SENDER_ADDRESS: "rharrington@scottlogic.com"
+      USER_POOL_ID:
+        Ref: CognitoUserPool
   createSubscription:
     handler: functions/createSubscription.handler
     description: Adds a daily digest subscription for an SDE user
@@ -455,7 +463,9 @@ stepFunctions:
               Next: "Send email"
             Default: "Done"
           "Send email":
-            Type: Pass
+            Type: Task
+            Resource:
+              Fn::GetAtt: [sendDigestEmail, Arn]
             InputPath: "$.data"
             ResultPath: null
             Next: "Get next email to send"
