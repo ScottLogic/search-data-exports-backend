@@ -445,7 +445,9 @@ stepFunctions:
               Next: "Send email"
             Default: "Done"
           "Send email":
-            Type: Pass
+            Type: Task
+            Resource:
+              Fn::GetAtt: [sendDigestEmail, Arn]
             InputPath: "$.data"
             ResultPath: null
             Next: "Get next email to send"
