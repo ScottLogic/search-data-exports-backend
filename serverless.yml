@@ -49,6 +49,7 @@ provider:
         - ses:SendEmail
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - cognito-idp:AdminGetUser
       Resource:
         - "*"
 
@@ -198,6 +199,13 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  sendDigestEmail:
+    handler: functions/sendDigestEmail.handler
+    description: Sends an email to a given user containing posts matching their digests
+    environment:
+      EMAIL_SENDER_ADDRESS: "rharrington@scottlogic.com"
+      USER_POOL_ID:
+        Ref: CognitoUserPool
   createSubscription:
     handler: functions/createSubscription.handler
     description: Adds a daily digest subscription for an SDE user
