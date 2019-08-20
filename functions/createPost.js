@@ -8,8 +8,6 @@ import ESCreate from '../common/ESCreate';
 
 export async function handler(event) {
   try {
-    const post = { ...event };
-
     const ESConnectOptions = {
       host: process.env.ES_SEARCH_API ? process.env.ES_SEARCH_API : 'http://localhost:9200',
       connectionClass: ConnectionClass,
@@ -19,7 +17,7 @@ export async function handler(event) {
     };
     const create = new ESCreate(ESConnectOptions);
 
-    const body = ESCreate.buildBody('post', post);
+    const body = ESCreate.buildBody('post', event);
 
     await create.create('posts', 'post', body);
 

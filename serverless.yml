@@ -216,8 +216,8 @@ functions:
     description: Uses ES to match a new post to existing digests
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
-  iterator:
-    handler: functions/iterator.handler
+  realTimeDigestEmailIterator:
+    handler: functions/realTimeDigestEmailIterator.handler
     description: Gets the data for the next email to be sent
   createSubscription:
     handler: functions/createSubscription.handler
@@ -421,11 +421,11 @@ stepFunctions:
             Type: Task
             Resource:
               Fn::GetAtt: [matchRealTimeDigests, Arn]
-            Next: "Iterator"
-          "Iterator":
+            Next: "Get next email to send"
+          "Get next email to send":
             Type: Task
             Resource:
-              Fn::GetAtt: [iterator, Arn]
+              Fn::GetAtt: [realTimeDigestEmailIterator, Arn]
             Next: "Check all emails sent"
           "Check all emails sent":
             Type: Choice
@@ -439,7 +439,7 @@ stepFunctions:
             Type: Pass
             InputPath: "$.data"
             ResultPath: null
-            Next: "Iterator"
+            Next: "Get next email to send"
           "Done":
             Type: Pass
             End: true
