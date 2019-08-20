@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const uuidv4 = require('uuid/v4');
+import { S3 } from 'aws-sdk';
+import uuidv4 from 'uuid/v4';
+import { fileTimeout, signedUrlTimeout } from '../s3_expiry';
 
 class S3Output {
   constructor(bucketName) {
@@ -12,7 +13,7 @@ class S3Output {
   }
 
   async writeBufferToS3(downloadMode = true) {
-    const s3 = new AWS.S3();
+    const s3 = new S3();
     const filename = `${uuidv4()}.svg`;
 
     await s3
@@ -22,11 +23,15 @@ class S3Output {
         ContentType: 'image/svg+xml',
         ContentDisposition: `${downloadMode && 'download;'} fileName="Chart.svg"`,
         Body: Buffer.from(this._reportBuffer, 'ascii'),
-        ACL: 'public-read'
+        Expires: fileTimeout()
       })
       .promise();
 
-    return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
+    return s3.getSignedUrl('getObject', {
+      Bucket: this._bucketName,
+      Key: filename,
+      Expires: signedUrlTimeout()
+    });
   }
 
   async close(downloadMode) {
@@ -35,4 +40,4 @@ class S3Output {
   }
 }
 
-module.exports = S3Output;
+export default S3Output;
