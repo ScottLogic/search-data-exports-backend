@@ -108,6 +108,31 @@ functions:
             - Ref: 'AWS::Region'
             - Ref: 'AWS::AccountId'
             - 'activity:AwaitOpenConnectionFromClient'
+  createPostRequest:
+    handler: functions/createPostRequest.handler
+    description: Triggered when a client requests to add a new post
+    events:
+      - http:
+          path: posts
+          method: post
+          cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/CreatePostRequestInputModel.json)}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+    environment:
+      CREATE_POST_STEP_FUNCTION_ARN:
+        !Join
+          - ':'
+          -
+            - 'arn:aws:states'
+            - Ref: 'AWS::Region'
+            - Ref: 'AWS::AccountId'
+            - 'stateMachine'
+            - '${self:service}-${self:custom.stage}-create-post-request-step-function'
   search:
     handler: functions/search.handler
     description: Performs an ES search and returns the resulting hits
@@ -186,20 +211,16 @@ functions:
   createPost:
     handler: functions/createPost.handler
     description: Save a new post into ES
-    events:
-      - http:
-          path: posts
-          method: post
-          cors: true
-          request:
-            schema:
-              application/json: ${file(api_models/CreatePostInputModel.json)}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
+  matchRealTimeDigests:
+    handler: functions/matchRealTimeDigests.handler
+    description: Uses ES to match a new post to existing digests
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
+  realTimeDigestEmailIterator:
+    handler: functions/realTimeDigestEmailIterator.handler
+    description: Gets the data for the next email to be sent
   sendDigestEmail:
     handler: functions/sendDigestEmail.handler
     description: Sends an email to a given user containing posts matching their digests
@@ -393,6 +414,43 @@ stepFunctions:
             Type: Task
             Resource:
               Fn::GetAtt: [pushNotificationToClient, Arn]
+            End: true
+    createPostRequestStepFunction:
+      name: "${self:service}-${self:custom.stage}-create-post-request-step-function"
+      definition:
+        Comment: "Create post and send real-time digests for matching searches"
+        StartAt: "Create post"
+        States:
+          "Create post":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [createPost, Arn]
+            Next: "Find matching real-time digests"
+          "Find matching real-time digests":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [matchRealTimeDigests, Arn]
+            Next: "Get next email to send"
+          "Get next email to send":
+            Type: Task
+            Resource:
+              Fn::GetAtt: [realTimeDigestEmailIterator, Arn]
+            Next: "Check all emails sent"
+          "Check all emails sent":
+            Type: Choice
+            Choices:
+            -
+              Variable: "$.shouldContinue"
+              BooleanEquals: true
+              Next: "Send email"
+            Default: "Done"
+          "Send email":
+            Type: Pass
+            InputPath: "$.data"
+            ResultPath: null
+            Next: "Get next email to send"
+          "Done":
+            Type: Pass
             End: true
   activities:
     - AwaitOpenConnectionFromClient

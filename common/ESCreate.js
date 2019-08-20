@@ -7,11 +7,10 @@ class ESCreate {
   }
 
   async create(index, type, body) {
-    const bodyContent = ESCreate.buildBody(type, body);
     return this._client.index({
       index,
       type,
-      body: bodyContent
+      body
     });
   }
 
