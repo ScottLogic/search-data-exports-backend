@@ -1,9 +1,9 @@
-const chrome = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
-const ESSearch = require('./search');
-const SVGBuilder = require('./svgbuilder');
-const S3Output = require('./s3-output');
-const pdfTemplate = require('./htmlbase');
+import chrome from 'chrome-aws-lambda';
+import puppeteer from 'puppeteer-core';
+import ESSearch from './search';
+import SVGBuilder from './svgbuilder';
+import S3Output from './s3-output';
+import pdfTemplate from './htmlbase';
 
 class HybridGenerator {
   constructor(ConnectionOptions, bucketName) {
@@ -106,4 +106,4 @@ class HybridGenerator {
   }
 }
 
-module.exports = HybridGenerator;
+export default HybridGenerator;
