@@ -31,15 +31,15 @@ const createAggregations = () => ({
   }
 });
 
-const createQuery = (Content, Tags) => ({
+const createQuery = (content, tags) => ({
   bool: {
     filter: [
       {
         percolate: {
           field: 'search.query',
           document: {
-            Content,
-            Tags
+            Content: content,
+            Tags: tags
           }
         }
       }
@@ -47,10 +47,10 @@ const createQuery = (Content, Tags) => ({
   }
 });
 
-const createSearchBody = (Content, Tags) => ({
+const createSearchBody = (content, tags) => ({
   size: 0,
   aggs: createAggregations(),
-  query: createQuery(Content, Tags)
+  query: createQuery(content, tags)
 });
 
 const buildEmailData = async (entry, post) => ({
