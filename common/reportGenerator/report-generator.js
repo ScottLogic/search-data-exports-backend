@@ -1,8 +1,8 @@
-const AWS = require('aws-sdk');
-const connectionClass = require('http-aws-es');
-const { Client } = require('elasticsearch');
-const buildQueryJson = require('../query.js');
-const Formatter = require('./csv-formatter');
+import { Config, EnvironmentCredentials } from 'aws-sdk';
+import connectionClass from 'http-aws-es';
+import { Client } from 'elasticsearch';
+import buildQueryJson from '../query';
+import { formatRows, formatHeader } from './csv-formatter';
 
 // this should be much higher number (10000), but set low to demonstrate scroll / multi-part upload
 const scrollResultSize = 10;
@@ -10,8 +10,8 @@ const scrollResultSize = 10;
 const getConfig = () => ({
   host: process.env.ES_SEARCH_API,
   connectionClass,
-  awsConfig: new AWS.Config({
-    credentials: new AWS.EnvironmentCredentials('AWS')
+  awsConfig: new Config({
+    credentials: new EnvironmentCredentials('AWS')
   })
 });
 
@@ -55,7 +55,7 @@ class ReportGenerator {
     let currentScrollId = result._scroll_id;
 
     while (hits && hits.hits.length) {
-      this.emitRows(Formatter.formatRows(result));
+      this.emitRows(formatRows(result));
 
       // eslint-disable-next-line no-await-in-loop
       const scrollResult = await this.doScroll(currentScrollId);
@@ -72,7 +72,7 @@ class ReportGenerator {
 
     const searchResult = await this.doSearch(searchJSON);
 
-    this.emitHeader(Formatter.formatHeader(searchResult));
+    this.emitHeader(formatHeader(searchResult));
 
     await this.processBatch(searchResult);
 
@@ -88,4 +88,4 @@ class ReportGenerator {
   }
 }
 
-module.exports = ReportGenerator;
+export default ReportGenerator;

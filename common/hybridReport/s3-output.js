@@ -1,6 +1,6 @@
 import { S3 } from 'aws-sdk';
 import uuidv4 from 'uuid/v4';
-import { fileTimeout } from '../s3_expiry';
+import { fileTimeout, signedUrlTimeout } from '../s3_expiry';
 
 class S3Output {
   constructor(bucketName) {
@@ -21,11 +21,14 @@ class S3Output {
       ContentType: 'application/pdf',
       ContentDisposition: 'download; fileName="Report.pdf"',
       Body: this._reportBuffer,
-      ACL: 'public-read',
       Expires: fileTimeout()
     }).promise();
 
-    return `https://${this._bucketName}.s3.amazonaws.com/${filename}`;
+    return s3.getSignedUrl('getObject', {
+      Bucket: this._bucketName,
+      Key: filename,
+      Expires: signedUrlTimeout()
+    });
   }
 
   async close() {
