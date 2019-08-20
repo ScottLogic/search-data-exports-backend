@@ -4,7 +4,7 @@ const ses = new SES();
 const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider();
 const { EMAIL_SENDER_ADDRESS, USER_POOL_ID } = process.env;
 
-const createDigestSection = (result) => (
+const createDigestSection = result => (
   `<h3>New posts matching your digests for <i>${result.searchTerms.join(', ')}</i>:</h3>
   ${result.posts.map(post => (
     `<div style="background-color: whitesmoke; border: 1px solid black;">
@@ -23,7 +23,7 @@ const createDigestSection = (result) => (
   ))}`
 );
 
-const createHtmlBody = (results) => (
+const createHtmlBody = results => (
   `<html>
     <head>
       <title>Your digest</title>
@@ -40,7 +40,9 @@ export async function handler(event) {
     Username: event.userID
   };
 
-  const { UserAttributes } = await cognitoIdentityServiceProvider.adminGetUser(cognitoParams).promise();
+  const { UserAttributes } = (
+    await cognitoIdentityServiceProvider.adminGetUser(cognitoParams).promise()
+  );
   const emailAttribute = UserAttributes.find(attr => attr.Name === 'email');
   const email = emailAttribute.Value;
 
