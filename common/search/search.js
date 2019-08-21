@@ -14,6 +14,10 @@ class ESSearch {
     this._client = new Client(ESConnectOptions);
   }
 
+  async doMultiSearch(searchJSON) {
+    return this._client.msearch(searchJSON);
+  }
+
   // Actually perform the search to the Elastic Search
   async doSearch(searchJSON) {
     return this._client.search(searchJSON);

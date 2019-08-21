@@ -1,22 +1,19 @@
 /* This code is responsible to making ES queries from the JSON inputted,
 as we want to hide some of the nitty gritty from the users. */
-const SEARCH_FIELDS_USER = ['LastName', 'FirstName', 'EmailAddress'];
 const SEARCH_FIELDS_POST = ['Content', 'Tags^3']; // The ^3 makes tags 3 times more important that content.
 
 const buildFilters = (type, dateRange = []) => {
   const filterList = [];
   if (type) filterList.push({ term: { _type: type } });
   if (dateRange.length >= 1) filterList.push({ range: { DateCreated: { gte: dateRange[0] } } });
-  if (dateRange.length >= 2) filterList.push({ range: { DateCreated: { lte: dateRange[1] } } });
+  if (dateRange.length >= 2) filterList.push({ range: { DateCreated: { lt: dateRange[1] } } });
   return filterList;
 };
-
-const getFieldList = () => [...SEARCH_FIELDS_POST, ...SEARCH_FIELDS_USER];
 
 const makeMultiFieldQuery = queryData => ({
   multi_match: {
     query: queryData,
-    fields: getFieldList()
+    fields: SEARCH_FIELDS_POST
   }
 });
 
