@@ -9,9 +9,9 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage}
   region: ${opt:region, self:provider.region}
-  esEndpoint: ${ssm:/sde-${self:custom.stage}-elasticsearch-endpoint}
-  s3BucketName: ${ssm:/sde-${self:custom.stage}-s3-bucket-name}
-  subscriptionsTableName: ${self:custom.stage}-sde-subscriptions
+  esEndpoint: ${ssm:/${self:service}-${self:custom.stage}-elasticsearch-endpoint}
+  s3BucketName: ${ssm:/${self:service}-${self:custom.stage}-s3-bucket-name}
+  subscriptionsTableName: ${self:custom.stage}-${self:service}-subscriptions
   webpack:
     includeModules: true # enable auto-packing of external modules
   output:
@@ -413,7 +413,24 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
-
+  scheduledDailyDigests:
+    handler: functions/scheduledDailyDigests.handler
+    description: Runs daily, invokes the calculateUserDailyDigest function for each user with daily subscriptions
+    events:
+      - schedule:
+          name: ${self:service}-${self:custom.stage}-scheduled-daily-digests
+          description: 'A daily event to trigger the sendDailyDigests function'
+          rate: cron(0 1 * * ? *)
+    environment:
+      SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
+      USER_DIGEST_LAMBDA_NAME: ${self:service}-${self:custom.stage}-calculateUserDailyDigest
+  calculateUserDailyDigest:
+    handler: functions/calculateUserDailyDigest.handler
+    description: Calculates and collates previous day's new posts which matching the user's daily subscriptions
+    environment:
+      ES_SEARCH_API: ${self:custom.esEndpoint}
+      EMAIL_MAX_POSTS: 50
+      SEND_DIGEST_EMAIL_LAMBDA_NAME: ${self:service}-${self:custom.stage}-sendDigestEmail
 stepFunctions:
   stateMachines:
     csvDownloadRequest:
@@ -551,7 +568,7 @@ resources:
     CognitoUserPool:
       Type: AWS::Cognito::UserPool # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html
       Properties:
-        UserPoolName: ${self:custom.stage}-sde-users-pool
+        UserPoolName: ${self:custom.stage}-${self:service}-users-pool
         UsernameAttributes:
           - email
         AutoVerifiedAttributes:
@@ -559,7 +576,7 @@ resources:
     CognitoUserPoolClient:
       Type: AWS::Cognito::UserPoolClient # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
       Properties:      
-        ClientName: ${self:custom.stage}-sde-user-pool-client
+        ClientName: ${self:custom.stage}-${self:service}-user-pool-client
         UserPoolId:
           Ref: CognitoUserPool
         GenerateSecret: false
@@ -578,7 +595,7 @@ resources:
         - ApiGatewayRestApi
       Type: AWS::ApiGateway::Authorizer
       Properties:
-        Name: ${self:custom.stage}-sde-api-authorizer
+        Name: ${self:custom.stage}-${self:service}-api-authorizer
         IdentitySource: method.request.header.Authorization
         RestApiId:
           Ref: ApiGatewayRestApi
