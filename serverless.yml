@@ -11,6 +11,7 @@ custom:
   region: ${opt:region, self:provider.region}
   esEndpoint: ${ssm:/${self:service}-${self:custom.stage}-elasticsearch-endpoint}
   s3BucketName: ${ssm:/${self:service}-${self:custom.stage}-s3-bucket-name}
+  s3websiteURL: ${ssm:/${self:service}-${self:custom.stage}-s3-bucket-site-url}
   subscriptionsTableName: ${self:custom.stage}-${self:service}-subscriptions
   webpack:
     includeModules: true # enable auto-packing of external modules
@@ -285,6 +286,7 @@ functions:
       EMAIL_SENDER_ADDRESS: "rharrington@scottlogic.com"
       USER_POOL_ID:
         Ref: CognitoUserPool
+      WEBSITE_LINK_URL: ${self:custom.s3websiteURL}
   createSubscription:
     handler: functions/createSubscription.handler
     description: Adds a daily digest subscription for an SDE user
