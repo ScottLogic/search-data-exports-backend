@@ -4,6 +4,7 @@ plugins:
   - serverless-webpack
   - serverless-step-functions
   - serverless-stack-output
+  - serverless-iam-roles-per-function
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -35,35 +36,28 @@ provider:
   stage: dev
   region: eu-west-1
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - states:DescribeExecution
-        - states:SendTaskSuccess
-        - states:StartExecution                
-        - states:GetActivityTask
-        - execute-api:Invoke
-        - es:ESHttpPost
-        - s3:GetObject
-        - s3:PutObject
-        - s3:PutObjectAcl
-        - ses:SendEmail
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - cognito-idp:AdminGetUser
-      Resource:
-        - "*"
-
 functions:
   pushNotificationOpenConnection:
     handler: functions/pushNotificationOpenConnection.handler
     description: Notified when client connects to websocket to complete activity
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - states:DescribeExecution
+          - states:SendTaskSuccess
+        Resource: "*"
     events:
       - websocket:
           route: OpenConnection
   pushNotificationToClient:
     handler: functions/pushNotificationToClient.handler
     description: Send report URL to client over websocket
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - execute-api:Invoke
+          - execute-api:ManageConnections
+        Resource: "*"
     environment:
       WEBSOCKET_ENDPOINT_URL:
         !Join
@@ -77,6 +71,12 @@ functions:
   downloadRequest:
     handler: functions/downloadRequest.handler
     description: Triggered when client requests a download
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - states:GetActivityTask
+          - states:StartExecution
+        Resource: "*"
     events:
       - http:
           path: download-request
@@ -111,6 +111,11 @@ functions:
   createPostRequest:
     handler: functions/createPostRequest.handler
     description: Triggered when a client requests to add a new post
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - states:StartExecution
+        Resource: "*"
     events:
       - http:
           path: posts
@@ -136,6 +141,11 @@ functions:
   search:
     handler: functions/search.handler
     description: Performs an ES search and returns the resulting hits
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+        Resource: "*"
     events:
       - http:
           path: search
@@ -152,6 +162,13 @@ functions:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   graphicalReport:
     handler: functions/graphicalReport.handler
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+          - s3:GetObject
+          - s3:PutObject
+        Resource: "*"
     events:
       - http:
           path: report/graphical
@@ -170,6 +187,13 @@ functions:
   hybridReport:
     handler: functions/hybridReport.handler
     runtime: nodejs8.10
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+          - s3:GetObject
+          - s3:PutObject
+        Resource: "*"
     events:
       - http:
           path: report/hybrid
@@ -185,11 +209,21 @@ functions:
   sendEmail:
     handler: functions/sendEmail.handler
     description: Sends an email to the specified email address with the report S3 link
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - ses:SendEmail
+        Resource: "*"
     environment:
       EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
   reportStatus:
     handler: functions/reportStatus.handler
     description: Returns the execution status of a generate report task
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - states:DescribeExecution
+        Resource: "*"
     events:
       - http:
           path: report-status
@@ -205,17 +239,34 @@ functions:
   reportGenerator:
     handler: functions/reportGenerator.handler
     description: Performs an ES search and generates a report in S3
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+          - s3:GetObject
+          - s3:PutObject
+        Resource: "*"
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
   createPost:
     handler: functions/createPost.handler
     description: Save a new post into ES
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+        Resource: "*"
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   matchRealTimeDigests:
     handler: functions/matchRealTimeDigests.handler
     description: Uses ES to match a new post to existing digests
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+        Resource: "*"
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   realTimeDigestEmailIterator:
@@ -224,6 +275,12 @@ functions:
   sendDigestEmail:
     handler: functions/sendDigestEmail.handler
     description: Sends an email to a given user containing posts matching their digests
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - ses:SendEmail
+          - cognito-idp:AdminGetUser
+        Resource: "*"
     environment:
       EMAIL_SENDER_ADDRESS: "rharrington@scottlogic.com"
       USER_POOL_ID:
@@ -231,6 +288,12 @@ functions:
   createSubscription:
     handler: functions/createSubscription.handler
     description: Adds a daily digest subscription for an SDE user
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+        Resource: "*"
     events:
       - http:
           path: subscriptions/daily
@@ -248,6 +311,12 @@ functions:
   deleteSubscription:
     handler: functions/deleteSubscription.handler
     description: Deletes a specified daily digest subscription for an SDE user
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+        Resource: "*"
     events:
       - http:
           path: subscriptions/daily
@@ -265,6 +334,11 @@ functions:
   getUserSubscriptions:
     handler: functions/getUserSubscriptions.handler
     description: Gets the daily digest subscriptions for an SDE user
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:GetItem
+        Resource: "*"
     events:
       - http:
           path: subscriptions/daily
@@ -279,6 +353,11 @@ functions:
   createRealTimeSubscription:
     handler: functions/createRealTimeSubscription.handler
     description: Adds a real-time digest subscription for an SDE user
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+        Resource: "*"
     events:
       - http:
           path: subscriptions/real-time
@@ -296,6 +375,11 @@ functions:
   deleteRealTimeSubscription:
     handler: functions/deleteRealTimeSubscription.handler
     description: Deletes a specified real-time digest subscription for an SDE user
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+        Resource: "*"
     events:
       - http:
           path: subscriptions/real-time
@@ -313,6 +397,11 @@ functions:
   getUserRealTimeSubscriptions:
     handler: functions/getUserRealTimeSubscriptions.handler
     description: Gets the real-time digest subscriptions for an SDE user
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - es:ESHttpPost
+        Resource: "*"
     events:
       - http:
           path: subscriptions/real-time
