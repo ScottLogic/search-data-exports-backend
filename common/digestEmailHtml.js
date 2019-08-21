@@ -20,7 +20,7 @@ const createPostOutput = ({
 
 const createDigestSection = result => (
   `
-  <h3>New posts matching your digests for <i>${result.searchTerms.join(', ')}</i>:</h3>
+  <h3>New posts matching your digests for <i>${result.searchTerms.map(term => `<a href="http://${process.env.WEBSITE_LINK_URL}/?search=${term}">${term}</a> `)}</i>:</h3>
   ${result.posts.map(post => createPostOutput(post))}
   `
 );
