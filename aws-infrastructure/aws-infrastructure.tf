@@ -47,6 +47,17 @@ module "ssm_es_endpoint_parameter" {
   value = module.elasticsearch.endpoint
 }
 
+module "ssm_es_arn_parameter" {
+  source                    = "./modules/ssm_parameter"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  name = "elasticsearch-arn"
+  description = "The Elasticsearch ARN for the SDE project"
+  type = "String"
+  value = module.elasticsearch.elasticsearch_arn
+}
+
 module "ssm_s3_bucket_name_parameter" {
   source                    = "./modules/ssm_parameter"
   name_prefix               = local.name_prefix
@@ -56,4 +67,15 @@ module "ssm_s3_bucket_name_parameter" {
   description = "The S3 bucket name for the SDE project"
   type = "String"
   value = module.s3-bucket.bucket_name
+}
+
+module "ssm_s3_arn_parameter" {
+  source                    = "./modules/ssm_parameter"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  name = "s3-bucket-arn"
+  description = "The S3 bucket ARN for the SDE project"
+  type = "String"
+  value = module.s3-bucket.arn
 }
