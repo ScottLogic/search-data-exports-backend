@@ -28,6 +28,7 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "serverless": "^1.49.0",
+    "serverless-iam-roles-per-function": "^2.0.1",
     "serverless-stack-output": "^0.2.3",
     "serverless-step-functions": "^2.2.0",
     "serverless-webpack": "^5.3.1",
