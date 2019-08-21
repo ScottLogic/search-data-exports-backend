@@ -20,7 +20,7 @@ const createPostOutput = ({
 
 const createDigestSection = result => (
   `
-  <h3>New posts matching your digests for <i>${result.searchTerms.join(', ')}</i>:</h3>
+  <h3>New posts matching your digests for <i>${result.searchTerms.map(term => `<a href="http://${process.env.WEBSITE_LINK_URL}/?search=${term}">${term}</a>`).join(', ')}</i>:</h3>
   ${result.posts.map(post => createPostOutput(post))}
   `
 );
@@ -32,7 +32,9 @@ export default results => (
       <title>Your digest</title>
     </head>
     <body>
-      ${results.map(result => createDigestSection(result))}
+      ${results.map(result => createDigestSection(result)).join('')}
+      <hr />
+      <p>If you wish to unsubscribe please click <a href="http://${process.env.WEBSITE_LINK_URL}/?unsubscribe=true">here</a>.</p>
     </body>
   </html>
   `
