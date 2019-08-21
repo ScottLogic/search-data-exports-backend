@@ -57,3 +57,14 @@ module "ssm_s3_bucket_name_parameter" {
   type = "String"
   value = module.s3-bucket.bucket_name
 }
+
+module "ssm_s3_bucket_site_url_parameter" {
+  source                    = "./modules/ssm_parameter"
+  name_prefix               = local.name_prefix
+  project                   = var.project
+  environment               = var.environment
+  name = "s3-bucket-site-url"
+  description = "The S3 bucket site url for the SDE project"
+  type = "String"
+  value = module.s3-bucket-site.cdn_domain_name
+}

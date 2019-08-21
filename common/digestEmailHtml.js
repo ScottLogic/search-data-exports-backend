@@ -33,6 +33,8 @@ export default results => (
     </head>
     <body>
       ${results.map(result => createDigestSection(result))}
+      <hr />
+      <p>If you wish to unsubscribe please click <a href="http://${process.env.WEBSITE_LINK_URL}/?unsubscribe=true">here</a>.</p>
     </body>
   </html>
   `
