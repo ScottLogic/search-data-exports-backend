@@ -326,9 +326,9 @@ functions:
               Ref: ApiGatewayAuthorizer
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
-  sendDailyDigests:
-    handler: functions/sendDailyDigests.handler
-    description: Runs daily, invokes the sendUserDailyDigest function for each user with daily subscriptions
+  scheduledDailyDigests:
+    handler: functions/scheduledDailyDigests.handler
+    description: Runs daily, invokes the calculateUserDailyDigest function for each user with daily subscriptions
     events:
       - schedule:
           name: ${self:service}-${self:custom.stage}-scheduled-daily-digests
@@ -336,13 +336,14 @@ functions:
           rate: cron(0 1 * * ? *)
     environment:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
-      USER_DIGEST_LAMBDA_NAME: ${self:service}-${self:custom.stage}-sendUserDailyDigest
-  sendUserDailyDigest:
-    handler: functions/sendUserDailyDigest.handler
-    description: Retrieves and calculates last day's new posts matching a user's daily digest subscriptions
+      USER_DIGEST_LAMBDA_NAME: ${self:service}-${self:custom.stage}-calculateUserDailyDigest
+  calculateUserDailyDigest:
+    handler: functions/calculateUserDailyDigest.handler
+    description: Calculates and collates previous day's new posts which matching the user's daily subscriptions
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       EMAIL_MAX_POSTS: 50
+      SEND_DIGEST_EMAIL_LAMBDA_NAME: ${self:service}-${self:custom.stage}-sendDigestEmail
 stepFunctions:
   stateMachines:
     csvDownloadRequest:
