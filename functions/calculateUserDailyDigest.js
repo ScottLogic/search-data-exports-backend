@@ -63,9 +63,9 @@ const transformMultiSearchResult = (userID, subscriptions, mSearchResult) => {
     // eslint-disable-next-line no-loop-func
     searchHits[i].forEach((post) => {
       if (mapPostsToSearches.has(post.PostId)) {
-        mapPostsToSearches.get(post.PostId).add(subscriptions[i]);
+        mapPostsToSearches.get(post.PostId).add(subscriptions[i].toLowerCase());
       } else {
-        mapPostsToSearches.set(post.PostId, new Set([subscriptions[i]]));
+        mapPostsToSearches.set(post.PostId, new Set([subscriptions[i].toLowerCase()]));
       }
     });
   }
