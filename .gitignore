@@ -43,3 +43,6 @@ circleci.exe
 
 # Env directories
 env/
+
+# VS Code Config Directory
+.vscode/
