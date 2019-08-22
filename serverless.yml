@@ -9,7 +9,9 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage}
   region: ${opt:region, self:provider.region}
+  esArn: ${ssm:/${self:service}-${self:custom.stage}-elasticsearch-arn}
   esEndpoint: ${ssm:/${self:service}-${self:custom.stage}-elasticsearch-endpoint}
+  s3BucketArn: ${ssm:/${self:service}-${self:custom.stage}-s3-bucket-arn}
   s3BucketName: ${ssm:/${self:service}-${self:custom.stage}-s3-bucket-name}
   s3websiteURL: ${ssm:/${self:service}-${self:custom.stage}-s3-bucket-site-url}
   subscriptionsTableName: ${self:custom.stage}-${self:service}-subscriptions
@@ -46,7 +48,15 @@ functions:
         Action:
           - states:DescribeExecution
           - states:SendTaskSuccess
-        Resource: "*"
+        Resource: 
+          !Join
+            - ':'
+            -
+              - 'arn:aws:states'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - 'stateMachine'
+              - '${self:service}-${self:custom.stage}-csv-download-request'
     events:
       - websocket:
           route: OpenConnection
@@ -58,7 +68,18 @@ functions:
         Action:
           - execute-api:Invoke
           - execute-api:ManageConnections
-        Resource: "*"
+        Resource: 
+          !Join
+            - ''
+            -
+              - 'arn:aws:execute-api:'
+              - Ref: 'AWS::Region'
+              - ':'
+              - Ref: 'AWS::AccountId'
+              - ':'
+              - !Ref WebsocketsApi
+              - '/${self:custom.stage}'
+              - '/POST/@connections'
     environment:
       WEBSOCKET_ENDPOINT_URL:
         !Join
@@ -77,7 +98,15 @@ functions:
         Action:
           - states:GetActivityTask
           - states:StartExecution
-        Resource: "*"
+        Resource: 
+          !Join
+            - ':'
+            -
+              - 'arn:aws:states'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - 'stateMachine'
+              - '${self:service}-${self:custom.stage}-csv-download-request'
     events:
       - http:
           path: download-request
@@ -116,7 +145,15 @@ functions:
       - Effect: "Allow"
         Action:
           - states:StartExecution
-        Resource: "*"
+        Resource: 
+          !Join
+            - ':'
+            -
+              - 'arn:aws:states'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - 'stateMachine'
+              - '${self:service}-${self:custom.stage}-create-post-request-step-function'
     events:
       - http:
           path: posts
@@ -146,7 +183,7 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
-        Resource: "*"
+        Resource: ${self:custom.esArn}
     events:
       - http:
           path: search
@@ -167,9 +204,12 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
+        Resource: ${self:custom.esArn}
+      - Effect: "Allow"
+        Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: "*"
+        Resource: ${self:custom.s3BucketArn}
     events:
       - http:
           path: report/graphical
@@ -192,9 +232,12 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
+        Resource: ${self:custom.esArn}
+      - Effect: "Allow"
+        Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: "*"
+        Resource: ${self:custom.s3BucketArn}
     events:
       - http:
           path: report/hybrid
@@ -214,7 +257,14 @@ functions:
       - Effect: "Allow"
         Action:
           - ses:SendEmail
-        Resource: "*"
+        Resource: 
+          !Join
+            - ':'
+            -
+              - 'arn:aws:ses'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - identity/rharrington@scottlogic.com
     environment:
       EMAIL_SENDER_ADDRESS  : "rharrington@scottlogic.com"
   reportStatus:
@@ -224,7 +274,15 @@ functions:
       - Effect: "Allow"
         Action:
           - states:DescribeExecution
-        Resource: "*"
+        Resource: 
+          !Join
+            - ':'
+            -
+              - 'arn:aws:states'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - 'stateMachine'
+              - '${self:service}-${self:custom.stage}-csv-download-request'
     events:
       - http:
           path: report-status
@@ -244,9 +302,12 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
+        Resource: ${self:custom.esArn}
+      - Effect: "Allow"
+        Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: "*"
+        Resource: ${self:custom.s3BucketArn}
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
       S3_BUCKET_NAME: ${self:custom.s3BucketName}
@@ -257,7 +318,7 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
-        Resource: "*"
+        Resource: ${self:custom.esArn}
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   matchRealTimeDigests:
@@ -267,7 +328,7 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
-        Resource: "*"
+        Resource: ${self:custom.esArn}
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   realTimeDigestEmailIterator:
@@ -280,8 +341,18 @@ functions:
       - Effect: "Allow"
         Action:
           - ses:SendEmail
+        Resource: 
+          !Join
+            - ':'
+            -
+              - 'arn:aws:ses'
+              - Ref: 'AWS::Region'
+              - Ref: 'AWS::AccountId'
+              - identity/rharrington@scottlogic.com
+      - Effect: "Allow"
+        Action:
           - cognito-idp:AdminGetUser
-        Resource: "*"
+        Resource: { Fn::GetAtt: [CognitoUserPool, Arn] }
     environment:
       EMAIL_SENDER_ADDRESS: "rharrington@scottlogic.com"
       USER_POOL_ID:
@@ -295,7 +366,16 @@ functions:
         Action:
           - dynamodb:GetItem
           - dynamodb:PutItem
-        Resource: "*"
+        Resource:
+          !Join
+            - ''
+            -
+              - 'arn:aws:dynamodb:'
+              - Ref: 'AWS::Region'
+              - ':'
+              - Ref: 'AWS::AccountId'
+              - ':table/'
+              - Ref: SubscriptionsTable
     events:
       - http:
           path: subscriptions/daily
@@ -318,7 +398,16 @@ functions:
         Action:
           - dynamodb:GetItem
           - dynamodb:PutItem
-        Resource: "*"
+        Resource:
+          !Join
+              - ''
+              -
+                - 'arn:aws:dynamodb:'
+                - Ref: 'AWS::Region'
+                - ':'
+                - Ref: 'AWS::AccountId'
+                - ':table/'
+                - Ref: SubscriptionsTable
     events:
       - http:
           path: subscriptions/daily
@@ -340,7 +429,16 @@ functions:
       - Effect: "Allow"
         Action:
           - dynamodb:GetItem
-        Resource: "*"
+        Resource:
+          !Join
+            - ''
+            -
+              - 'arn:aws:dynamodb:'
+              - Ref: 'AWS::Region'
+              - ':'
+              - Ref: 'AWS::AccountId'
+              - ':table/'
+              - Ref: SubscriptionsTable
     events:
       - http:
           path: subscriptions/daily
@@ -359,7 +457,7 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
-        Resource: "*"
+        Resource: ${self:custom.esArn}
     events:
       - http:
           path: subscriptions/real-time
@@ -381,7 +479,7 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
-        Resource: "*"
+        Resource: ${self:custom.esArn}
     events:
       - http:
           path: subscriptions/real-time
@@ -403,7 +501,7 @@ functions:
       - Effect: "Allow"
         Action:
           - es:ESHttpPost
-        Resource: "*"
+        Resource: ${self:custom.esArn}
     events:
       - http:
           path: subscriptions/real-time
@@ -418,6 +516,24 @@ functions:
   scheduledDailyDigests:
     handler: functions/scheduledDailyDigests.handler
     description: Runs daily, invokes the calculateUserDailyDigest function for each user with daily subscriptions
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Scan
+        Resource:
+          !Join
+            - ''
+            -
+              - 'arn:aws:dynamodb:'
+              - Ref: 'AWS::Region'
+              - ':'
+              - Ref: 'AWS::AccountId'
+              - ':table/'
+              - Ref: SubscriptionsTable
+      - Effect: "Allow"
+        Action:
+          - lambda:InvokeFunction
+        Resource: "*"
     events:
       - schedule:
           name: ${self:service}-${self:custom.stage}-scheduled-daily-digests
@@ -425,14 +541,32 @@ functions:
           rate: cron(0 1 * * ? *)
     environment:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
-      USER_DIGEST_LAMBDA_NAME: ${self:service}-${self:custom.stage}-calculateUserDailyDigest
-  calculateUserDailyDigest:
-    handler: functions/calculateUserDailyDigest.handler
-    description: Calculates and collates previous day's new posts which matching the user's daily subscriptions
-    environment:
-      ES_SEARCH_API: ${self:custom.esEndpoint}
-      EMAIL_MAX_POSTS: 50
-      SEND_DIGEST_EMAIL_LAMBDA_NAME: ${self:service}-${self:custom.stage}-sendDigestEmail
+      # USER_DIGEST_LAMBDA_NAME: ${self:service}-${self:custom.stage}-calculateUserDailyDigest
+  # calculateUserDailyDigest:
+  #   handler: functions/calculateUserDailyDigest.handler
+  #   description: Calculates and collates previous day's new posts which matching the user's daily subscriptions
+  #   iamRoleStatements:
+  #     - Effect: "Allow"
+  #       Action:
+  #         - es:ESHttpPost
+  #       Resource: ${self:custom.esArn}
+  #     - Effect: "Allow"
+  #       Action:
+  #         - lambda:InvokeFunction
+  #       Resource:
+  #         !Join
+  #           - ':'
+  #           -
+  #             - 'arn:aws:lambda'
+  #             - Ref: 'AWS::Region'
+  #             - Ref: 'AWS::AccountId'
+  #             - 'function'
+  #             - '${self:service}-${self:custom.stage}-sendDigestEmail'
+  #   environment:
+  #     ES_SEARCH_API: ${self:custom.esEndpoint}
+  #     EMAIL_MAX_POSTS: 50
+  #     SEND_DIGEST_EMAIL_LAMBDA_NAME: ${self:service}-${self:custom.stage}-sendDigestEmail
+
 stepFunctions:
   stateMachines:
     csvDownloadRequest:
