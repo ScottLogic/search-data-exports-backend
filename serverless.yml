@@ -588,17 +588,17 @@ resources:
         RestApiId:
           Ref: 'ApiGatewayRestApi'
     pushNotificationOpenConnectionLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-pushNotificationOpenConnectionLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -618,17 +618,17 @@ resources:
                           - stateMachine
                           - '${self:service}-${self:custom.stage}-csv-download-request'
     pushNotificationToClientLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-pushNotificationToClientLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -651,17 +651,17 @@ resources:
                           - '/${self:custom.stage}'
                           - '/POST/@connections'
     downloadRequestLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-downloadRequestLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -681,17 +681,17 @@ resources:
                           - 'stateMachine'
                           - '${self:service}-${self:custom.stage}-csv-download-request'
     createPostRequestLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-createPostRequestLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -710,17 +710,17 @@ resources:
                           - 'stateMachine'
                           - '${self:service}-${self:custom.stage}-create-post-request-step-function'
     searchLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-searchLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -732,17 +732,17 @@ resources:
                   Resource:
                     - ${self:custom.esArn}
     graphicalReportLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-graphicalReportLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -760,17 +760,17 @@ resources:
                   Resource:
                     - ${self:custom.s3BucketArn}
     hybridReportLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-hybridReportLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -788,17 +788,17 @@ resources:
                   Resource:
                     - ${self:custom.s3BucketArn}
     sendEmailLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-sendEmailLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -816,17 +816,17 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - identity/rharrington@scottlogic.com
     reportStatusLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-reportStatusLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -845,17 +845,17 @@ resources:
                           - 'stateMachine'
                           - '${self:service}-${self:custom.stage}-csv-download-request'
     reportGeneratorLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-reportGeneratorLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -873,17 +873,17 @@ resources:
                   Resource:
                     - ${self:custom.s3BucketArn}
     createPostLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-createPostLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -895,17 +895,17 @@ resources:
                   Resource:
                     - ${self:custom.esArn}
     matchRealTimeDigestsLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-matchRealTimeDigestsLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -917,17 +917,17 @@ resources:
                   Resource:
                     - ${self:custom.esArn}
     sendDigestEmailLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-sendDigestEmailLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -950,17 +950,17 @@ resources:
                   Resource:
                     - { Fn::GetAtt: [CognitoUserPool, Arn] }
     createSubscriptionLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-createSubscriptionLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -981,17 +981,17 @@ resources:
                           - ':table/'
                           - Ref: SubscriptionsTable
     deleteSubscriptionLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-deleteSubscriptionLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1012,17 +1012,17 @@ resources:
                           - ':table/'
                           - Ref: SubscriptionsTable
     getUserSubscriptionsLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-getUserSubscriptionsLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1042,17 +1042,17 @@ resources:
                           - ':table/'
                           - Ref: SubscriptionsTable
     createRealTimeSubscriptionLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-createRealTimeSubscriptionLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1064,17 +1064,17 @@ resources:
                   Resource:
                     - ${self:custom.esArn}
     deleteRealTimeSubscriptionLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-deleteRealTimeSubscriptionLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1086,17 +1086,17 @@ resources:
                   Resource:
                     - ${self:custom.esArn}
     getUserRealTimeSubscriptionsLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-getUserRealTimeSubscriptionsLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1108,17 +1108,17 @@ resources:
                   Resource:
                     - ${self:custom.esArn}
     scheduledDailyDigestsLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-scheduledDailyDigestsLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1150,17 +1150,17 @@ resources:
                           - 'function'
                           - '${self:service}-${self:custom.stage}-calculateUserDailyDigest'
     calculateUserDailyDigestLambdaRole:
-      Type: AWS::IAM::ROLE
+      Type: AWS::IAM::Role
       Properties:
         RoleName: ${self:service}-${self:custom.stage}-calculateUserDailyDigestLambdaRole
         AssumeRolePolicyDocument:
-          Version: '2017'
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principle:
+              Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRole
+              Action: sts:AssumeRoleWithWebIdentity
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
