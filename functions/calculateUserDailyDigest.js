@@ -34,8 +34,27 @@ const formatInputQueryBody = (subscriptions, dateBegin, dateEnd) => subscription
   search: [{ value }, { dateRange: [dateBegin, dateEnd] }]
 }));
 
-// Not implemented yet
-const trimDigest = results => results;
+const trimDigest = (results, maxPosts) => {
+  const digestSections = results.length;
+  let postPool = digestSections >= maxPosts ? 0 : maxPosts - digestSections;
+
+  const newResults = [];
+
+  for (const entry of results) {
+    let postsToCopy = 1;
+    if (postPool > 0) {
+      postsToCopy = entry.posts.length - 1 <= postPool ? entry.posts.length : postPool + 1;
+      postPool -= postsToCopy - 1;
+    }
+
+    newResults.push({
+      searchTerms: entry.searchTerms,
+      posts: entry.posts.slice(0, postsToCopy)
+    });
+  }
+
+  return newResults;
+};
 
 const compareSortedArrays = (arr1, arr2) => {
   if (arr1.length !== arr2.length) return false;
@@ -92,7 +111,7 @@ const transformMultiSearchResult = (userID, subscriptions, mSearchResult) => {
 
   results.sort((a, b) => b.searchTerms.length - a.searchTerms.length);
 
-  if (totalPostsCount > EMAIL_MAX_POSTS) results = trimDigest(results);
+  if (totalPostsCount > EMAIL_MAX_POSTS) results = trimDigest(results, EMAIL_MAX_POSTS);
 
   return { userID, results };
 };
