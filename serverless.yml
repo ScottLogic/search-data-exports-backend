@@ -340,7 +340,7 @@ functions:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
       USER_DIGEST_LAMBDA_NAME: ${self:service}-${self:custom.stage}-calculateUserDailyDigest
   calculateUserDailyDigest:
-    handler: functions/calculateUserDailyDigest.handler
+    handler: functions/calculateUserDailyDigest.exportedFunctions.handler
     description: Calculates and collates previous day's new posts which matching the user's daily subscriptions
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}

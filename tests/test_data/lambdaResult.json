@@ -1,0 +1,358 @@
+{
+  "userID": 1,
+  "results": [
+    {
+      "searchTerms": ["math", "test"],
+      "posts": [
+        {
+          "PostId": "ssrMZmwBntX9HY5L1Src",
+          "UserID": "18",
+          "DateCreated": "2019-07-21T02:16:47.504Z",
+          "Content": "How was the math test?",
+          "Tags": ["#enfix", "#foster", "#minimize"]
+        },
+        {
+          "PostId": "CcrMZmwBntX9HY5L1S3f",
+          "UserID": "48",
+          "DateCreated": "2019-07-22T05:27:20.207Z",
+          "Content": "How was the math test?",
+          "Tags": ["#confront", "#outer", "#integrity"]
+        },
+        {
+          "PostId": "bsrMZmwBntX9HY5L1S71",
+          "UserID": "87",
+          "DateCreated": "2019-07-21T18:36:23.541Z",
+          "Content": "How was the math test?",
+          "Tags": ["#quote", "#stain"]
+        },
+        {
+          "PostId": "OMr4dmwBntX9HY5LhS99",
+          "UserID": "21",
+          "DateCreated": "2019-07-21T14:49:21.818Z",
+          "Content": "How was the math test?",
+          "Tags": ["#conviction", "#entitlement", "#single", "#prisoner"]
+        },
+        {
+          "PostId": "Osr4dmwBntX9HY5LhS99",
+          "UserID": "93",
+          "DateCreated": "2019-07-21T07:48:52.77Z",
+          "Content": "How was the math test?",
+          "Tags": ["#habit"]
+        },
+        {
+          "PostId": "IsrMZmwBntX9HY5L1Svd",
+          "UserID": "35",
+          "DateCreated": "2019-07-22T23:26:00.722Z",
+          "Content": "How was the math test?",
+          "Tags": []
+        },
+        {
+          "PostId": "y8qnlGwBntX9HY5LADJI",
+          "UserID": "15",
+          "DateCreated": "2019-08-14T10:57:02.469Z",
+          "Content": "How was the math test?",
+          "Tags": ["#exposure", "#dollar", "#warrant", "#volume"]
+        },
+        {
+          "PostId": "0MqnlGwBntX9HY5LADRZ",
+          "UserID": "80",
+          "DateCreated": "2019-08-14T01:51:58.002Z",
+          "Content": "How was the math test?",
+          "Tags": ["#grind", "#climate", "#diplomat", "#realize", "#sense"]
+        },
+        {
+          "PostId": "48qnlGwBntX9HY5LADRZ",
+          "UserID": "33",
+          "DateCreated": "2019-08-13T18:53:21.886Z",
+          "Content": "How was the math test?",
+          "Tags": ["#feedback", "#urgency", "#stimulation"]
+        },
+        {
+          "PostId": "L8qnlGwBntX9HY5LADVZ",
+          "UserID": "23",
+          "DateCreated": "2019-08-14T03:20:12.993Z",
+          "Content": "How was the math test?",
+          "Tags": ["#salvation"]
+        },
+        {
+          "PostId": "gsrMZmwBntX9HY5L1Szf",
+          "UserID": "85",
+          "DateCreated": "2019-07-22T10:49:47.221Z",
+          "Content": "How was the math test?",
+          "Tags": ["#coverage", "#graduate", "#digress"]
+        },
+        {
+          "PostId": "VMr4dmwBntX9HY5LhTF-",
+          "UserID": "93",
+          "DateCreated": "2019-07-21T21:11:37.679Z",
+          "Content": "How was the math test?",
+          "Tags": ["#strap", "#exchange", "#conscience"]
+        },
+        {
+          "PostId": "DsqnlGwBntX9HY5LADNJ",
+          "UserID": "52",
+          "DateCreated": "2019-08-14T12:21:04.007Z",
+          "Content": "How was the math test?",
+          "Tags": ["#layer", "#stuff", "#accompany"]
+        },
+        {
+          "PostId": "UsqnlGwBntX9HY5LADVZ",
+          "UserID": "5",
+          "DateCreated": "2019-08-13T09:22:49.829Z",
+          "Content": "How was the math test?",
+          "Tags": ["#unlawful", "#sandwich", "#rational"]
+        },
+        {
+          "PostId": "F8rMZmwBntX9HY5L1S3f",
+          "UserID": "52",
+          "DateCreated": "2019-07-21T15:17:03.629Z",
+          "Content": "How was the math test?",
+          "Tags": ["#spare", "#relevance", "#advertising", "#equinox"]
+        },
+        {
+          "PostId": "jMr4dmwBntX9HY5LhS99",
+          "UserID": "89",
+          "DateCreated": "2019-07-22T02:24:43.063Z",
+          "Content": "How was the math test?",
+          "Tags": ["#rumor", "#departure", "#restrain"]
+        },
+        {
+          "PostId": "bMr4dmwBntX9HY5LhTF-",
+          "UserID": "29",
+          "DateCreated": "2019-07-21T23:29:03.663Z",
+          "Content": "How was the math test?",
+          "Tags": ["#sensitive", "#interest"]
+        },
+        {
+          "PostId": "H8qnlGwBntX9HY5LADZZ",
+          "UserID": "56",
+          "DateCreated": "2019-08-14T23:36:04.31Z",
+          "Content": "How was the math test?",
+          "Tags": ["#firefighter", "#brave", "#elbow", "#straw"]
+        },
+        {
+          "PostId": "Esr4dmwBntX9HY5LhS99",
+          "UserID": "15",
+          "DateCreated": "2019-07-21T14:19:16.663Z",
+          "Content": "How was the math test?",
+          "Tags": ["#space", "#proclaim"]
+        },
+        {
+          "PostId": "O8rMZmwBntX9HY5L1Sze",
+          "UserID": "2",
+          "DateCreated": "2019-07-21T16:49:52.708Z",
+          "Content": "How was the math test?",
+          "Tags": ["#sector", "#release", "#count", "#psychology"]
+        },
+        {
+          "PostId": "AcrMZmwBntX9HY5L1S3f",
+          "UserID": "33",
+          "DateCreated": "2019-07-22T12:51:27.998Z",
+          "Content": "How was the math test?",
+          "Tags": ["#photograph", "#corpse", "#gallery", "#horse"]
+        },
+        {
+          "PostId": "WMrMZmwBntX9HY5L1S3g",
+          "UserID": "62",
+          "DateCreated": "2019-07-22T06:41:03.335Z",
+          "Content": "How was the math test?",
+          "Tags": ["#indication", "#complex"]
+        },
+        {
+          "PostId": "-MrMZmwBntX9HY5L1S3h",
+          "UserID": "87",
+          "DateCreated": "2019-07-21T22:02:36.862Z",
+          "Content": "How was the math test?",
+          "Tags": ["#divide", "#custody", "#drown"]
+        },
+        {
+          "PostId": "_MrMZmwBntX9HY5L1S3x",
+          "UserID": "90",
+          "DateCreated": "2019-07-21T06:32:20.893Z",
+          "Content": "How was the math test?",
+          "Tags": ["#jewel", "#skeleton"]
+        },
+        {
+          "PostId": "UsrMZmwBntX9HY5L1S71",
+          "UserID": "23",
+          "DateCreated": "2019-07-22T13:36:27.04Z",
+          "Content": "How was the math test?",
+          "Tags": ["#accept", "#climb", "#sense"]
+        },
+        {
+          "PostId": "_sqnlGwBntX9HY5LADRZ",
+          "UserID": "61",
+          "DateCreated": "2019-08-14T05:17:30.438Z",
+          "Content": "How was the math test?",
+          "Tags": ["#matrix", "#bless"]
+        }
+      ]
+    },
+    {
+      "searchTerms": ["test"],
+      "posts": [
+        {
+          "PostId": "WsqMlWwBntX9HY5LeTar",
+          "UserID": "f4a9d909-66de-4c60-a6a0-2c664ed0697e",
+          "Content": "Test of the wiggler",
+          "DateCreated": "2019-08-15T13:51:47.028Z",
+          "Tags": ["#Test", "#Wiggle"]
+        },
+        {
+          "PostId": "dsq8bGwBntX9HY5LKC7I",
+          "UserID": 1,
+          "Content": "Wiggler",
+          "DateCreated": "2019-08-07T15:39:26.173Z",
+          "Tags": ["#Wiggle", "#Test", "#Posted"]
+        },
+        {
+          "PostId": "k8rZrmwBntX9HY5LgDaQ",
+          "UserID": "f4a9d909-66de-4c60-a6a0-2c664ed0697e",
+          "Content": "Test",
+          "DateCreated": "2019-08-20T11:46:25.426Z",
+          "Tags": ["#asdasd"]
+        },
+        {
+          "PostId": "WcqDlWwBntX9HY5LWjao",
+          "UserID": "84615168-b367-4f57-bbcb-a1e6eb40c2b3",
+          "Content": "test",
+          "DateCreated": "2019-08-15T13:41:49.262Z",
+          "Tags": ["#teeeeeeeeest"]
+        },
+        {
+          "PostId": "asoZi2wBntX9HY5LMDJr",
+          "UserID": "5267b209-647c-441a-b071-8d3c37094ce9",
+          "Content": "test",
+          "DateCreated": "2019-08-13T13:09:39.475Z",
+          "Tags": ["#good", "#stuff"]
+        },
+        {
+          "PostId": "IMrMZmwBntX9HY5L1S71",
+          "UserID": "84",
+          "DateCreated": "2019-07-21T01:41:07.431Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#train", "#delicate", "#count", "#cheat"]
+        },
+        {
+          "PostId": "T8r4dmwBntX9HY5LhS99",
+          "UserID": "24",
+          "DateCreated": "2019-07-22T04:03:59.788Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#omission", "#formula", "#permission", "#interest"]
+        },
+        {
+          "PostId": "asrMZmwBntX9HY5L1Svd",
+          "UserID": "43",
+          "DateCreated": "2019-07-21T06:56:03.214Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#reference", "#nomination"]
+        },
+        {
+          "PostId": "rcrMZmwBntX9HY5L1Szf",
+          "UserID": "16",
+          "DateCreated": "2019-07-22T06:32:38.379Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#supply", "#appearance"]
+        },
+        {
+          "PostId": "6Mr4dmwBntX9HY5LhS99",
+          "UserID": "8",
+          "DateCreated": "2019-07-21T03:00:19.109Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#feather", "#misery", "#first"]
+        },
+        {
+          "PostId": "acrMZmwBntX9HY5L1Svd",
+          "UserID": "82",
+          "DateCreated": "2019-07-21T06:49:16.358Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#fibre", "#direction"]
+        },
+        {
+          "PostId": "McrMZmwBntX9HY5L1S71",
+          "UserID": "68",
+          "DateCreated": "2019-07-22T14:41:27.279Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#heaven", "#relief", "#wrestle", "#thumb"]
+        },
+        {
+          "PostId": "e8r4dmwBntX9HY5LhS51",
+          "UserID": "57",
+          "DateCreated": "2019-07-21T18:07:57.125Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#resign", "#ostracize"]
+        },
+        {
+          "PostId": "2Mr4dmwBntX9HY5LhS51",
+          "UserID": "74",
+          "DateCreated": "2019-07-21T11:37:26.285Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#tribute", "#south"]
+        },
+        {
+          "PostId": "fsr4dmwBntX9HY5LhTB9",
+          "UserID": "51",
+          "DateCreated": "2019-07-21T14:42:34.369Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#coverage", "#graduate"]
+        },
+        {
+          "PostId": "L8qnlGwBntX9HY5LADRY",
+          "UserID": "19",
+          "DateCreated": "2019-08-14T15:16:35.743Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#rhetoric"]
+        },
+        {
+          "PostId": "EsqnlGwBntX9HY5LADVZ",
+          "UserID": "84",
+          "DateCreated": "2019-08-14T10:57:50.483Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#basic", "#essential", "#sailor"]
+        },
+        {
+          "PostId": "0cr4dmwBntX9HY5LhTF-",
+          "UserID": "86",
+          "DateCreated": "2019-07-21T14:26:45.821Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#single", "#accident"]
+        },
+        {
+          "PostId": "zcrMZmwBntX9HY5L1Sve",
+          "UserID": "78",
+          "DateCreated": "2019-07-21T10:03:45.422Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#attachment", "#recovery"]
+        },
+        {
+          "PostId": "ssrMZmwBntX9HY5L1Szf",
+          "UserID": "4",
+          "DateCreated": "2019-07-22T23:07:19.581Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#preference", "#presentation"]
+        },
+        {
+          "PostId": "1MqnlGwBntX9HY5LADJI",
+          "UserID": "78",
+          "DateCreated": "2019-08-14T17:43:56.958Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#infection", "#transparent"]
+        },
+        {
+          "PostId": "k8qnlGwBntX9HY5LADNJ",
+          "UserID": "54",
+          "DateCreated": "2019-08-14T01:15:04.88Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#shareholder", "#reluctance"]
+        },
+        {
+          "PostId": "TcqnlGwBntX9HY5LADZZ",
+          "UserID": "36",
+          "DateCreated": "2019-08-14T09:57:40.342Z",
+          "Content": "She did not cheat on the test",
+          "Tags": ["#output", "#stuff"]
+        }
+      ]
+    }
+  ]
+}
