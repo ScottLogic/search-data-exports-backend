@@ -217,6 +217,7 @@ functions:
   realTimeDigestEmailIterator:
     handler: functions/realTimeDigestEmailIterator.handler
     description: Gets the data for the next email to be sent
+    role: realTimeDigestEmailIteratorLambdaRole
   sendDigestEmail:
     handler: functions/sendDigestEmail.handler
     description: Sends an email to a given user containing posts matching their digests
@@ -621,6 +622,30 @@ resources:
                   Action:
                     - states:SendTaskSuccess
                   Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     pushNotificationToClientLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -653,6 +678,30 @@ resources:
                           - ':'
                           - !Ref WebsocketsApi
                           - '/${self:custom.stage}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     downloadRequestLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -694,6 +743,30 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - 'activity'
                           - 'AwaitOpenConnectionFromClient'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     createPostRequestLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -723,6 +796,30 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - 'stateMachine'
                           - '${self:service}-${self:custom.stage}-create-post-request-step-function'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     searchLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -745,6 +842,30 @@ resources:
                     - es:ESHttpPost
                   Resource:
                     - '${self:custom.esArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     graphicalReportLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -773,6 +894,30 @@ resources:
                     - s3:PutObject
                   Resource:
                     - '${self:custom.s3BucketArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     hybridReportLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -801,6 +946,30 @@ resources:
                     - s3:PutObject
                   Resource:
                     - '${self:custom.s3BucketArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     sendEmailLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -822,6 +991,30 @@ resources:
                   Action:
                     - ses:SendEmail
                   Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     reportStatusLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -852,6 +1045,30 @@ resources:
                           - 'execution'
                           - '${self:service}-${self:custom.stage}-csv-download-request'
                           - '*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     reportGeneratorLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -880,6 +1097,30 @@ resources:
                     - s3:PutObject
                   Resource:
                     - '${self:custom.s3BucketArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     createPostLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -902,6 +1143,30 @@ resources:
                     - es:ESHttpPost
                   Resource:
                     - '${self:custom.esArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     matchRealTimeDigestsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -924,6 +1189,71 @@ resources:
                     - es:ESHttpPost
                   Resource:
                     - '${self:custom.esArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
+    realTimeDigestEmailIteratorLambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ${self:service}-${self:custom.stage}-realTimeDigestEmailIteratorLambdaRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: inlinePolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     sendDigestEmailLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -950,6 +1280,30 @@ resources:
                     - cognito-idp:AdminGetUser
                   Resource:
                     - { Fn::GetAtt: [CognitoUserPool, Arn] }
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     createSubscriptionLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -981,6 +1335,30 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - ':table/'
                           - Ref: SubscriptionsTable
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     deleteSubscriptionLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1012,6 +1390,30 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - ':table/'
                           - Ref: SubscriptionsTable
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     getUserSubscriptionsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1042,6 +1444,30 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - ':table/'
                           - Ref: SubscriptionsTable
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     createRealTimeSubscriptionLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1064,6 +1490,30 @@ resources:
                     - es:ESHttpPost
                   Resource:
                     - '${self:custom.esArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     deleteRealTimeSubscriptionLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1086,6 +1536,30 @@ resources:
                     - es:ESHttpPost
                   Resource:
                     - '${self:custom.esArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     getUserRealTimeSubscriptionsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1108,6 +1582,30 @@ resources:
                     - es:ESHttpPost
                   Resource:
                     - '${self:custom.esArn}/*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     scheduledDailyDigestsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1150,6 +1648,30 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - 'function'
                           - '${self:service}-${self:custom.stage}-calculateUserDailyDigest'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
     calculateUserDailyDigestLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1184,3 +1706,27 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - 'function'
                           - '${self:service}-${self:custom.stage}-sendDigestEmail'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*'
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - log-group
+                          - '/aws/lambda/${self:service}-${self:custom.stage}*:*:*'
