@@ -598,7 +598,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -607,7 +607,6 @@ resources:
                 - Effect: Allow
                   Action:
                     - states:DescribeExecution
-                    - states:SendTaskSuccess
                   Resource:
                     - !Join
                         - ':'
@@ -615,8 +614,13 @@ resources:
                           - 'arn:aws:states'
                           - Ref: 'AWS::Region'
                           - Ref: 'AWS::AccountId'
-                          - stateMachine
+                          - 'execution'
                           - '${self:service}-${self:custom.stage}-csv-download-request'
+                          - '*'
+                - Effect: Allow
+                  Action:
+                    - states:SendTaskSuccess
+                  Resource: "*"
     pushNotificationToClientLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -628,7 +632,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -648,8 +652,7 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - ':'
                           - !Ref WebsocketsApi
-                          - '/${self:custom.stage}'
-                          - '/POST/@connections'
+                          - '/${self:custom.stage}/*'
     downloadRequestLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -661,7 +664,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -669,7 +672,6 @@ resources:
               Statement:
                 - Effect: Allow
                   Action:
-                    - states:GetActivityTask
                     - states:StartExecution
                   Resource:
                     - !Join
@@ -680,6 +682,18 @@ resources:
                           - Ref: 'AWS::AccountId'
                           - 'stateMachine'
                           - '${self:service}-${self:custom.stage}-csv-download-request'
+                - Effect: Allow
+                  Action:
+                    - states:GetActivityTask
+                  Resource:
+                    - !Join
+                        - ':'
+                        -
+                          - 'arn:aws:states'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'activity'
+                          - 'AwaitOpenConnectionFromClient'
     createPostRequestLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -691,7 +705,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -720,7 +734,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -730,7 +744,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
     graphicalReportLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -742,7 +756,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -752,13 +766,13 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
                 - Effect: Allow
                   Action:
                     - s3:GetObject
                     - s3:PutObject
                   Resource:
-                    - ${self:custom.s3BucketArn}
+                    - '${self:custom.s3BucketArn}/*'
     hybridReportLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -770,7 +784,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -780,13 +794,13 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
                 - Effect: Allow
                   Action:
                     - s3:GetObject
                     - s3:PutObject
                   Resource:
-                    - ${self:custom.s3BucketArn}
+                    - '${self:custom.s3BucketArn}/*'
     sendEmailLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -798,7 +812,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -807,14 +821,7 @@ resources:
                 - Effect: Allow
                   Action:
                     - ses:SendEmail
-                  Resource:
-                    - !Join
-                        - ':'
-                        -
-                          - 'arn:aws:ses'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - identity/rharrington@scottlogic.com
+                  Resource: "*"
     reportStatusLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -826,7 +833,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -842,8 +849,9 @@ resources:
                           - 'arn:aws:states'
                           - Ref: 'AWS::Region'
                           - Ref: 'AWS::AccountId'
-                          - 'stateMachine'
+                          - 'execution'
                           - '${self:service}-${self:custom.stage}-csv-download-request'
+                          - '*'
     reportGeneratorLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -855,7 +863,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -865,13 +873,13 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
                 - Effect: Allow
                   Action:
                     - s3:GetObject
                     - s3:PutObject
                   Resource:
-                    - ${self:custom.s3BucketArn}
+                    - '${self:custom.s3BucketArn}/*'
     createPostLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -883,7 +891,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -893,7 +901,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
     matchRealTimeDigestsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -905,7 +913,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -915,7 +923,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
     sendDigestEmailLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -927,7 +935,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -936,14 +944,7 @@ resources:
                 - Effect: Allow
                   Action:
                     - ses:SendEmail
-                  Resource:
-                    - !Join
-                        - ':'
-                        -
-                          - 'arn:aws:ses'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - identity/rharrington@scottlogic.com
+                  Resource: "*"
                 - Effect: Allow
                   Action:
                     - cognito-idp:AdminGetUser
@@ -960,7 +961,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -991,7 +992,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1022,7 +1023,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1052,7 +1053,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1062,7 +1063,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
     deleteRealTimeSubscriptionLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1074,7 +1075,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1084,7 +1085,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
     getUserRealTimeSubscriptionsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1096,7 +1097,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1106,7 +1107,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
     scheduledDailyDigestsLambdaRole:
       Type: AWS::IAM::Role
       Properties:
@@ -1118,7 +1119,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1160,7 +1161,7 @@ resources:
               Principal:
                 Service:
                   - lambda.amazonaws.com
-              Action: sts:AssumeRoleWithWebIdentity
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: inlinePolicy
             PolicyDocument:
@@ -1170,7 +1171,7 @@ resources:
                   Action:
                     - es:ESHttpPost
                   Resource:
-                    - ${self:custom.esArn}
+                    - '${self:custom.esArn}/*'
                 - Effect: Allow
                   Action:
                     - lambda:InvokeFunction
