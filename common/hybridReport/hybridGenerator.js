@@ -47,7 +47,7 @@ class HybridGenerator {
       headless: chrome.headless,
     });
     const page = await browser.newPage();
-    page.setContent(formattedHTML);
+    await page.setContent(formattedHTML);
     const buffer = await page.pdf({
       format: 'A4'
     });
