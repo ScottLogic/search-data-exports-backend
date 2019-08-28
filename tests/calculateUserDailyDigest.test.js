@@ -31,6 +31,10 @@ describe('calculateUserDailyDigest function', () => {
     exportedFunctions.sendDailyDigestEmail = jest.fn();
 
     await exportedFunctions.handler(handlerInput);
-    expect(exportedFunctions.sendDailyDigestEmail).toBeCalledWith(lambdaResult, expect.anything(), expect.anything());
+    expect(exportedFunctions.sendDailyDigestEmail).toBeCalledWith(
+      lambdaResult,
+      expect.anything(),
+      expect.anything()
+    );
   });
 });
