@@ -1,0 +1,938 @@
+{
+  "responses": [
+    {
+      "took": 8,
+      "timed_out": false,
+      "_shards": {
+        "total": 5,
+        "successful": 5,
+        "skipped": 0,
+        "failed": 0
+      },
+      "hits": {
+        "total": 49,
+        "max_score": 17.878036,
+        "hits": [
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "WsqMlWwBntX9HY5LeTar",
+            "_score": 17.878036,
+            "_source": {
+              "UserID": "f4a9d909-66de-4c60-a6a0-2c664ed0697e",
+              "Content": "Test of the wiggler",
+              "DateCreated": "2019-08-15T13:51:47.028Z",
+              "Tags": ["#Test", "#Wiggle"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "dsq8bGwBntX9HY5LKC7I",
+            "_score": 15.200848,
+            "_source": {
+              "UserID": 1,
+              "Content": "Wiggler",
+              "DateCreated": "2019-08-07T15:39:26.173Z",
+              "Tags": ["#Wiggle", "#Test", "#Posted"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "k8rZrmwBntX9HY5LgDaQ",
+            "_score": 7.138904,
+            "_source": {
+              "UserID": "f4a9d909-66de-4c60-a6a0-2c664ed0697e",
+              "Content": "Test",
+              "DateCreated": "2019-08-20T11:46:25.426Z",
+              "Tags": ["#asdasd"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "WcqDlWwBntX9HY5LWjao",
+            "_score": 6.5184183,
+            "_source": {
+              "UserID": "84615168-b367-4f57-bbcb-a1e6eb40c2b3",
+              "Content": "test",
+              "DateCreated": "2019-08-15T13:41:49.262Z",
+              "Tags": ["#teeeeeeeeest"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "asoZi2wBntX9HY5LMDJr",
+            "_score": 6.085622,
+            "_source": {
+              "UserID": "5267b209-647c-441a-b071-8d3c37094ce9",
+              "Content": "test",
+              "DateCreated": "2019-08-13T13:09:39.475Z",
+              "Tags": ["#good", "#stuff"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "ssrMZmwBntX9HY5L1Src",
+            "_score": 5.511417,
+            "_source": {
+              "UserID": "18",
+              "DateCreated": "2019-07-21T02:16:47.504Z",
+              "Content": "How was the math test?",
+              "Tags": ["#enfix", "#foster", "#minimize"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "CcrMZmwBntX9HY5L1S3f",
+            "_score": 5.511417,
+            "_source": {
+              "UserID": "48",
+              "DateCreated": "2019-07-22T05:27:20.207Z",
+              "Content": "How was the math test?",
+              "Tags": ["#confront", "#outer", "#integrity"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "bsrMZmwBntX9HY5L1S71",
+            "_score": 5.511417,
+            "_source": {
+              "UserID": "87",
+              "DateCreated": "2019-07-21T18:36:23.541Z",
+              "Content": "How was the math test?",
+              "Tags": ["#quote", "#stain"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "OMr4dmwBntX9HY5LhS99",
+            "_score": 5.511417,
+            "_source": {
+              "UserID": "21",
+              "DateCreated": "2019-07-21T14:49:21.818Z",
+              "Content": "How was the math test?",
+              "Tags": ["#conviction", "#entitlement", "#single", "#prisoner"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "Osr4dmwBntX9HY5LhS99",
+            "_score": 5.511417,
+            "_source": {
+              "UserID": "93",
+              "DateCreated": "2019-07-21T07:48:52.77Z",
+              "Content": "How was the math test?",
+              "Tags": ["#habit"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "IsrMZmwBntX9HY5L1Svd",
+            "_score": 5.3748593,
+            "_source": {
+              "UserID": "35",
+              "DateCreated": "2019-07-22T23:26:00.722Z",
+              "Content": "How was the math test?",
+              "Tags": []
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "y8qnlGwBntX9HY5LADJI",
+            "_score": 5.3748593,
+            "_source": {
+              "UserID": "15",
+              "DateCreated": "2019-08-14T10:57:02.469Z",
+              "Content": "How was the math test?",
+              "Tags": ["#exposure", "#dollar", "#warrant", "#volume"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "0MqnlGwBntX9HY5LADRZ",
+            "_score": 5.3748593,
+            "_source": {
+              "UserID": "80",
+              "DateCreated": "2019-08-14T01:51:58.002Z",
+              "Content": "How was the math test?",
+              "Tags": ["#grind", "#climate", "#diplomat", "#realize", "#sense"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "48qnlGwBntX9HY5LADRZ",
+            "_score": 5.3748593,
+            "_source": {
+              "UserID": "33",
+              "DateCreated": "2019-08-13T18:53:21.886Z",
+              "Content": "How was the math test?",
+              "Tags": ["#feedback", "#urgency", "#stimulation"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "L8qnlGwBntX9HY5LADVZ",
+            "_score": 5.3748593,
+            "_source": {
+              "UserID": "23",
+              "DateCreated": "2019-08-14T03:20:12.993Z",
+              "Content": "How was the math test?",
+              "Tags": ["#salvation"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "gsrMZmwBntX9HY5L1Szf",
+            "_score": 5.0904193,
+            "_source": {
+              "UserID": "85",
+              "DateCreated": "2019-07-22T10:49:47.221Z",
+              "Content": "How was the math test?",
+              "Tags": ["#coverage", "#graduate", "#digress"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "VMr4dmwBntX9HY5LhTF-",
+            "_score": 5.0904193,
+            "_source": {
+              "UserID": "93",
+              "DateCreated": "2019-07-21T21:11:37.679Z",
+              "Content": "How was the math test?",
+              "Tags": ["#strap", "#exchange", "#conscience"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "DsqnlGwBntX9HY5LADNJ",
+            "_score": 5.0904193,
+            "_source": {
+              "UserID": "52",
+              "DateCreated": "2019-08-14T12:21:04.007Z",
+              "Content": "How was the math test?",
+              "Tags": ["#layer", "#stuff", "#accompany"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "UsqnlGwBntX9HY5LADVZ",
+            "_score": 5.0904193,
+            "_source": {
+              "UserID": "5",
+              "DateCreated": "2019-08-13T09:22:49.829Z",
+              "Content": "How was the math test?",
+              "Tags": ["#unlawful", "#sandwich", "#rational"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "IMrMZmwBntX9HY5L1S71",
+            "_score": 4.8433,
+            "_source": {
+              "UserID": "84",
+              "DateCreated": "2019-07-21T01:41:07.431Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#train", "#delicate", "#count", "#cheat"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "T8r4dmwBntX9HY5LhS99",
+            "_score": 4.8433,
+            "_source": {
+              "UserID": "24",
+              "DateCreated": "2019-07-22T04:03:59.788Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#omission", "#formula", "#permission", "#interest"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "F8rMZmwBntX9HY5L1S3f",
+            "_score": 4.7503123,
+            "_source": {
+              "UserID": "52",
+              "DateCreated": "2019-07-21T15:17:03.629Z",
+              "Content": "How was the math test?",
+              "Tags": ["#spare", "#relevance", "#advertising", "#equinox"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "jMr4dmwBntX9HY5LhS99",
+            "_score": 4.7503123,
+            "_source": {
+              "UserID": "89",
+              "DateCreated": "2019-07-22T02:24:43.063Z",
+              "Content": "How was the math test?",
+              "Tags": ["#rumor", "#departure", "#restrain"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "bMr4dmwBntX9HY5LhTF-",
+            "_score": 4.7503123,
+            "_source": {
+              "UserID": "29",
+              "DateCreated": "2019-07-21T23:29:03.663Z",
+              "Content": "How was the math test?",
+              "Tags": ["#sensitive", "#interest"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "H8qnlGwBntX9HY5LADZZ",
+            "_score": 4.7503123,
+            "_source": {
+              "UserID": "56",
+              "DateCreated": "2019-08-14T23:36:04.31Z",
+              "Content": "How was the math test?",
+              "Tags": ["#firefighter", "#brave", "#elbow", "#straw"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "Esr4dmwBntX9HY5LhS99",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "15",
+              "DateCreated": "2019-07-21T14:19:16.663Z",
+              "Content": "How was the math test?",
+              "Tags": ["#space", "#proclaim"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "O8rMZmwBntX9HY5L1Sze",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "2",
+              "DateCreated": "2019-07-21T16:49:52.708Z",
+              "Content": "How was the math test?",
+              "Tags": ["#sector", "#release", "#count", "#psychology"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "AcrMZmwBntX9HY5L1S3f",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "33",
+              "DateCreated": "2019-07-22T12:51:27.998Z",
+              "Content": "How was the math test?",
+              "Tags": ["#photograph", "#corpse", "#gallery", "#horse"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "WMrMZmwBntX9HY5L1S3g",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "62",
+              "DateCreated": "2019-07-22T06:41:03.335Z",
+              "Content": "How was the math test?",
+              "Tags": ["#indication", "#complex"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "-MrMZmwBntX9HY5L1S3h",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "87",
+              "DateCreated": "2019-07-21T22:02:36.862Z",
+              "Content": "How was the math test?",
+              "Tags": ["#divide", "#custody", "#drown"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "_MrMZmwBntX9HY5L1S3x",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "90",
+              "DateCreated": "2019-07-21T06:32:20.893Z",
+              "Content": "How was the math test?",
+              "Tags": ["#jewel", "#skeleton"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "UsrMZmwBntX9HY5L1S71",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "23",
+              "DateCreated": "2019-07-22T13:36:27.04Z",
+              "Content": "How was the math test?",
+              "Tags": ["#accept", "#climb", "#sense"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "_sqnlGwBntX9HY5LADRZ",
+            "_score": 4.643971,
+            "_source": {
+              "UserID": "61",
+              "DateCreated": "2019-08-14T05:17:30.438Z",
+              "Content": "How was the math test?",
+              "Tags": ["#matrix", "#bless"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "asrMZmwBntX9HY5L1Svd",
+            "_score": 4.587882,
+            "_source": {
+              "UserID": "43",
+              "DateCreated": "2019-07-21T06:56:03.214Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#reference", "#nomination"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "rcrMZmwBntX9HY5L1Szf",
+            "_score": 4.587882,
+            "_source": {
+              "UserID": "16",
+              "DateCreated": "2019-07-22T06:32:38.379Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#supply", "#appearance"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "6Mr4dmwBntX9HY5LhS99",
+            "_score": 4.587882,
+            "_source": {
+              "UserID": "8",
+              "DateCreated": "2019-07-21T03:00:19.109Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#feather", "#misery", "#first"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "acrMZmwBntX9HY5L1Svd",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "82",
+              "DateCreated": "2019-07-21T06:49:16.358Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#fibre", "#direction"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "McrMZmwBntX9HY5L1S71",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "68",
+              "DateCreated": "2019-07-22T14:41:27.279Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#heaven", "#relief", "#wrestle", "#thumb"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "e8r4dmwBntX9HY5LhS51",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "57",
+              "DateCreated": "2019-07-21T18:07:57.125Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#resign", "#ostracize"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "2Mr4dmwBntX9HY5LhS51",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "74",
+              "DateCreated": "2019-07-21T11:37:26.285Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#tribute", "#south"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "fsr4dmwBntX9HY5LhTB9",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "51",
+              "DateCreated": "2019-07-21T14:42:34.369Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#coverage", "#graduate"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "L8qnlGwBntX9HY5LADRY",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "19",
+              "DateCreated": "2019-08-14T15:16:35.743Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#rhetoric"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "EsqnlGwBntX9HY5LADVZ",
+            "_score": 4.2806787,
+            "_source": {
+              "UserID": "84",
+              "DateCreated": "2019-08-14T10:57:50.483Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#basic", "#essential", "#sailor"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "0cr4dmwBntX9HY5LhTF-",
+            "_score": 4.1817575,
+            "_source": {
+              "UserID": "86",
+              "DateCreated": "2019-07-21T14:26:45.821Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#single", "#accident"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "zcrMZmwBntX9HY5L1Sve",
+            "_score": 4.1817575,
+            "_source": {
+              "UserID": "78",
+              "DateCreated": "2019-07-21T10:03:45.422Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#attachment", "#recovery"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "ssrMZmwBntX9HY5L1Szf",
+            "_score": 4.1817575,
+            "_source": {
+              "UserID": "4",
+              "DateCreated": "2019-07-22T23:07:19.581Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#preference", "#presentation"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "1MqnlGwBntX9HY5LADJI",
+            "_score": 4.1817575,
+            "_source": {
+              "UserID": "78",
+              "DateCreated": "2019-08-14T17:43:56.958Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#infection", "#transparent"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "k8qnlGwBntX9HY5LADNJ",
+            "_score": 4.1817575,
+            "_source": {
+              "UserID": "54",
+              "DateCreated": "2019-08-14T01:15:04.88Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#shareholder", "#reluctance"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "TcqnlGwBntX9HY5LADZZ",
+            "_score": 4.1817575,
+            "_source": {
+              "UserID": "36",
+              "DateCreated": "2019-08-14T09:57:40.342Z",
+              "Content": "She did not cheat on the test",
+              "Tags": ["#output", "#stuff"]
+            }
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "took": 1,
+      "timed_out": false,
+      "_shards": {
+        "total": 5,
+        "successful": 5,
+        "skipped": 0,
+        "failed": 0
+      },
+      "hits": {
+        "total": 26,
+        "max_score": 6.008662,
+        "hits": [
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "gsrMZmwBntX9HY5L1Szf",
+            "_score": 6.008662,
+            "_source": {
+              "UserID": "85",
+              "DateCreated": "2019-07-22T10:49:47.221Z",
+              "Content": "How was the math test?",
+              "Tags": ["#coverage", "#graduate", "#digress"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "VMr4dmwBntX9HY5LhTF-",
+            "_score": 6.008662,
+            "_source": {
+              "UserID": "93",
+              "DateCreated": "2019-07-21T21:11:37.679Z",
+              "Content": "How was the math test?",
+              "Tags": ["#strap", "#exchange", "#conscience"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "DsqnlGwBntX9HY5LADNJ",
+            "_score": 6.008662,
+            "_source": {
+              "UserID": "52",
+              "DateCreated": "2019-08-14T12:21:04.007Z",
+              "Content": "How was the math test?",
+              "Tags": ["#layer", "#stuff", "#accompany"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "UsqnlGwBntX9HY5LADVZ",
+            "_score": 6.008662,
+            "_source": {
+              "UserID": "5",
+              "DateCreated": "2019-08-13T09:22:49.829Z",
+              "Content": "How was the math test?",
+              "Tags": ["#unlawful", "#sandwich", "#rational"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "F8rMZmwBntX9HY5L1S3f",
+            "_score": 6.005053,
+            "_source": {
+              "UserID": "52",
+              "DateCreated": "2019-07-21T15:17:03.629Z",
+              "Content": "How was the math test?",
+              "Tags": ["#spare", "#relevance", "#advertising", "#equinox"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "jMr4dmwBntX9HY5LhS99",
+            "_score": 6.005053,
+            "_source": {
+              "UserID": "89",
+              "DateCreated": "2019-07-22T02:24:43.063Z",
+              "Content": "How was the math test?",
+              "Tags": ["#rumor", "#departure", "#restrain"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "bMr4dmwBntX9HY5LhTF-",
+            "_score": 6.005053,
+            "_source": {
+              "UserID": "29",
+              "DateCreated": "2019-07-21T23:29:03.663Z",
+              "Content": "How was the math test?",
+              "Tags": ["#sensitive", "#interest"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "H8qnlGwBntX9HY5LADZZ",
+            "_score": 6.005053,
+            "_source": {
+              "UserID": "56",
+              "DateCreated": "2019-08-14T23:36:04.31Z",
+              "Content": "How was the math test?",
+              "Tags": ["#firefighter", "#brave", "#elbow", "#straw"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "IsrMZmwBntX9HY5L1Svd",
+            "_score": 5.7557216,
+            "_source": {
+              "UserID": "35",
+              "DateCreated": "2019-07-22T23:26:00.722Z",
+              "Content": "How was the math test?",
+              "Tags": []
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "y8qnlGwBntX9HY5LADJI",
+            "_score": 5.7557216,
+            "_source": {
+              "UserID": "15",
+              "DateCreated": "2019-08-14T10:57:02.469Z",
+              "Content": "How was the math test?",
+              "Tags": ["#exposure", "#dollar", "#warrant", "#volume"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "0MqnlGwBntX9HY5LADRZ",
+            "_score": 5.7557216,
+            "_source": {
+              "UserID": "80",
+              "DateCreated": "2019-08-14T01:51:58.002Z",
+              "Content": "How was the math test?",
+              "Tags": ["#grind", "#climate", "#diplomat", "#realize", "#sense"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "48qnlGwBntX9HY5LADRZ",
+            "_score": 5.7557216,
+            "_source": {
+              "UserID": "33",
+              "DateCreated": "2019-08-13T18:53:21.886Z",
+              "Content": "How was the math test?",
+              "Tags": ["#feedback", "#urgency", "#stimulation"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "L8qnlGwBntX9HY5LADVZ",
+            "_score": 5.7557216,
+            "_source": {
+              "UserID": "23",
+              "DateCreated": "2019-08-14T03:20:12.993Z",
+              "Content": "How was the math test?",
+              "Tags": ["#salvation"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "ssrMZmwBntX9HY5L1Src",
+            "_score": 5.7135615,
+            "_source": {
+              "UserID": "18",
+              "DateCreated": "2019-07-21T02:16:47.504Z",
+              "Content": "How was the math test?",
+              "Tags": ["#enfix", "#foster", "#minimize"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "CcrMZmwBntX9HY5L1S3f",
+            "_score": 5.7135615,
+            "_source": {
+              "UserID": "48",
+              "DateCreated": "2019-07-22T05:27:20.207Z",
+              "Content": "How was the math test?",
+              "Tags": ["#confront", "#outer", "#integrity"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "bsrMZmwBntX9HY5L1S71",
+            "_score": 5.7135615,
+            "_source": {
+              "UserID": "87",
+              "DateCreated": "2019-07-21T18:36:23.541Z",
+              "Content": "How was the math test?",
+              "Tags": ["#quote", "#stain"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "OMr4dmwBntX9HY5LhS99",
+            "_score": 5.7135615,
+            "_source": {
+              "UserID": "21",
+              "DateCreated": "2019-07-21T14:49:21.818Z",
+              "Content": "How was the math test?",
+              "Tags": ["#conviction", "#entitlement", "#single", "#prisoner"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "Osr4dmwBntX9HY5LhS99",
+            "_score": 5.7135615,
+            "_source": {
+              "UserID": "93",
+              "DateCreated": "2019-07-21T07:48:52.77Z",
+              "Content": "How was the math test?",
+              "Tags": ["#habit"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "Esr4dmwBntX9HY5LhS99",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "15",
+              "DateCreated": "2019-07-21T14:19:16.663Z",
+              "Content": "How was the math test?",
+              "Tags": ["#space", "#proclaim"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "O8rMZmwBntX9HY5L1Sze",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "2",
+              "DateCreated": "2019-07-21T16:49:52.708Z",
+              "Content": "How was the math test?",
+              "Tags": ["#sector", "#release", "#count", "#psychology"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "AcrMZmwBntX9HY5L1S3f",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "33",
+              "DateCreated": "2019-07-22T12:51:27.998Z",
+              "Content": "How was the math test?",
+              "Tags": ["#photograph", "#corpse", "#gallery", "#horse"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "WMrMZmwBntX9HY5L1S3g",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "62",
+              "DateCreated": "2019-07-22T06:41:03.335Z",
+              "Content": "How was the math test?",
+              "Tags": ["#indication", "#complex"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "-MrMZmwBntX9HY5L1S3h",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "87",
+              "DateCreated": "2019-07-21T22:02:36.862Z",
+              "Content": "How was the math test?",
+              "Tags": ["#divide", "#custody", "#drown"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "_MrMZmwBntX9HY5L1S3x",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "90",
+              "DateCreated": "2019-07-21T06:32:20.893Z",
+              "Content": "How was the math test?",
+              "Tags": ["#jewel", "#skeleton"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "UsrMZmwBntX9HY5L1S71",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "23",
+              "DateCreated": "2019-07-22T13:36:27.04Z",
+              "Content": "How was the math test?",
+              "Tags": ["#accept", "#climb", "#sense"]
+            }
+          },
+          {
+            "_index": "posts",
+            "_type": "post",
+            "_id": "_sqnlGwBntX9HY5LADRZ",
+            "_score": 5.29805,
+            "_source": {
+              "UserID": "61",
+              "DateCreated": "2019-08-14T05:17:30.438Z",
+              "Content": "How was the math test?",
+              "Tags": ["#matrix", "#bless"]
+            }
+          }
+        ]
+      },
+      "status": 200
+    }
+  ]
+}

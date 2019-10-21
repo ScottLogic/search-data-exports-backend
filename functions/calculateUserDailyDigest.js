@@ -3,17 +3,6 @@ import ConnectionClass from 'http-aws-es';
 import ESSearch from '../common/search/search';
 import buildQueryJson from '../common/query';
 
-const { ES_SEARCH_API, EMAIL_MAX_POSTS, SEND_DIGEST_EMAIL_LAMBDA_NAME: FunctionName } = process.env;
-const ESConnectOptions = {
-  host: ES_SEARCH_API,
-  connectionClass: ConnectionClass,
-  awsConfig: new Config({
-    credentials: new EnvironmentCredentials('AWS')
-  })
-};
-const esSearchClient = new ESSearch(ESConnectOptions);
-const lambda = new Lambda();
-
 // Midnight yesterday
 const getDateBegin = () => {
   const dateBegin = new Date();
@@ -64,7 +53,7 @@ const compareSortedArrays = (arr1, arr2) => {
   return true;
 };
 
-const transformMultiSearchResult = (userID, subscriptions, mSearchResult) => {
+const transformMultiSearchResult = (userID, subscriptions, mSearchResult, EMAIL_MAX_POSTS) => {
   const searchHits = mSearchResult.responses
     .map(response => response.hits.hits.map(hit => ({
       PostId: hit._id,
@@ -116,7 +105,7 @@ const transformMultiSearchResult = (userID, subscriptions, mSearchResult) => {
   return { userID, results };
 };
 
-const sendDailyDigestEmail = async result => lambda
+const sendDailyDigestEmail = async (result, FunctionName, lambda) => lambda
   .invoke({
     FunctionName,
     InvocationType: 'Event',
@@ -124,14 +113,17 @@ const sendDailyDigestEmail = async result => lambda
   })
   .promise();
 
-const processUserSubscriptions = async (userID, subscriptions) => {
+const processUserSubscriptions = async (
+  userID,
+  subscriptions,
+  EMAIL_MAX_POSTS,
+  FunctionName,
+  esSearchClient,
+  lambda
+) => {
   console.log(`Processing ${subscriptions.length} subscriptions of user with ID: ${userID}`);
 
-  const buildQueryInput = formatInputQueryBody(
-    subscriptions,
-    getDateBegin(),
-    getDateEnd()
-  );
+  const buildQueryInput = formatInputQueryBody(subscriptions, getDateBegin(), getDateEnd());
 
   const body = [];
   for (const input of buildQueryInput) {
@@ -142,14 +134,41 @@ const processUserSubscriptions = async (userID, subscriptions) => {
 
   const mSearchResult = await esSearchClient.doMultiSearch(mSearchInput);
 
-  const result = transformMultiSearchResult(userID, subscriptions, mSearchResult);
+  const result = transformMultiSearchResult(userID, subscriptions, mSearchResult, EMAIL_MAX_POSTS);
   if (result.results.length) {
-    await sendDailyDigestEmail(result);
+    // eslint-disable-next-line no-use-before-define
+    await exportedFunctions.sendDailyDigestEmail(result, FunctionName, lambda);
     console.log(`Sent ${result.results.length} digest updates to user ${userID}`);
   }
 };
 
-export const handler = async (event) => {
+const handler = async (event) => {
+  const {
+    ES_SEARCH_API,
+    EMAIL_MAX_POSTS,
+    SEND_DIGEST_EMAIL_LAMBDA_NAME: FunctionName
+  } = process.env;
+  const esSearchClient = new ESSearch({
+    host: ES_SEARCH_API,
+    connectionClass: ConnectionClass,
+    awsConfig: new Config({
+      credentials: new EnvironmentCredentials('AWS')
+    })
+  });
+  const lambda = new Lambda();
+
   const { userId: userID, subscriptions } = event;
-  await processUserSubscriptions(userID, subscriptions);
+  await processUserSubscriptions(
+    userID,
+    subscriptions,
+    EMAIL_MAX_POSTS,
+    FunctionName,
+    esSearchClient,
+    lambda
+  );
+};
+
+export const exportedFunctions = {
+  handler,
+  sendDailyDigestEmail
 };
