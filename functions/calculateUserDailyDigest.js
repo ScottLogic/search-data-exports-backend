@@ -142,7 +142,7 @@ const processUserSubscriptions = async (
   }
 };
 
-const handler = async (event) => {
+export const handler = async (event) => {
   const {
     ES_SEARCH_API,
     EMAIL_MAX_POSTS,
