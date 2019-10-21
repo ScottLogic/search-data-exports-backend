@@ -46,3 +46,6 @@ env/
 
 # VS Code Config Directory
 .vscode/
+
+# terraform.exe
+terraform.exe
