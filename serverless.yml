@@ -149,7 +149,7 @@ functions:
           cors: true
           request:
             schema:
-              application/json: ${file(api_models/GraphicalReportInputModel.json)}
+              application/json: ${file(api_models/ReportInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -166,6 +166,9 @@ functions:
           path: report/hybrid
           method: post
           cors: true
+          request:
+            schema:
+              application/json: ${file(api_models/ReportInputModel.json)}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -210,7 +213,7 @@ functions:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   matchRealTimeDigests:
     handler: functions/matchRealTimeDigests.handler
-    description: Uses ES to match a new post to existing digests
+    description: Uses ES to match a new post to existing real time subscriptions
     role: matchRealTimeDigestsLambdaRole
     environment:
       ES_SEARCH_API: ${self:custom.esEndpoint}
@@ -220,7 +223,7 @@ functions:
     role: realTimeDigestEmailIteratorLambdaRole
   sendDigestEmail:
     handler: functions/sendDigestEmail.handler
-    description: Sends an email to a given user containing posts matching their digests
+    description: Sends an email to a given user containing posts matching their daily subscriptions
     role: sendDigestEmailLambdaRole
     environment:
       EMAIL_SENDER_ADDRESS: "rharrington@scottlogic.com"
@@ -229,7 +232,7 @@ functions:
       WEBSITE_LINK_URL: ${self:custom.s3websiteURL}
   createSubscription:
     handler: functions/createSubscription.handler
-    description: Adds a daily digest subscription for an SDE user
+    description: Adds a daily subscription for an SDE user
     role: createSubscriptionLambdaRole
     events:
       - http:
@@ -247,7 +250,7 @@ functions:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
   deleteSubscription:
     handler: functions/deleteSubscription.handler
-    description: Deletes a specified daily digest subscription for an SDE user
+    description: Deletes a specified daily subscription for an SDE user
     role: deleteSubscriptionLambdaRole
     events:
       - http:
@@ -265,7 +268,7 @@ functions:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
   getUserSubscriptions:
     handler: functions/getUserSubscriptions.handler
-    description: Gets the daily digest subscriptions for an SDE user
+    description: Gets the daily subscriptions for an SDE user
     role: getUserSubscriptionsLambdaRole
     events:
       - http:
@@ -280,7 +283,7 @@ functions:
       SUBSCRIPTIONS_TABLE: ${self:custom.subscriptionsTableName}
   createRealTimeSubscription:
     handler: functions/createRealTimeSubscription.handler
-    description: Adds a real-time digest subscription for an SDE user
+    description: Adds a real time subscription for an SDE user
     role: createRealTimeSubscriptionLambdaRole
     events:
       - http:
@@ -298,7 +301,7 @@ functions:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   deleteRealTimeSubscription:
     handler: functions/deleteRealTimeSubscription.handler
-    description: Deletes a specified real-time digest subscription for an SDE user
+    description: Deletes a specified real time subscription for an SDE user
     role: deleteRealTimeSubscriptionLambdaRole
     events:
       - http:
@@ -316,7 +319,7 @@ functions:
       ES_SEARCH_API: ${self:custom.esEndpoint}
   getUserRealTimeSubscriptions:
     handler: functions/getUserRealTimeSubscriptions.handler
-    description: Gets the real-time digest subscriptions for an SDE user
+    description: Gets the real time subscriptions for an SDE user
     role: getUserRealTimeSubscriptionsLambdaRole
     events:
       - http:
@@ -443,15 +446,15 @@ stepFunctions:
     createPostRequestStepFunction:
       name: "${self:service}-${self:custom.stage}-create-post-request-step-function"
       definition:
-        Comment: "Create post and send real-time digests for matching searches"
+        Comment: "Create post and send real-time notifications for matching searches"
         StartAt: "Create post"
         States:
           "Create post":
             Type: Task
             Resource:
               Fn::GetAtt: [createPost, Arn]
-            Next: "Find matching real-time digests"
-          "Find matching real-time digests":
+            Next: "Find matching real-time posts"
+          "Find matching real-time posts":
             Type: Task
             Resource:
               Fn::GetAtt: [matchRealTimeDigests, Arn]

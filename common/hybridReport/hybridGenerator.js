@@ -61,13 +61,15 @@ class HybridGenerator {
     return fileURL;
   }
 
-  static buildRequestJSON(paramJSON = {}) {
-    const dateRange = paramJSON.search.find(x => x.dateRange);
-    const startDate = new Date(dateRange ? dateRange.dateRange[0] : Date.now());
-    const endDate = new Date(dateRange ? dateRange.dateRange[1] : Date.now());
-    if (!dateRange) {
-      startDate.setDate(startDate.getDate() - 1);
+  static buildRequestJSON(paramJSON) {
+    let dateRange;
+    if (Object.prototype.hasOwnProperty.call(paramJSON, 'search')) {
+      dateRange = paramJSON.search.find(x => x.dateRange);
+    } else {
+      dateRange = [Date.now() - 1, Date.now()];
     }
+    const startDate = new Date(dateRange[0]);
+    const endDate = new Date(dateRange[1]);
 
     return {
       index: 'posts',
