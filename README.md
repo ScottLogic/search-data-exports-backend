@@ -155,7 +155,7 @@ When the `type=push`, the `Push notification report request` choice is selected 
 We make use of an AWS Step Function Activity, to handle the frontend connecting to a websocket via API Gateway. For the example, the Activity is called AwaitOpenConnectionFromClient.
 
 For a push notification, we return a `taskToken` for the `AwaitOpenConnectionFromClient` activity as well as the `executionArn` during the initial `/download-request`:
-![Download-request-push.png](docs/Download-request-push.png)
+![Download-request-push.png](docs/download-request-push.png)
 
 The frontend then connects to a websocket using API Gateway, passing the `executionArn` and `taskToken`. API Gateway, triggers a lambda called `pushNotificationOpenConnection` on an `OpenConnection` event on the API Gateway (WEBSOCKET), and this Lambda marks the `AwaitOpenConnectionFromClient` as complete and passes in the `connectionId` into the step. 
 ![open-connection-push.png](docs/open-connection-push.png)
