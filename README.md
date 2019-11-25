@@ -2,15 +2,11 @@
 
 Exploration of various large-scale data export techniques for browser-based users, using an AWS Serverless Lambda backend and an Elasticsearch datasource.
 
-## Introduction
-
-Exporting data via a web application, where large results sets are generated is a very common use case. Typically, the export process itself is asynchronous, due to the time taken to generate the data, either due to the large amount of data or time intensive processing against the data.
-
-To help us explore this, a very basic Twitter clone has been created.
+Exporting data via a web application, where large results sets are generated is a very common use case. Typically, the export process itself is asynchronous, due to the time taken to generate the data, either due to the large amount of data or time intensive processing against the data. This repository (and the related [frontend repository](https://github.com/ScottLogic/search-data-exports-frontend)) demonstrate worked examples of a number of techniques for achieving this. 
 
 ## Twitter Clone
 
-The application is pretty simple for our purposes. The functionality required:
+To provide a dataset to help us explore this topic, a very basic Twitter clone has been created. The application is pretty simple for our purposes. The functionality required:
 
 * Perform a text search against a data source
 * Display the search results in a paginated form
