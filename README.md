@@ -2,7 +2,7 @@
 
 Exploration of various large-scale data export techniques for browser-based users, using an AWS Serverless Lambda backend and an Elasticsearch datasource.
 
-Exporting data via a web application, where large results sets are generated is a very common use case. Typically, the export process itself is asynchronous, due to the time taken to generate the data, either due to the large amount of data or time intensive processing against the data. This repository (and the related [frontend repository](https://github.com/ScottLogic/search-data-exports-frontend)) demonstrate worked examples of a number of techniques for achieving this. 
+Exporting data via a web application, where large results sets are generated is a very common use case. Typically, the export process itself is asynchronous, due to the time taken to generate the data, either due to the large amount of data or time intensive processing against the data. This repository (and the related [frontend repository](https://github.com/ScottLogic/search-data-exports-frontend)) demonstrate worked examples of a number of techniques for achieving this. For a more in depth look at some of the features in this repository you can check out our blog posts on [Email Digests with Elasticsearch via a Serverless Architecture](https://blog.scottlogic.com/2019/11/28/email-digests-with-elasticsearch-via-a-serverless-architecture.html) and [Generating SVG and PDF reports from Elasticsearch](https://blog.scottlogic.com/2019/12/02/Search-Data-Visualisation.html).
 
 ## Twitter Clone
 
