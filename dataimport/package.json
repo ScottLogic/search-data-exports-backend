@@ -13,6 +13,6 @@
     "helixESImport": "npm run createUsers && npm run createPosts && npm run ESImport"
   },
   "devDependencies": {
-    "aws-sdk": "^2.507.0"
+    "aws-sdk": "^2.814.0"
   }
 }
