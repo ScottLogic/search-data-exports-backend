@@ -11,7 +11,7 @@
   "description": "Serverless application definition for the SDE project",
   "dependencies": {
     "chrome-aws-lambda": "1.19.0",
-    "d3": "5.12.0",
+    "d3": "7.6.1",
     "elasticsearch": "^16.4.0",
     "http-aws-es": "^6.0.0",
     "jsdom": "15.1.1",
