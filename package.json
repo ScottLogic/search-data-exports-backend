@@ -32,7 +32,7 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "jest": "^24.9.0",
-    "serverless": "1.49.0",
+    "serverless": "3.25.1",
     "serverless-stack-output": "^0.2.3",
     "serverless-step-functions": "^2.10.1",
     "serverless-webpack": "^5.3.1",
